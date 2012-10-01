@@ -5,7 +5,6 @@ Unit tests for the KNN algorithm.
 """
 
 import unittest
-
 import classifiers
 
 class KnnTest(unittest.TestCase):
