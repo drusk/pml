@@ -20,6 +20,46 @@ class DataSet(object):
         """
         self.data_frame = data_frame
         
+    @classmethod
+    def from_list(cls, data_list):
+        """
+        Creates a DataSet object from regular Python lists.
+        
+        Args:
+          data_list: a standard Python list or list of lists containing the 
+            data.
+            
+        Returns:
+          A new DataSet instance.
+        """
+        return cls(pd.DataFrame(data_list))
+    
+    @classmethod
+    def from_unknown(cls, data):
+        """
+        Creates a DataSet object from an object of an unknown data type.
+        
+        Args:
+          data: the raw data set.  It can be stored as a Python list or 
+            pandas dataframe.  If it is already a DataSet then it will just be 
+            returned.
+        
+        Returns:
+          A DataSet wrapper around the data.  If it is already a DataSet then 
+          it will just be returned.
+          
+        Raises:
+          ValueError if the data is not of a supported type.
+        """
+        if isinstance(data, DataSet):
+            return data
+        elif isinstance(data, pd.DataFrame):
+            return cls(data)
+        elif isinstance(data, list):
+            return DataSet.from_list(data)
+        else:
+            raise ValueError("Unsupported representation of data set")
+
     def num_samples(self):
         """
         Returns:
@@ -33,6 +73,9 @@ class DataSet(object):
           The number of features (columns) in the data set.
         """
         return self.data_frame.shape[1]
+    
+    def apply_row_function(self, function):
+        return self.data_frame.apply(function, axis=1)
 
 
 def load(path, delimiter=","):
