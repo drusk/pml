@@ -102,6 +102,17 @@ class DataSet(object):
         return DataSet(self.data_frame.drop(index, axis=1))
 
     def get_column(self, index):
+        """
+        Selects a column from the data set.
+        
+        Args:
+          index: the index (0 based) of the column to select.
+          
+        Returns:
+          the columns at the specified index as a pandas Series object.  This 
+          series is a view on the original data set, not a copy.  That means 
+          any changes to it will also be applied to the original data set.
+        """
         return self.data_frame.ix[:, index]
 
 
