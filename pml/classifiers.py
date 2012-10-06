@@ -54,7 +54,8 @@ class Knn(object):
         
         def calc_dist(vector):
             return distance_utils.euclidean(vector, sample)
-        distances = data.apply_row_function(calc_dist)
+        
+        distances = data.reduce_rows(calc_dist)
         
         votes = collections.defaultdict(int)
         for i, index in enumerate(distances.order(ascending=True).index):

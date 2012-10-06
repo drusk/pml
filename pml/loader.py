@@ -74,7 +74,7 @@ class DataSet(object):
         """
         return self.data_frame.shape[1]
     
-    def apply_row_function(self, function):
+    def reduce_rows(self, function):
         return self.data_frame.apply(function, axis=1)
 
     def drop_column(self, index):
