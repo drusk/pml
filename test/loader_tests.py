@@ -16,7 +16,8 @@ class LoaderTest(base_tests.BaseFileLoadingTest):
         self.assertEqual(data_set.num_samples(), 4)
 
     def testLoadCsvNoHeader(self):
-        data_set = loader.load(self.relative("datasets/3f_no_header.csv"))
+        data_set = loader.load(self.relative("datasets/3f_no_header.csv"), 
+                               has_header=False)
         self.assertEqual(data_set.num_features(), 3)
         self.assertEqual(data_set.num_samples(), 4)
     

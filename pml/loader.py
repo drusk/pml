@@ -116,16 +116,19 @@ class DataSet(object):
         return self.data_frame.ix[:, index]
 
 
-def load(path, delimiter=","):
+def load(path, has_header=True, delimiter=","):
     """
     Loads a data set from a delimited text file.
     
     Args:
       path: the path to the file containing the data set.
+      has_header: set to False if the data being loaded does not have column 
+        headers on the first line.  Defaults to true.
       delimiter: the symbol used to separate columns in the file.  Default 
         value is ','.  Hint: delimiter for tab-delimited files is '\t'.
       
     Returns:
       An array-like object.
     """
-    return DataSet(pd.read_csv(path, delimiter=delimiter))
+    header = 0 if has_header else None
+    return DataSet(pd.read_csv(path, header=header, delimiter=delimiter))
