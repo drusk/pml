@@ -77,6 +77,12 @@ class DataSet(object):
     def apply_row_function(self, function):
         return self.data_frame.apply(function, axis=1)
 
+    def drop_column(self, index):
+        return DataSet(self.data_frame.drop(index, axis=1))
+
+    def get_column(self, index):
+        return self.data_frame.ix[:, index]
+
 
 def load(path, delimiter=","):
     """
