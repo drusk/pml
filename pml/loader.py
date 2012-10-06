@@ -75,9 +75,30 @@ class DataSet(object):
         return self.data_frame.shape[1]
     
     def reduce_rows(self, function):
+        """
+        Performs a row-wise reduction of the data set.
+        
+        Args:
+          function: the function which will be applied to each row in the data 
+            set.
+        
+        Returns:
+          a pandas Series object which is the one dimensional result of 
+            reduction (one value corresponding to each row).
+        """
         return self.data_frame.apply(function, axis=1)
 
     def drop_column(self, index):
+        """
+        Creates a copy of the data set with a specified column removed.
+        
+        Args:
+          index: the index (0 based) of the column to drop.
+          
+        Returns:
+          a new DataSet with the specified column removed.  The original 
+          DataSet remains unaltered.
+        """
         return DataSet(self.data_frame.drop(index, axis=1))
 
     def get_column(self, index):
