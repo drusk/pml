@@ -24,6 +24,7 @@ class KnnTest(unittest.TestCase):
         result = classifier.classify([2, 1.5])
         self.assertEqual(result, "a")
     
+    @unittest.skip("Undecided on best tie breaking strategy")
     def testTie(self):
         training_set = [[1, 7, "c"], [1.5, 6.5, "b"], [1.5, 8, "a"], 
                         [2.5, 6.5, "b"], [2.5, 8, "a"]]
