@@ -112,7 +112,7 @@ def load(path, delimiter=","):
     Args:
       path: the path to the file containing the data set.
       delimiter: the symbol used to separate columns in the file.  Default 
-        value is ','.
+        value is ','.  Hint: delimiter for tab-delimited files is '\t'.
       
     Returns:
       An array-like object.
