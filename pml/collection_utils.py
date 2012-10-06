@@ -4,7 +4,7 @@ Created on 2012-10-05
 @author: drusk
 """
 
-def get_key_of_highest_val(dictionary):
+def get_key_of_highest_value(dictionary):
     key_of_highest = None
     highest_val = None
     

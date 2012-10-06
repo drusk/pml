@@ -52,6 +52,8 @@ class Knn(object):
         labels = self.training_set.get_column(num_features - 1)
         data = self.training_set.drop_column(num_features - 1)
         
+        # This function is used so that we can reduce each row with respect 
+        # to the sample.
         def calc_dist(vector):
             return distance_utils.euclidean(vector, sample)
         
@@ -64,5 +66,5 @@ class Knn(object):
             else:
                 break
         
-        return collection_utils.get_key_of_highest_val(votes)
+        return collection_utils.get_key_of_highest_value(votes)
     
