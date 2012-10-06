@@ -10,7 +10,7 @@ import classifiers
 class KnnTest(unittest.TestCase):
 
     def testTwoClassesNoTie(self):
-        training_set = [[8, 4, "b"], [8, 5, "c"], [8, 6, "b"], [9, 4, "b"], 
+        training_set = [[8, 4, "b"], [8, 5, "c"], [8, 6, "c"], [9, 4, "b"], 
                         [9, 6, "c"]]
         classifier = classifiers.Knn(training_set, k=5)
         result = classifier.classify([9, 5])
