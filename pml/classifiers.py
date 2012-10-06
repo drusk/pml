@@ -4,6 +4,11 @@ Classification algorithms for supervised learning tasks.
 @author: drusk
 """
 
+import loader
+import distance_utils
+import collections
+import collection_utils
+
 class Knn(object):
     """
     K-Nearest Neighbours classifier.
@@ -30,8 +35,9 @@ class Knn(object):
             sample's class.  Must be a positive integer, preferably small.  
             Default value is 5.
         """
-        pass
-    
+        self.training_set = loader.DataSet.from_unknown(training_set)
+        self.k = k
+        
     def classify(self, sample):
         """
         Predicts a sample's classification based on the training set.
@@ -42,5 +48,20 @@ class Knn(object):
         Returns:
           The sample's classification.
         """
-        pass
+        num_features = self.training_set.num_features()
+        labels = self.training_set.get_column(num_features - 1)
+        data = self.training_set.drop_column(num_features - 1)
+        
+        def calc_dist(vector):
+            return distance_utils.euclidean(vector, sample)
+        distances = data.apply_row_function(calc_dist)
+        
+        votes = collections.defaultdict(int)
+        for i, index in enumerate(distances.order(ascending=True).index):
+            if i < self.k:
+                votes[labels[index]] += 1
+            else:
+                break
+        
+        return collection_utils.get_key_of_highest_val(votes)
     
