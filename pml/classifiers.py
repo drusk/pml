@@ -100,7 +100,7 @@ class Knn(object):
         max_votes = max(votes.values())
         most_voted = []
         
-        for label, num_votes in votes.iteritems:
+        for label, num_votes in votes.iteritems():
             if num_votes == max_votes:
                 most_voted.append(label)
         
