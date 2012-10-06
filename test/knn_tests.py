@@ -31,7 +31,7 @@ class KnnTest(unittest.TestCase):
         result = classifier.classify([2, 7])
         self.assertEqual(result, "b")
         
-    def testKLessThanSamples(self):
+    def testKGreaterThanNumSamples(self):
         training_set = [[1, 1, "a"], [1, 3, "a"], [3, 2, "b"]]
         classifier = classifiers.Knn(training_set, k=7)
         result = classifier.classify([2, 2])
