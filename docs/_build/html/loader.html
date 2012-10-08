@@ -1,0 +1,233 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>loader Module &mdash; Python Machine Learning 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Python Machine Learning 0.1 documentation" href="index.html" />
+    <link rel="prev" title="distance_utils Module" href="distance_utils.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="distance_utils.html" title="distance_utils Module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Python Machine Learning 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-loader">
+<span id="loader-module"></span><h1>loader Module<a class="headerlink" href="#module-loader" title="Permalink to this headline">¶</a></h1>
+<p>Utilities for loading data sets.</p>
+<p>&#64;author: drusk</p>
+<dl class="class">
+<dt id="loader.DataSet">
+<em class="property">class </em><tt class="descclassname">loader.</tt><tt class="descname">DataSet</tt><big>(</big><em>data_frame</em><big>)</big><a class="reference internal" href="_modules/loader.html#DataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#loader.DataSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>An abstract representation of a data set.</p>
+<dl class="method">
+<dt id="loader.DataSet.drop_column">
+<tt class="descname">drop_column</tt><big>(</big><em>index</em><big>)</big><a class="reference internal" href="_modules/loader.html#DataSet.drop_column"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#loader.DataSet.drop_column" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a copy of the data set with a specified column removed.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>index: the index (0 based) of the column to drop.</dd>
+<dt>Returns:</dt>
+<dd>a new DataSet with the specified column removed.  The original 
+DataSet remains unaltered.</dd>
+</dl>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="loader.DataSet.from_list">
+<em class="property">classmethod </em><tt class="descname">from_list</tt><big>(</big><em>data_list</em><big>)</big><a class="reference internal" href="_modules/loader.html#DataSet.from_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#loader.DataSet.from_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a DataSet object from regular Python lists.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>data_list: a standard Python list or list of lists containing the </dt>
+<dd>data.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>A new DataSet instance.</dd>
+</dl>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="loader.DataSet.from_unknown">
+<em class="property">classmethod </em><tt class="descname">from_unknown</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="_modules/loader.html#DataSet.from_unknown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#loader.DataSet.from_unknown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a DataSet object from an object of an unknown data type.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>data: the raw data set.  It can be stored as a Python list or </dt>
+<dd>pandas dataframe.  If it is already a DataSet then it will just be 
+returned.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>A DataSet wrapper around the data.  If it is already a DataSet then 
+it will just be returned.</dd>
+<dt>Raises:</dt>
+<dd>ValueError if the data is not of a supported type.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="loader.DataSet.get_column">
+<tt class="descname">get_column</tt><big>(</big><em>index</em><big>)</big><a class="reference internal" href="_modules/loader.html#DataSet.get_column"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#loader.DataSet.get_column" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selects a column from the data set.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>index: the index (0 based) of the column to select.</dd>
+<dt>Returns:</dt>
+<dd>the columns at the specified index as a pandas Series object.  This 
+series is a view on the original data set, not a copy.  That means 
+any changes to it will also be applied to the original data set.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="loader.DataSet.num_features">
+<tt class="descname">num_features</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/loader.html#DataSet.num_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#loader.DataSet.num_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:
+The number of features (columns) in the data set.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="loader.DataSet.num_samples">
+<tt class="descname">num_samples</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/loader.html#DataSet.num_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#loader.DataSet.num_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:
+The number of samples (rows) in the data set.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="loader.DataSet.reduce_rows">
+<tt class="descname">reduce_rows</tt><big>(</big><em>function</em><big>)</big><a class="reference internal" href="_modules/loader.html#DataSet.reduce_rows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#loader.DataSet.reduce_rows" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a row-wise reduction of the data set.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>function: the function which will be applied to each row in the data </dt>
+<dd>set.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd><dl class="first last docutils">
+<dt>a pandas Series object which is the one dimensional result of </dt>
+<dd>reduction (one value corresponding to each row).</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="loader.load">
+<tt class="descclassname">loader.</tt><tt class="descname">load</tt><big>(</big><em>path</em>, <em>has_header=True</em>, <em>delimiter='</em>, <em>'</em><big>)</big><a class="reference internal" href="_modules/loader.html#load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#loader.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a data set from a delimited text file.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><p class="first">path: the path to the file containing the data set.
+has_header: set to False if the data being loaded does not have column</p>
+<blockquote>
+<div>headers on the first line.  Defaults to true.</div></blockquote>
+<dl class="last docutils">
+<dt>delimiter: the symbol used to separate columns in the file.  Default </dt>
+<dd>value is &#8216;,&#8217;.  Hint: delimiter for tab-delimited files is &#8216;     &#8216;.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>An array-like object.</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="distance_utils.html"
+                        title="previous chapter">distance_utils Module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/loader.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="distance_utils.html" title="distance_utils Module"
+             >previous</a> |</li>
+        <li><a href="index.html">Python Machine Learning 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, David Rusk.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

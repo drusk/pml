@@ -1,0 +1,228 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>loader &mdash; Python Machine Learning 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Python Machine Learning 0.1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">Python Machine Learning 0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for loader</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Utilities for loading data sets.</span>
+
+<span class="sd">@author: drusk</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+
+<div class="viewcode-block" id="DataSet"><a class="viewcode-back" href="../loader.html#loader.DataSet">[docs]</a><span class="k">class</span> <span class="nc">DataSet</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An abstract representation of a data set.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_frame</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructs a new data set object.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">          data_frame: a pandas DataFrame object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_frame</span> <span class="o">=</span> <span class="n">data_frame</span>
+        
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="DataSet.from_list"><a class="viewcode-back" href="../loader.html#loader.DataSet.from_list">[docs]</a>    <span class="k">def</span> <span class="nf">from_list</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">data_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a DataSet object from regular Python lists.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">          data_list: a standard Python list or list of lists containing the </span>
+<span class="sd">            data.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          A new DataSet instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data_list</span><span class="p">))</span>
+    </div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="DataSet.from_unknown"><a class="viewcode-back" href="../loader.html#loader.DataSet.from_unknown">[docs]</a>    <span class="k">def</span> <span class="nf">from_unknown</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a DataSet object from an object of an unknown data type.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">          data: the raw data set.  It can be stored as a Python list or </span>
+<span class="sd">            pandas dataframe.  If it is already a DataSet then it will just be </span>
+<span class="sd">            returned.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          A DataSet wrapper around the data.  If it is already a DataSet then </span>
+<span class="sd">          it will just be returned.</span>
+<span class="sd">          </span>
+<span class="sd">        Raises:</span>
+<span class="sd">          ValueError if the data is not of a supported type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">DataSet</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">data</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">DataSet</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Unsupported representation of data set&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="DataSet.num_samples"><a class="viewcode-back" href="../loader.html#loader.DataSet.num_samples">[docs]</a>    <span class="k">def</span> <span class="nf">num_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">          The number of samples (rows) in the data set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>    
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_frame</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    </div>
+<div class="viewcode-block" id="DataSet.num_features"><a class="viewcode-back" href="../loader.html#loader.DataSet.num_features">[docs]</a>    <span class="k">def</span> <span class="nf">num_features</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">          The number of features (columns) in the data set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_frame</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    </div>
+<div class="viewcode-block" id="DataSet.reduce_rows"><a class="viewcode-back" href="../loader.html#loader.DataSet.reduce_rows">[docs]</a>    <span class="k">def</span> <span class="nf">reduce_rows</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs a row-wise reduction of the data set.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">          function: the function which will be applied to each row in the data </span>
+<span class="sd">            set.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          a pandas Series object which is the one dimensional result of </span>
+<span class="sd">            reduction (one value corresponding to each row).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_frame</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="DataSet.drop_column"><a class="viewcode-back" href="../loader.html#loader.DataSet.drop_column">[docs]</a>    <span class="k">def</span> <span class="nf">drop_column</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a copy of the data set with a specified column removed.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">          index: the index (0 based) of the column to drop.</span>
+<span class="sd">          </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          a new DataSet with the specified column removed.  The original </span>
+<span class="sd">          DataSet remains unaltered.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">DataSet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_frame</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="DataSet.get_column"><a class="viewcode-back" href="../loader.html#loader.DataSet.get_column">[docs]</a>    <span class="k">def</span> <span class="nf">get_column</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Selects a column from the data set.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">          index: the index (0 based) of the column to select.</span>
+<span class="sd">          </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          the columns at the specified index as a pandas Series object.  This </span>
+<span class="sd">          series is a view on the original data set, not a copy.  That means </span>
+<span class="sd">          any changes to it will also be applied to the original data set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_frame</span><span class="o">.</span><span class="n">ix</span><span class="p">[:,</span> <span class="n">index</span><span class="p">]</span>
+
+</div></div>
+<div class="viewcode-block" id="load"><a class="viewcode-back" href="../loader.html#loader.load">[docs]</a><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">has_header</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">&quot;,&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads a data set from a delimited text file.</span>
+<span class="sd">    </span>
+<span class="sd">    Args::</span>
+<span class="sd">      path: the path to the file containing the data set.</span>
+<span class="sd">      has_header: set to False if the data being loaded does not have column </span>
+<span class="sd">        headers on the first line.  Defaults to true.</span>
+<span class="sd">      delimiter: the symbol used to separate columns in the file.  Default </span>
+<span class="sd">        value is &#39;,&#39;.  Hint: delimiter for tab-delimited files is &#39;\t&#39;.</span>
+<span class="sd">      </span>
+<span class="sd">    Returns:</span>
+<span class="sd">      An array-like object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">has_header</span> <span class="k">else</span> <span class="bp">None</span>
+    <span class="k">return</span> <span class="n">DataSet</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="n">delimiter</span><span class="p">))</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">Python Machine Learning 0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, David Rusk.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
