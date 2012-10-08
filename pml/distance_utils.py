@@ -11,8 +11,10 @@ def euclidean(vector1, vector2):
     Calculates the Euclidean distance between two vectors in n-space.
     
     Args:
-      vector1: start point vector
-      vector2: end point vector
+      vector1: 
+        start point vector
+      vector2: 
+        end point vector
     
     Returns:
       The distance (magnitude) between vector1 and vector2.

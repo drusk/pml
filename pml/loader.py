@@ -16,7 +16,8 @@ class DataSet(object):
         Constructs a new data set object.
         
         Args:
-          data_frame: a pandas DataFrame object.
+          data_frame: 
+            a pandas DataFrame object.
         """
         self.data_frame = data_frame
         
@@ -26,8 +27,8 @@ class DataSet(object):
         Creates a DataSet object from regular Python lists.
         
         Args:
-          data_list: a standard Python list or list of lists containing the 
-            data.
+          data_list: 
+            a standard Python list or list of lists containing the data.
             
         Returns:
           A new DataSet instance.
@@ -40,8 +41,9 @@ class DataSet(object):
         Creates a DataSet object from an object of an unknown data type.
         
         Args:
-          data: the raw data set.  It can be stored as a Python list or 
-            pandas dataframe.  If it is already a DataSet then it will just be 
+          data: 
+            the raw data set.  It can be stored as a Python list or pandas 
+            dataframe.  If it is already a DataSet then it will just be 
             returned.
         
         Returns:
@@ -79,8 +81,8 @@ class DataSet(object):
         Performs a row-wise reduction of the data set.
         
         Args:
-          function: the function which will be applied to each row in the data 
-            set.
+          function: 
+            the function which will be applied to each row in the data set.
         
         Returns:
           a pandas Series object which is the one dimensional result of 
@@ -93,7 +95,8 @@ class DataSet(object):
         Creates a copy of the data set with a specified column removed.
         
         Args:
-          index: the index (0 based) of the column to drop.
+          index: 
+            the index (0 based) of the column to drop.
           
         Returns:
           a new DataSet with the specified column removed.  The original 
@@ -106,7 +109,8 @@ class DataSet(object):
         Selects a column from the data set.
         
         Args:
-          index: the index (0 based) of the column to select.
+          index: 
+            the index (0 based) of the column to select.
           
         Returns:
           the columns at the specified index as a pandas Series object.  This 
@@ -121,11 +125,14 @@ def load(path, has_header=True, delimiter=","):
     Loads a data set from a delimited text file.
     
     Args:
-      path: the path to the file containing the data set.
-      has_header: set to False if the data being loaded does not have column 
-        headers on the first line.  Defaults to true.
-      delimiter: the symbol used to separate columns in the file.  Default 
-        value is ','.  Hint: delimiter for tab-delimited files is '\t'.
+      path: 
+        the path to the file containing the data set.
+      has_header: 
+        set to False if the data being loaded does not have column headers on 
+        the first line.  Defaults to true.
+      delimiter: 
+        the symbol used to separate columns in the file.  Default value is 
+        ','.  Hint: delimiter for tab-delimited files is '\t'.
       
     Returns:
       An array-like object.

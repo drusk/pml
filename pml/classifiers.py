@@ -29,8 +29,10 @@ class Knn(object):
         Constructs a new Knn classifier.
         
         Args:
-          training_set: an array-like set of data used to train the classifier.
-          k: the number of nearest neighbours to consider when voting for a 
+          training_set: 
+            an array-like set of data used to train the classifier.
+          k: 
+            the number of nearest neighbours to consider when voting for a 
             sample's class.  Must be a positive integer, preferably small.  
             Default value is 5.
         """
@@ -42,7 +44,8 @@ class Knn(object):
         Predicts a sample's classification based on the training set.
         
         Args:
-          sample: the sample or observation to be classified.
+          sample: 
+            the sample or observation to be classified.
           
         Returns:
           The sample's classification.
@@ -71,9 +74,10 @@ class Knn(object):
         give the sample.
         
         Args:
-          labels: the training set labels
-          distances: the distance from each entry in the training set to the 
-            sample.
+          labels: 
+            the training set labels
+          distances: 
+            the distance from each entry in the training set to the sample.
               
         Returns: 
           a dictionary mapping labels to their number of votes.
@@ -91,7 +95,8 @@ class Knn(object):
         Determines the labels which received the most votes.
         
         Args:
-          votes: a dictionary mapping labels to their number of votes.
+          votes: 
+            a dictionary mapping labels to their number of votes.
           
         Returns:
           a list of the labels which got the most votes.  It is a list because 

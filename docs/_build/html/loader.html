@@ -64,7 +64,11 @@
 <dd><p>Creates a copy of the data set with a specified column removed.</p>
 <dl class="docutils">
 <dt>Args:</dt>
-<dd>index: the index (0 based) of the column to drop.</dd>
+<dd><dl class="first last docutils">
+<dt>index: </dt>
+<dd>the index (0 based) of the column to drop.</dd>
+</dl>
+</dd>
 <dt>Returns:</dt>
 <dd>a new DataSet with the specified column removed.  The original 
 DataSet remains unaltered.</dd>
@@ -78,8 +82,8 @@ DataSet remains unaltered.</dd>
 <dl class="docutils">
 <dt>Args:</dt>
 <dd><dl class="first last docutils">
-<dt>data_list: a standard Python list or list of lists containing the </dt>
-<dd>data.</dd>
+<dt>data_list: </dt>
+<dd>a standard Python list or list of lists containing the data.</dd>
 </dl>
 </dd>
 <dt>Returns:</dt>
@@ -94,8 +98,9 @@ DataSet remains unaltered.</dd>
 <dl class="docutils">
 <dt>Args:</dt>
 <dd><dl class="first last docutils">
-<dt>data: the raw data set.  It can be stored as a Python list or </dt>
-<dd>pandas dataframe.  If it is already a DataSet then it will just be 
+<dt>data: </dt>
+<dd>the raw data set.  It can be stored as a Python list or pandas 
+dataframe.  If it is already a DataSet then it will just be 
 returned.</dd>
 </dl>
 </dd>
@@ -113,7 +118,11 @@ it will just be returned.</dd>
 <dd><p>Selects a column from the data set.</p>
 <dl class="docutils">
 <dt>Args:</dt>
-<dd>index: the index (0 based) of the column to select.</dd>
+<dd><dl class="first last docutils">
+<dt>index: </dt>
+<dd>the index (0 based) of the column to select.</dd>
+</dl>
+</dd>
 <dt>Returns:</dt>
 <dd>the columns at the specified index as a pandas Series object.  This 
 series is a view on the original data set, not a copy.  That means 
@@ -142,8 +151,8 @@ The number of samples (rows) in the data set.</p>
 <dl class="docutils">
 <dt>Args:</dt>
 <dd><dl class="first last docutils">
-<dt>function: the function which will be applied to each row in the data </dt>
-<dd>set.</dd>
+<dt>function: </dt>
+<dd>the function which will be applied to each row in the data set.</dd>
 </dl>
 </dd>
 <dt>Returns:</dt>
@@ -163,13 +172,15 @@ The number of samples (rows) in the data set.</p>
 <dd><p>Loads a data set from a delimited text file.</p>
 <dl class="docutils">
 <dt>Args:</dt>
-<dd><p class="first">path: the path to the file containing the data set.
-has_header: set to False if the data being loaded does not have column</p>
-<blockquote>
-<div>headers on the first line.  Defaults to true.</div></blockquote>
-<dl class="last docutils">
-<dt>delimiter: the symbol used to separate columns in the file.  Default </dt>
-<dd>value is &#8216;,&#8217;.  Hint: delimiter for tab-delimited files is &#8216;     &#8216;.</dd>
+<dd><dl class="first last docutils">
+<dt>path: </dt>
+<dd>the path to the file containing the data set.</dd>
+<dt>has_header: </dt>
+<dd>set to False if the data being loaded does not have column headers on 
+the first line.  Defaults to true.</dd>
+<dt>delimiter: </dt>
+<dd>the symbol used to separate columns in the file.  Default value is 
+&#8216;,&#8217;.  Hint: delimiter for tab-delimited files is &#8216;      &#8216;.</dd>
 </dl>
 </dd>
 <dt>Returns:</dt>
