@@ -6,6 +6,7 @@
 <path>/PythonMachineLearning</path>
 <path>/PythonMachineLearning/pml</path>
 <path>/PythonMachineLearning/test</path>
+<path>/PythonMachineLearning/shell</path>
 </pydev_pathproperty>
 <pydev_property name="org.python.pydev.PYTHON_PROJECT_VERSION">python 2.7</pydev_property>
 <pydev_property name="org.python.pydev.PYTHON_PROJECT_INTERPRETER">Default</pydev_property>
