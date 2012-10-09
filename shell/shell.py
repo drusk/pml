@@ -29,13 +29,27 @@ https://github.com/ingenuitas/SimpleCV/blob/develop/SimpleCV/Shell/Shell.py
 """
 
 import sys
+import webbrowser
+
 from IPython.config.loader import Config
 from IPython.frontend.terminal.embed import InteractiveShellEmbed
+
+def magic_docs(self, arg):
+    """
+    The function called when the 'docs' magic is executed.  IPython requires 
+    this function to accept two parameters, even though they are not used in 
+    this instance.
+    """
+    webbrowser.open("http://drusk.github.com/pml/")
 
 def setup_shell():
     banner = "+-----------------------------------------------------------+\n"
     banner += " PML Shell - built on IPython.\n"
     banner += "+-----------------------------------------------------------+\n"
+    banner += "Commands: \n"
+    banner += "\t'exit', 'quit' or press 'CTRL + D' to exit the shell.\n"
+    banner += "\t'docs' will open up the online documentation in a web \n"
+    banner += "\tbrowser\n"
 
     exit_message = "\nExiting PML shell, good bye!"
     
@@ -46,8 +60,7 @@ def setup_shell():
     
     shell = InteractiveShellEmbed(config=config, banner1=banner, 
                                   exit_msg=exit_message)
-    # add magics here
-    # ex: shell.define_magic("magic_name", magic_function)
+    shell.define_magic("docs", magic_docs)
     return shell
 
 if __name__ == "__main__":
