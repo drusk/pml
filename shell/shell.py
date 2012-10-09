@@ -51,5 +51,12 @@ def setup_shell():
     return shell
 
 if __name__ == "__main__":
+    # XXX eventually this will probably be run from a script somewhere else, 
+    # in which case this path won't be right.
+    sys.path.append("..")
+    # Import pml library.  These imports will be available in the shell that 
+    # is created.
+    from pml import *
+    
     shell = setup_shell()
     sys.exit(shell())
