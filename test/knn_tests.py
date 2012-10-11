@@ -25,6 +25,7 @@ Unit tests for the KNN algorithm.
 
 import unittest
 import classifiers
+import loader
 
 class KnnTest(unittest.TestCase):
 
@@ -56,6 +57,15 @@ class KnnTest(unittest.TestCase):
         classifier = classifiers.Knn(training_set, k=7)
         result = classifier.classify([2, 2])
         self.assertEqual(result, "a")
+        
+    def testClassifyAll(self):
+        training_set = [[1, 1, "a"], [2, 2, "a"], [11, 11, "b"], [12, 12, "b"]]
+        classifier = classifiers.Knn(training_set, k=3)
+        dataset = [[1.5, 1.3], [12.2, 12.9]]
+        classes = classifier.classify_all(dataset)
+        # TODO: collections matcher?
+        self.assertEqual(classes[0], "a")
+        self.assertEqual(classes[1], "b")
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

@@ -58,6 +58,19 @@ class Knn(object):
         self.training_set = loader.DataSet.from_unknown(training_set)
         self.k = k
         
+    def classify_all(self, dataset):
+        """
+        Predicts the classification of each sample in a dataset.
+        
+        Args:
+          dataset: DataSet compatible object (see DataSet.from_unknown)
+            the dataset whose samples (observations) will be classified.
+            
+        Returns:
+          a pandas Series containing each sample's classification.
+        """
+        return loader.DataSet.from_unknown(dataset).reduce_rows(self.classify)
+        
     def classify(self, sample):
         """
         Predicts a sample's classification based on the training set.
