@@ -73,6 +73,37 @@ class DataSetTest(unittest.TestCase):
         for i in range(len(column1)):
             self.assertEqual(column1[i], new_val)
         
+    def testGetRows(self):
+        dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
+        selection = dataset.get_rows([1, 3])
+        
+        self.assertEqual(selection.num_samples(), 2)
+        # TODO DataSet matcher?  need to verify it is the right 2 rows...
+        
+    def testSplit(self):
+        dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
+        first, second = dataset.split(0.5)
+        self.assertEqual(first.num_samples(), 2)
+        self.assertEqual(second.num_samples(), 2)
+        #TODO: check exact elements with collections matcher
+        
+    def testUnequalSplit(self):
+        dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
+        first, second = dataset.split(0.3)
+        self.assertEqual(first.num_samples(), 1)
+        self.assertEqual(second.num_samples(), 3)
+        #TODO: check exact elements with collections matcher
+
+    def testSplit0(self):
+        dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
+        first, second = dataset.split(0)
+        self.assertEqual(first.num_samples(), 0)
+        self.assertEqual(second.num_samples(), 4)
+        #TODO: check exact elements with collections matcher
+
+    def testSplitInvalidPercent(self):
+        dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
+        self.assertRaises(ValueError, dataset.split, 50)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

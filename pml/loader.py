@@ -138,6 +138,49 @@ class DataSet(object):
         """
         return self.data_frame.ix[:, index]
 
+    def get_rows(self, indices):
+        """
+        Selects specified rows from the dataset.
+        
+        Args:
+          indices: list
+            The list of row indices (0 based) which should be selected.
+        
+        Returns:
+          A new DataSet with the specified rows from the original.
+        """
+        return DataSet(self.data_frame.take(indices))
+
+    def split(self, percent):
+        """
+        Splits the dataset in two.
+        
+        Args:
+          percent: float
+            The percentage of the original dataset samples which should be 
+            placed in the first dataset returned.  The remainder are placed 
+            in the second dataset.  This percentage must be specified as a 
+            value between 0 and 1 inclusive.
+        
+        Returns:
+          dataset1: DataSet object
+            A subset of the original dataset with <percent> samples.
+          dataset2: DataSet object
+            A subset of the original dataset with 1-<percent> samples.
+            
+        Raises:
+          ValueError if percent < 0 or percent > 1.
+        """
+        if percent < 0 or percent > 1:
+            raise ValueError("Percentage value must be >= 0 and <= 1.")
+        
+        num_set1_samples = int(percent * self.num_samples())
+        set1_rows = range(num_set1_samples)
+        set2_rows = range(num_set1_samples, self.num_samples())
+    
+        # XXX refactor factories/constructor
+        return DataSet.from_unknown(self.get_rows(set1_rows)), DataSet.from_unknown(self.get_rows(set2_rows))
+    
 
 def load(path, has_header=True, delimiter=","):
     """
