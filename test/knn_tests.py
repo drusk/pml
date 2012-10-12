@@ -25,7 +25,7 @@ Unit tests for the KNN algorithm.
 
 import unittest
 import classifiers
-import loader
+from hamcrest import assert_that, contains
 
 class KnnTest(unittest.TestCase):
 
@@ -63,9 +63,8 @@ class KnnTest(unittest.TestCase):
         classifier = classifiers.Knn(training_set, k=3)
         dataset = [[1.5, 1.3], [12.2, 12.9]]
         classes = classifier.classify_all(dataset)
-        # TODO: collections matcher?
-        self.assertEqual(classes[0], "a")
-        self.assertEqual(classes[1], "b")
+        assert_that(classes, contains("a", "b"))
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

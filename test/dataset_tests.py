@@ -25,19 +25,14 @@ Tests for the DataSet class.
 
 import unittest
 from loader import DataSet
+from hamcrest import assert_that, contains
 
 class DataSetTest(unittest.TestCase):
 
     def testReduceRows(self):
         dataset = DataSet.from_list([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
         reduced = dataset.reduce_rows(sum)
-        expected = [6, 15, 24]
-        
-        self.assertEqual(len(reduced.values), len(expected))
-        
-        # TODO collections matchers
-        for i in range(len(expected)):
-            self.assertEqual(reduced.values[i], expected[i])
+        assert_that(reduced.values, contains(6, 15, 24))
         
     def testDropColumn(self):
         original_dataset = DataSet.from_list([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
@@ -54,24 +49,12 @@ class DataSetTest(unittest.TestCase):
     def testGetColumn(self):
         dataset = DataSet.from_list([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
         column1 = dataset.get_column(1)
-        
-        expected = [2, 5, 8]
-        self.assertEqual(len(column1.values), len(expected))
-        
-        # TODO collections matchers
-        for i in range(len(expected)):
-            self.assertEqual(column1.values[i], expected[i])
+        assert_that(column1.values, contains(2, 5, 8))
     
     def testGetColumnSetValue(self):
         dataset = DataSet.from_list([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-        new_val = 1
-        dataset.get_column(1)[:] = new_val
-        
-        # check that original dataset has been altered
-        # TODO collections matchers
-        column1 = dataset.get_column(1)
-        for i in range(len(column1)):
-            self.assertEqual(column1[i], new_val)
+        dataset.get_column(1)[:] = 1
+        assert_that(dataset.get_column(1), contains(1, 1, 1))
         
     def testGetRows(self):
         dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
