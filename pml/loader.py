@@ -40,6 +40,26 @@ class DataSet(object):
         """
         self.data_frame = data_frame
         
+    def __str__(self):
+        """
+        Returns:
+          This object's string representation, primarily for debugging 
+          purposes.
+        """
+        return self.data_frame.__str__()
+    
+    def __repr__(self):
+        """
+        This gets called when the object's name is typed into IPython on its 
+        own line, causing a string representation of the object to be 
+        displayed.
+        
+        Returns:
+          This object's string representation, primarily for debugging 
+          purposes.
+        """
+        return self.__str__()  
+        
     @classmethod
     def from_list(cls, data_list):
         """
