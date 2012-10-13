@@ -23,6 +23,7 @@ Custom Hamcrest matchers.
 @author: drusk
 """
 
+import numpy as np
 from hamcrest.core.base_matcher import BaseMatcher
 
 class IsDataSet(BaseMatcher):
@@ -59,13 +60,21 @@ class IsDataSet(BaseMatcher):
         description.append_text("dataset with elements: ")
         description.append_text(self.as_list.__str__())
     
+def _equals(val1, val2):
+    """
+    Special equals method to make NaN's considered equal to each other.
+    """
+    if np.isnan(val1) and np.isnan(val2):
+        return True
+    return val1 == val2
+    
 def match_exactly(list1, list2):
     """
     Compares two lists and returns True if they are exactly the same, False 
     otherwise.
     """
     return len(list1) == len(list2) and \
-        all([list1[i] == list2[i] for i in xrange(len(list1))])
+        all([_equals(list1[i], list2[i]) for i in xrange(len(list1))])
     
 def equals_dataset(as_list):
     """
