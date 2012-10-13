@@ -31,6 +31,8 @@ https://github.com/ingenuitas/SimpleCV/blob/develop/SimpleCV/Shell/Shell.py
 import sys
 import webbrowser
 
+from os.path import dirname
+
 from IPython.config.loader import Config
 from IPython.frontend.terminal.embed import InteractiveShellEmbed
 
@@ -64,9 +66,9 @@ def setup_shell():
     return shell
 
 if __name__ == "__main__":
-    # XXX eventually this will probably be run from a script somewhere else, 
-    # in which case this path won't be right.
-    sys.path.append("..")
+    # calling dirname twice gets the parent of the directory
+    sys.path.append(dirname(dirname(__file__)))
+    
     # Import pml library.  These imports will be available in the shell that 
     # is created.
     from pml import *
