@@ -26,6 +26,8 @@ Tests for the DataSet class.
 import unittest
 from loader import DataSet
 from hamcrest import assert_that, contains
+from matchers import equals_dataset
+import numpy as np
 
 class DataSetTest(unittest.TestCase):
 
@@ -61,6 +63,7 @@ class DataSetTest(unittest.TestCase):
         selection = dataset.get_rows([1, 3])
         
         self.assertEqual(selection.num_samples(), 2)
+        assert_that(selection, equals_dataset([[3, 4], [7, 8]]))
         # TODO DataSet matcher?  need to verify it is the right 2 rows...
         
     def testSplit(self):
@@ -87,6 +90,26 @@ class DataSetTest(unittest.TestCase):
     def testSplitInvalidPercent(self):
         dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
         self.assertRaises(ValueError, dataset.split, 50)
+        
+    def test_fill_missing(self):
+        dataset = DataSet.from_list([[1, np.NaN, 3], [np.NaN, 5, np.NaN]])
+        filled = dataset.fill_missing(0)
+        assert_that(filled, equals_dataset([[1, 0, 3], [0, 5, 0]]))
+        # verify original dataset is unchanged
+        assert_that(dataset, equals_dataset([[1, np.NaN, 3], 
+                                             [np.NaN, 5, np.NaN]]))
+        
+    def test_get_row(self):
+        dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
+        row = dataset.get_row(1)
+        assert_that(row.values, contains(3, 4))
+        # check that changes made to selected row are reflected in original
+        row[:] = 1
+        assert_that(dataset.get_row(1), contains(1, 1))
+        
+    def test_get_last_row(self):
+        dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
+        assert_that(dataset.get_row(dataset.num_samples() - 1), contains(7, 8))
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

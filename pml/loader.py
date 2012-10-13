@@ -158,6 +158,21 @@ class DataSet(object):
         """
         return self.data_frame.ix[:, index]
 
+    def get_row(self, index):
+        """
+        Selects a single row from the dataset.
+        
+        Args:
+          index: int
+            The index (0 based) of the row to select.
+            
+        Returns:
+          A pandas Series object representing the desired row.  NOTE: this is 
+          a view on the original dataset.  Changes made to this Series will 
+          also be made to the DataSet.
+        """
+        return self.data_frame.ix[index]
+
     def get_rows(self, indices):
         """
         Selects specified rows from the dataset.
@@ -200,6 +215,20 @@ class DataSet(object):
     
         # XXX refactor factories/constructor
         return DataSet.from_unknown(self.get_rows(set1_rows)), DataSet.from_unknown(self.get_rows(set2_rows))
+    
+    def fill_missing(self, fill_value):
+        """
+        Fill in missing data with a constant value.
+        
+        Args:
+          fill_value:
+            The value to insert wherever data is missing.
+            
+        Returns:
+          A new DataSet object with missing values filled in.
+        """
+        # fillna returns a new DataFrame, does not modify the original
+        return DataSet(self.data_frame.fillna(fill_value))
     
 
 def load(path, has_header=True, delimiter=","):
