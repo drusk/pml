@@ -58,6 +58,27 @@ class Knn(object):
         self.training_set = loader.DataSet.from_unknown(training_set)
         self.k = k
         
+    def __str__(self):
+        """
+        Returns:
+          This object's string representation, primarily for debugging 
+          purposes.
+        """
+        return "<KNN Classifier: k=%d, trained on %d samples>" \
+            % (self.k, self.training_set.num_samples())
+            
+    def __repr__(self):
+        """
+        This gets called when the object's name is typed into IPython on its 
+        own line, causing a string representation of the object to be 
+        displayed.
+        
+        Returns:
+          This object's string representation, primarily for debugging 
+          purposes.
+        """
+        return self.__str__()  
+    
     def classify_all(self, dataset):
         """
         Predicts the classification of each sample in a dataset.
