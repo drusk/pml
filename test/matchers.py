@@ -42,33 +42,28 @@ class IsDataSet(BaseMatcher):
         self.as_list = as_list
     
     def _matches(self, dataset):
-        print "Expected: %s" % self.as_list
         if dataset.num_samples() != len(self.as_list):
             return False
-        print "Length check ok"
+
         for i in xrange(dataset.num_samples()):
-            print "Checking element %d" %i
-            print self.as_list[i]
-            print "Dataset: %s" % dataset
-            print dataset.get_row(i)
-            print dataset.get_row(i).tolist()
-            if not match_exactly(self.as_list[i], dataset.get_row(i).tolist()):
+            # if the dataset has been filtered the indices may not be a 
+            # continuous range
+            index = dataset.data_frame.index[i]
+            if not match_exactly(self.as_list[i], 
+                                 dataset.get_row(index).tolist()):
                 return False
         
         return True    
         
     def describe_to(self, description):
         description.append_text("dataset with elements: ")
-        description.append_text(self.as_list)
+        description.append_text(self.as_list.__str__())
     
 def match_exactly(list1, list2):
     """
     Compares two lists and returns True if they are exactly the same, False 
     otherwise.
     """
-    print "Testing match_exactly"
-    print "list1: " % list1
-    print "list2: " % list2
     return len(list1) == len(list2) and \
         all([list1[i] == list2[i] for i in xrange(len(list1))])
     
