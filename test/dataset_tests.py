@@ -37,16 +37,15 @@ class DataSetTest(unittest.TestCase):
         assert_that(reduced.values, contains(6, 15, 24))
         
     def testDropColumn(self):
-        original_dataset = DataSet.from_list([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-        self.assertEqual(original_dataset.num_features(), 3)
-        
-        filtered_dataset = original_dataset.drop_column(1)
-        self.assertEqual(filtered_dataset.num_features(), 2)
-        
-        self.assertEqual(original_dataset.num_features(), 3)
-        
-        # TODO should test the exact values as well.  Maybe have an as_list 
-        # method and pass results to a collections matcher?
+        original = DataSet.from_list([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        self.assertEqual(original.num_features(), 3)
+        filtered = original.drop_column(1)
+        self.assertEqual(filtered.num_features(), 2)
+        assert_that(filtered, equals_dataset([[1, 3], [4, 6], [7, 9]]))
+        # make sure original unchanged
+        self.assertEqual(original.num_features(), 3)
+        assert_that(original, equals_dataset([[1, 2, 3], [4, 5, 6], 
+                                              [7, 8, 9]]))
         
     def testGetColumn(self):
         dataset = DataSet.from_list([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
@@ -64,28 +63,30 @@ class DataSetTest(unittest.TestCase):
         
         self.assertEqual(selection.num_samples(), 2)
         assert_that(selection, equals_dataset([[3, 4], [7, 8]]))
-        # TODO DataSet matcher?  need to verify it is the right 2 rows...
         
     def testSplit(self):
         dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
         first, second = dataset.split(0.5)
         self.assertEqual(first.num_samples(), 2)
+        assert_that(first, equals_dataset([[1, 2], [3, 4]]))
         self.assertEqual(second.num_samples(), 2)
-        #TODO: check exact elements with collections matcher
+        assert_that(second, equals_dataset([[5, 6], [7, 8]]))
         
     def testUnequalSplit(self):
         dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
         first, second = dataset.split(0.3)
         self.assertEqual(first.num_samples(), 1)
+        assert_that(first, equals_dataset([[1, 2]]))
         self.assertEqual(second.num_samples(), 3)
-        #TODO: check exact elements with collections matcher
+        assert_that(second, equals_dataset([[3, 4], [5, 6], [7, 8]]))
 
     def testSplit0(self):
         dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
         first, second = dataset.split(0)
         self.assertEqual(first.num_samples(), 0)
+        assert_that(first, equals_dataset([]))
         self.assertEqual(second.num_samples(), 4)
-        #TODO: check exact elements with collections matcher
+        assert_that(second, equals_dataset([[1, 2], [3, 4], [5, 6], [7, 8]]))
 
     def testSplitInvalidPercent(self):
         dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
@@ -110,6 +111,7 @@ class DataSetTest(unittest.TestCase):
     def test_get_last_row(self):
         dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
         assert_that(dataset.get_row(dataset.num_samples() - 1), contains(7, 8))
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
