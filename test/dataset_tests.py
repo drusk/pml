@@ -31,12 +31,12 @@ import numpy as np
 
 class DataSetTest(unittest.TestCase):
 
-    def testReduceRows(self):
+    def test_reduce_rows(self):
         dataset = DataSet.from_list([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
         reduced = dataset.reduce_rows(sum)
         assert_that(reduced.values, contains(6, 15, 24))
         
-    def testDropColumn(self):
+    def test_drop_column(self):
         original = DataSet.from_list([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
         self.assertEqual(original.num_features(), 3)
         filtered = original.drop_column(1)
@@ -47,24 +47,24 @@ class DataSetTest(unittest.TestCase):
         assert_that(original, equals_dataset([[1, 2, 3], [4, 5, 6], 
                                               [7, 8, 9]]))
         
-    def testGetColumn(self):
+    def test_get_column(self):
         dataset = DataSet.from_list([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
         column1 = dataset.get_column(1)
         assert_that(column1.values, contains(2, 5, 8))
     
-    def testGetColumnSetValue(self):
+    def test_get_column_set_value(self):
         dataset = DataSet.from_list([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
         dataset.get_column(1)[:] = 1
         assert_that(dataset.get_column(1), contains(1, 1, 1))
         
-    def testGetRows(self):
+    def test_get_rows(self):
         dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
         selection = dataset.get_rows([1, 3])
         
         self.assertEqual(selection.num_samples(), 2)
         assert_that(selection, equals_dataset([[3, 4], [7, 8]]))
         
-    def testSplit(self):
+    def test_split(self):
         dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
         first, second = dataset.split(0.5)
         self.assertEqual(first.num_samples(), 2)
@@ -72,7 +72,7 @@ class DataSetTest(unittest.TestCase):
         self.assertEqual(second.num_samples(), 2)
         assert_that(second, equals_dataset([[5, 6], [7, 8]]))
         
-    def testUnequalSplit(self):
+    def test_unequal_split(self):
         dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
         first, second = dataset.split(0.3)
         self.assertEqual(first.num_samples(), 1)
@@ -80,7 +80,7 @@ class DataSetTest(unittest.TestCase):
         self.assertEqual(second.num_samples(), 3)
         assert_that(second, equals_dataset([[3, 4], [5, 6], [7, 8]]))
 
-    def testSplit0(self):
+    def test_split_0(self):
         dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
         first, second = dataset.split(0)
         self.assertEqual(first.num_samples(), 0)
@@ -88,7 +88,7 @@ class DataSetTest(unittest.TestCase):
         self.assertEqual(second.num_samples(), 4)
         assert_that(second, equals_dataset([[1, 2], [3, 4], [5, 6], [7, 8]]))
 
-    def testSplitInvalidPercent(self):
+    def test_split_invalid_percent(self):
         dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
         self.assertRaises(ValueError, dataset.split, 50)
         

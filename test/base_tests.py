@@ -49,6 +49,8 @@ class BaseFileLoadingTest(unittest.TestCase):
         path.replace("/", os.sep)
         return os.path.dirname(__file__) + os.sep + path
 
+
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
+    

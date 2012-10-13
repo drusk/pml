@@ -29,25 +29,25 @@ import loader
 
 class LoaderTest(base_tests.BaseFileLoadingTest):
 
-    def testLoadCsv(self):
+    def test_load_csv(self):
         data_set = loader.load(self.relative("datasets/3f_header.csv"))
         self.assertEqual(data_set.num_features(), 3)
         self.assertEqual(data_set.num_samples(), 4)
 
-    def testLoadCsvNoHeader(self):
+    def test_load_csv_no_header(self):
         data_set = loader.load(self.relative("datasets/3f_no_header.csv"), 
                                has_header=False)
         self.assertEqual(data_set.num_features(), 3)
         self.assertEqual(data_set.num_samples(), 4)
     
-    def testLoadTsv(self):
+    def test_load_tsv(self):
         data_set = loader.load(self.relative("datasets/3f_header.tsv"), 
                                delimiter="\t")
         self.assertEqual(data_set.num_features(), 3)
         self.assertEqual(data_set.num_samples(), 4)
     
     @unittest.skip("Filtering unimplemented")
-    def testLoadAndFilterToSingleValue(self):
+    def test_load_and_filter_to_single_value(self):
         data_set = loader.load(self.relative("datasets/3f_header.csv"))
         filtered = data_set.filter("y", 3)
         self.assertEqual(filtered.num_samples(), 1)
@@ -56,11 +56,12 @@ class LoaderTest(base_tests.BaseFileLoadingTest):
         self.assertEqual(filtered.get("label"), "b")
     
     @unittest.skip("Filtering unimplemented")
-    def testLoadAndFilterToMultipleValues(self):
+    def test_load_and_filter_to_multiple_values(self):
         data_set = loader.load(self.relative("datasets/3f_header.csv"))
         filtered = data_set.filter("x", 1)
         self.assertEqual(filtered.num_samples(), 2)
         self.assertEqual(filtered.num_features(), 3)
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

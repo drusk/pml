@@ -60,6 +60,7 @@ class IsDataSet(BaseMatcher):
         description.append_text("dataset with elements: ")
         description.append_text(self.as_list.__str__())
     
+    
 def _equals(val1, val2):
     """
     Special equals method to make NaN's considered equal to each other.
