@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
 # IN THE SOFTWARE.
 """
-Tests for the DataSet class.
+Unit tests for the model module.
 
 @author: drusk
 """
