@@ -49,7 +49,7 @@ class IsDataSet(BaseMatcher):
         for i in xrange(dataset.num_samples()):
             # if the dataset has been filtered the indices may not be a 
             # continuous range
-            index = dataset.data_frame.index[i]
+            index = dataset._dataframe.index[i]
             if not match_exactly(self.as_list[i], 
                                  dataset.get_row(index).tolist()):
                 return False

@@ -27,18 +27,21 @@ import pandas as pd
 
 class DataSet(object):
     """
-    An abstract representation of a data set.
+    A collection of data that may be analysed and manipulated.
+    
+    Columns are interpreted as features in the data set, and rows are samples 
+    or observations.
     """
     
-    def __init__(self, data_frame):
+    def __init__(self, dataframe):
         """
-        Constructs a new data set object.
+        Constructs a new DataSet object.
         
         Args:
-          data_frame: 
+          dataframe: 
             a pandas DataFrame object.
         """
-        self.data_frame = data_frame
+        self._dataframe = dataframe
         
     def __str__(self):
         """
@@ -46,7 +49,7 @@ class DataSet(object):
           This object's string representation, primarily for debugging 
           purposes.
         """
-        return self.data_frame.__str__()
+        return self._dataframe.__str__()
     
     def __repr__(self):
         """
@@ -106,14 +109,14 @@ class DataSet(object):
         Returns:
           The number of samples (rows) in the data set.
         """    
-        return self.data_frame.shape[0]
+        return self._dataframe.shape[0]
     
     def num_features(self):
         """
         Returns:
           The number of features (columns) in the data set.
         """
-        return self.data_frame.shape[1]
+        return self._dataframe.shape[1]
     
     def reduce_rows(self, function):
         """
@@ -127,7 +130,7 @@ class DataSet(object):
           a pandas Series object which is the one dimensional result of 
             reduction (one value corresponding to each row).
         """
-        return self.data_frame.apply(function, axis=1)
+        return self._dataframe.apply(function, axis=1)
 
     def drop_column(self, index):
         """
@@ -141,7 +144,7 @@ class DataSet(object):
           a new DataSet with the specified column removed.  The original 
           DataSet remains unaltered.
         """
-        return DataSet(self.data_frame.drop(index, axis=1))
+        return DataSet(self._dataframe.drop(index, axis=1))
 
     def get_column(self, index):
         """
@@ -156,7 +159,7 @@ class DataSet(object):
           series is a view on the original data set, not a copy.  That means 
           any changes to it will also be applied to the original data set.
         """
-        return self.data_frame.ix[:, index]
+        return self._dataframe.ix[:, index]
 
     def get_row(self, identifier):
         """
@@ -173,7 +176,7 @@ class DataSet(object):
           a view on the original dataset.  Changes made to this Series will 
           also be made to the DataSet.
         """
-        return self.data_frame.ix[identifier]
+        return self._dataframe.ix[identifier]
 
     def get_rows(self, indices):
         """
@@ -186,7 +189,7 @@ class DataSet(object):
         Returns:
           A new DataSet with the specified rows from the original.
         """
-        return DataSet(self.data_frame.take(indices))
+        return DataSet(self._dataframe.take(indices))
 
     def split(self, percent):
         """
@@ -230,7 +233,7 @@ class DataSet(object):
           A new DataSet object with missing values filled in.
         """
         # fillna returns a new DataFrame, does not modify the original
-        return DataSet(self.data_frame.fillna(fill_value))
+        return DataSet(self._dataframe.fillna(fill_value))
     
 
 def load(path, has_ids=True, has_header=True, delimiter=","):
