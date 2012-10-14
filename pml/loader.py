@@ -158,20 +158,22 @@ class DataSet(object):
         """
         return self.data_frame.ix[:, index]
 
-    def get_row(self, index):
+    def get_row(self, identifier):
         """
         Selects a single row from the dataset.
         
         Args:
-          index: int
-            The index (0 based) of the row to select.
+          identifier:
+            The id of the row to select.  If the DataSet has special indices 
+            set up (ex: through a call to load with has_ids=True) these can 
+            be used.  The integer index (0 based) can also be used.
             
         Returns:
           A pandas Series object representing the desired row.  NOTE: this is 
           a view on the original dataset.  Changes made to this Series will 
           also be made to the DataSet.
         """
-        return self.data_frame.ix[index]
+        return self.data_frame.ix[identifier]
 
     def get_rows(self, indices):
         """

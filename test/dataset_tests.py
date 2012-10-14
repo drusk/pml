@@ -28,6 +28,7 @@ from loader import DataSet
 from hamcrest import assert_that, contains
 from matchers import equals_dataset
 import numpy as np
+import pandas as pd
 
 class DataSetTest(unittest.TestCase):
 
@@ -107,6 +108,16 @@ class DataSetTest(unittest.TestCase):
         # check that changes made to selected row are reflected in original
         row[:] = 1
         assert_that(dataset.get_row(1), contains(1, 1))
+        
+    def test_get_row_by_id(self):
+        df = pd.DataFrame([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 
+                          index=["V01", "V02", "V03"])
+        dataset = DataSet(df)
+        sample = dataset.get_row("V02")
+        assert_that(sample, contains(4, 5, 6))
+        # make sure position based index is still usable
+        sample = dataset.get_row(1)
+        assert_that(sample, contains(4, 5, 6))
         
     def test_get_last_row(self):
         dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
