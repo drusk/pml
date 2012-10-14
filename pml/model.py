@@ -33,15 +33,30 @@ class DataSet(object):
     or observations.
     """
     
-    def __init__(self, dataframe):
+    def __init__(self, data):
         """
-        Constructs a new DataSet object.
-        
+        Creates a new DataSet from data of an unknown type.  If data is itself 
+        a DataSet object, then its contents are copied and a new DataSet is 
+        created from the copies.
+    
         Args:
-          dataframe: 
-            a pandas DataFrame object.
+          data: 
+            Data of unknown type.  The supported types are:
+                1) pandas DataFrame
+                2) Python lists or pandas DataFrame
+                3) an existing DataSet object 
+        
+        Raises:
+          ValueError if the data is not of a supported type.    
         """
-        self._dataframe = dataframe
+        if isinstance(data, pd.DataFrame):
+            self._dataframe = data
+        elif isinstance(data, list):
+            self._dataframe = pd.DataFrame(data)
+        elif isinstance(data, DataSet):
+            self._dataframe = data._dataframe.copy()
+        else:
+            raise ValueError("Unsupported representation of data set")        
         
     def __str__(self):
         """
@@ -63,47 +78,6 @@ class DataSet(object):
         """
         return self.__str__()  
         
-    @classmethod
-    def from_list(cls, data_list):
-        """
-        Creates a DataSet object from regular Python lists.
-        
-        Args:
-          data_list: 
-            a standard Python list or list of lists containing the data.
-            
-        Returns:
-          A new DataSet instance.
-        """
-        return cls(pd.DataFrame(data_list))
-    
-    @classmethod
-    def from_unknown(cls, data):
-        """
-        Creates a DataSet object from an object of an unknown data type.
-        
-        Args:
-          data: 
-            the raw data set.  It can be stored as a Python list or pandas 
-            dataframe.  If it is already a DataSet then it will just be 
-            returned.
-        
-        Returns:
-          A DataSet wrapper around the data.  If it is already a DataSet then 
-          it will just be returned.
-          
-        Raises:
-          ValueError if the data is not of a supported type.
-        """
-        if isinstance(data, DataSet):
-            return data
-        elif isinstance(data, pd.DataFrame):
-            return cls(data)
-        elif isinstance(data, list):
-            return DataSet.from_list(data)
-        else:
-            raise ValueError("Unsupported representation of data set")
-
     def num_samples(self):
         """
         Returns:
@@ -218,8 +192,7 @@ class DataSet(object):
         set1_rows = range(num_set1_samples)
         set2_rows = range(num_set1_samples, self.num_samples())
     
-        # XXX refactor factories/constructor
-        return DataSet.from_unknown(self.get_rows(set1_rows)), DataSet.from_unknown(self.get_rows(set2_rows))
+        return DataSet(self.get_rows(set1_rows)), DataSet(self.get_rows(set2_rows))
     
     def fill_missing(self, fill_value):
         """
@@ -234,4 +207,29 @@ class DataSet(object):
         """
         # fillna returns a new DataFrame, does not modify the original
         return DataSet(self._dataframe.fillna(fill_value))
+    
+
+def as_dataset(data):
+    """
+    Creates a DataSet from the provided data.  If data is already a DataSet, 
+    return it directly.  Use this instead of the DataSet constructor if you 
+    don't know whether your data is a DataSet already, but you don't want to 
+    create a new one if it already is.
+    
+    Args:
+      data: 
+        Data of unknown type.  It may be a Python list or pandas DataFrame or 
+        DataSet object.
+        
+    Returns:
+      A DataSet object.  If the data was already a DataSet then the input 
+      object will be directly returned.
+          
+    Raises:
+      ValueError if the data is not of a supported type.    
+    """
+    if isinstance(data, DataSet):
+        return data
+    else:
+        return DataSet(data)
     

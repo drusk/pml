@@ -33,12 +33,12 @@ import pandas as pd
 class DataSetTest(unittest.TestCase):
 
     def test_reduce_rows(self):
-        dataset = DataSet.from_list([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        dataset = DataSet([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
         reduced = dataset.reduce_rows(sum)
         assert_that(reduced.values, contains(6, 15, 24))
         
     def test_drop_column(self):
-        original = DataSet.from_list([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        original = DataSet([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
         self.assertEqual(original.num_features(), 3)
         filtered = original.drop_column(1)
         self.assertEqual(filtered.num_features(), 2)
@@ -49,24 +49,24 @@ class DataSetTest(unittest.TestCase):
                                               [7, 8, 9]]))
         
     def test_get_column(self):
-        dataset = DataSet.from_list([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        dataset = DataSet([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
         column1 = dataset.get_column(1)
         assert_that(column1.values, contains(2, 5, 8))
     
     def test_get_column_set_value(self):
-        dataset = DataSet.from_list([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        dataset = DataSet([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
         dataset.get_column(1)[:] = 1
         assert_that(dataset.get_column(1), contains(1, 1, 1))
         
     def test_get_rows(self):
-        dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
+        dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]])
         selection = dataset.get_rows([1, 3])
         
         self.assertEqual(selection.num_samples(), 2)
         assert_that(selection, equals_dataset([[3, 4], [7, 8]]))
         
     def test_split(self):
-        dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
+        dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]])
         first, second = dataset.split(0.5)
         self.assertEqual(first.num_samples(), 2)
         assert_that(first, equals_dataset([[1, 2], [3, 4]]))
@@ -74,7 +74,7 @@ class DataSetTest(unittest.TestCase):
         assert_that(second, equals_dataset([[5, 6], [7, 8]]))
         
     def test_unequal_split(self):
-        dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
+        dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]])
         first, second = dataset.split(0.3)
         self.assertEqual(first.num_samples(), 1)
         assert_that(first, equals_dataset([[1, 2]]))
@@ -82,7 +82,7 @@ class DataSetTest(unittest.TestCase):
         assert_that(second, equals_dataset([[3, 4], [5, 6], [7, 8]]))
 
     def test_split_0(self):
-        dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
+        dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]])
         first, second = dataset.split(0)
         self.assertEqual(first.num_samples(), 0)
         assert_that(first, equals_dataset([]))
@@ -90,11 +90,11 @@ class DataSetTest(unittest.TestCase):
         assert_that(second, equals_dataset([[1, 2], [3, 4], [5, 6], [7, 8]]))
 
     def test_split_invalid_percent(self):
-        dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
+        dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]])
         self.assertRaises(ValueError, dataset.split, 50)
         
     def test_fill_missing(self):
-        dataset = DataSet.from_list([[1, np.NaN, 3], [np.NaN, 5, np.NaN]])
+        dataset = DataSet([[1, np.NaN, 3], [np.NaN, 5, np.NaN]])
         filled = dataset.fill_missing(0)
         assert_that(filled, equals_dataset([[1, 0, 3], [0, 5, 0]]))
         # verify original dataset is unchanged
@@ -102,7 +102,7 @@ class DataSetTest(unittest.TestCase):
                                              [np.NaN, 5, np.NaN]]))
         
     def test_get_row(self):
-        dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
+        dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]])
         row = dataset.get_row(1)
         assert_that(row.values, contains(3, 4))
         # check that changes made to selected row are reflected in original
@@ -120,7 +120,7 @@ class DataSetTest(unittest.TestCase):
         assert_that(sample, contains(4, 5, 6))
         
     def test_get_last_row(self):
-        dataset = DataSet.from_list([[1, 2], [3, 4], [5, 6], [7, 8]])
+        dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]])
         assert_that(dataset.get_row(dataset.num_samples() - 1), contains(7, 8))
 
 

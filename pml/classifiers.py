@@ -55,7 +55,7 @@ class Knn(object):
             sample's class.  Must be a positive integer, preferably small.  
             Default value is 5.
         """
-        self.training_set = model.DataSet.from_unknown(training_set)
+        self.training_set = model.as_dataset(training_set)
         self.k = k
         
     def __str__(self):
@@ -84,13 +84,13 @@ class Knn(object):
         Predicts the classification of each sample in a dataset.
         
         Args:
-          dataset: DataSet compatible object (see DataSet.from_unknown)
+          dataset: DataSet compatible object (see DataSet constructor)
             the dataset whose samples (observations) will be classified.
             
         Returns:
           a pandas Series containing each sample's classification.
         """
-        return model.DataSet.from_unknown(dataset).reduce_rows(self.classify)
+        return model.as_dataset(dataset).reduce_rows(self.classify)
         
     def classify(self, sample):
         """
