@@ -24,7 +24,7 @@ Unit tests for the model module.
 """
 
 import unittest
-from model import DataSet
+from model import DataSet, as_dataset
 from hamcrest import assert_that, contains
 from matchers import equals_dataset
 import numpy as np
@@ -122,6 +122,22 @@ class DataSetTest(unittest.TestCase):
     def test_get_last_row(self):
         dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]])
         assert_that(dataset.get_row(dataset.num_samples() - 1), contains(7, 8))
+
+    def test_contruct_dataset_from_dataset(self):
+        original = DataSet([[1, 2], [3, 4], [5, 6]])
+        new = DataSet(original)
+        self.assertFalse(new is original)
+        new._dataframe.ix[1] = 1
+        assert_that(new, equals_dataset([[1, 2], [1, 1], [5, 6]]))
+        assert_that(original, equals_dataset([[1, 2], [3, 4], [5, 6]]))
+        
+    def test_as_dataset(self):
+        original = DataSet([[1, 2], [3, 4], [5, 6]])
+        dataset = as_dataset(original)
+        self.assertTrue(dataset is original)
+        dataset._dataframe.ix[1] = 1
+        assert_that(dataset, equals_dataset([[1, 2], [1, 1], [5, 6]]))
+        assert_that(original, equals_dataset([[1, 2], [1, 1], [5, 6]]))
 
 
 if __name__ == "__main__":
