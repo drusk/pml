@@ -23,7 +23,7 @@ Classification algorithms for supervised learning tasks.
 @author: drusk
 """
 
-import loader
+import model
 import distance_utils
 import collections
 
@@ -55,7 +55,7 @@ class Knn(object):
             sample's class.  Must be a positive integer, preferably small.  
             Default value is 5.
         """
-        self.training_set = loader.DataSet.from_unknown(training_set)
+        self.training_set = model.DataSet.from_unknown(training_set)
         self.k = k
         
     def __str__(self):
@@ -90,7 +90,7 @@ class Knn(object):
         Returns:
           a pandas Series containing each sample's classification.
         """
-        return loader.DataSet.from_unknown(dataset).reduce_rows(self.classify)
+        return model.DataSet.from_unknown(dataset).reduce_rows(self.classify)
         
     def classify(self, sample):
         """

@@ -24,7 +24,7 @@ Tests for the DataSet class.
 """
 
 import unittest
-from loader import DataSet
+from model import DataSet
 from hamcrest import assert_that, contains
 from matchers import equals_dataset
 import numpy as np
