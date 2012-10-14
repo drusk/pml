@@ -30,19 +30,20 @@ import loader
 class LoaderTest(base_tests.BaseFileLoadingTest):
 
     def test_load_csv(self):
-        data_set = loader.load(self.relative("datasets/3f_header.csv"))
+        data_set = loader.load(self.relative("datasets/3f_header.csv"), 
+                               has_ids=False)
         self.assertEqual(data_set.num_features(), 3)
         self.assertEqual(data_set.num_samples(), 4)
 
     def test_load_csv_no_header(self):
         data_set = loader.load(self.relative("datasets/3f_no_header.csv"), 
-                               has_header=False)
+                               has_header=False, has_ids=False)
         self.assertEqual(data_set.num_features(), 3)
         self.assertEqual(data_set.num_samples(), 4)
     
     def test_load_tsv(self):
         data_set = loader.load(self.relative("datasets/3f_header.tsv"), 
-                               delimiter="\t")
+                               delimiter="\t", has_ids=False)
         self.assertEqual(data_set.num_features(), 3)
         self.assertEqual(data_set.num_samples(), 4)
     
@@ -62,6 +63,11 @@ class LoaderTest(base_tests.BaseFileLoadingTest):
         self.assertEqual(filtered.num_samples(), 2)
         self.assertEqual(filtered.num_features(), 3)
 
+    def test_load_has_ids(self):
+        dataset = loader.load(self.relative("datasets/3f_ids_header.csv"))
+        self.assertEqual(dataset.num_features(), 3)
+        self.assertEqual(dataset.num_samples(), 4)
+        
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

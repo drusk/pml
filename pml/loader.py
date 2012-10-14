@@ -231,17 +231,21 @@ class DataSet(object):
         return DataSet(self.data_frame.fillna(fill_value))
     
 
-def load(path, has_header=True, delimiter=","):
+def load(path, has_ids=True, has_header=True, delimiter=","):
     """
     Loads a data set from a delimited text file.
     
     Args:
       path: 
         the path to the file containing the data set.
-      has_header: 
+      has_ids: boolean
+        set to False if the first column in the loaded dataset should not be 
+        interpreted as a feature instead of sample identifiers.  Defaults to 
+        True, i.e. first column are interpreted as sample identifiers.
+      has_header: boolean
         set to False if the data being loaded does not have column headers on 
         the first line.  Defaults to true.
-      delimiter: 
+      delimiter: string
         the symbol used to separate columns in the file.  Default value is 
         ','.  Hint: delimiter for tab-delimited files is '\t'.
       
@@ -249,4 +253,6 @@ def load(path, has_header=True, delimiter=","):
       An array-like object.
     """
     header = 0 if has_header else None
-    return DataSet(pd.read_csv(path, header=header, delimiter=delimiter))
+    id_col = 0 if has_ids else None
+    return DataSet(pd.read_csv(path, index_col=id_col, header=header, 
+                               delimiter=delimiter))
