@@ -108,7 +108,15 @@ class Knn(object):
           
         Returns:
           The sample's classification.
+          
+        Raises:
+          ValueError if sample doesn't have the same number of features as 
+          the data in the training set.
         """
+        if len(sample) != self.training_set.num_features():
+            raise ValueError(("Sample must have the same number of features ", 
+                              "as the training set."))
+            
         # This function is used so that we can reduce each row with respect 
         # to the sample.
         def calc_dist(vector):
