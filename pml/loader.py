@@ -26,7 +26,7 @@ Utilities for loading data sets.
 import pandas as pd
 import model
 
-def load(path, has_ids=True, has_header=True, delimiter=","):
+def load(path, has_ids=True, has_header=True, has_labels=True, delimiter=","):
     """
     Loads a data set from a delimited text file.
     
@@ -40,14 +40,24 @@ def load(path, has_ids=True, has_header=True, delimiter=","):
       has_header: boolean
         set to False if the data being loaded does not have column headers on 
         the first line.  Defaults to true.
+      has_labels: boolean
+        set to False if the data being loaded does not have classification 
+        labels for each sample.  Defaults to True.  The labels should be the 
+        last column in the dataset being loaded.
       delimiter: string
         the symbol used to separate columns in the file.  Default value is 
         ','.  Hint: delimiter for tab-delimited files is '\t'.
       
     Returns:
-      An array-like object.
+      A DataSet object.
     """
     header = 0 if has_header else None
     id_col = 0 if has_ids else None
-    return model.DataSet(pd.read_csv(path, index_col=id_col, header=header, 
-                               delimiter=delimiter))
+
+    dataframe = pd.read_csv(path, index_col=id_col, header=header, 
+                            delimiter=delimiter)
+    
+    if has_labels:
+        labels = dataframe.pop(dataframe.columns[-1])
+
+    return model.DataSet(dataframe)
