@@ -57,7 +57,6 @@ def load(path, has_ids=True, has_header=True, has_labels=True, delimiter=","):
     dataframe = pd.read_csv(path, index_col=id_col, header=header, 
                             delimiter=delimiter)
     
-    if has_labels:
-        labels = dataframe.pop(dataframe.columns[-1])
+    labels = dataframe.pop(dataframe.columns[-1]) if has_labels else None
 
-    return model.DataSet(dataframe)
+    return model.DataSet(dataframe, labels=labels)

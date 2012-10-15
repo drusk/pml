@@ -26,6 +26,8 @@ Unit tests for the loader module.
 import unittest
 import base_tests
 import loader
+from hamcrest import assert_that
+from matchers import equals_series
 
 class LoaderTest(base_tests.BaseFileLoadingTest):
 
@@ -67,6 +69,20 @@ class LoaderTest(base_tests.BaseFileLoadingTest):
         dataset = loader.load(self.relative("datasets/3f_ids_header.csv"))
         self.assertEqual(dataset.num_features(), 3)
         self.assertEqual(dataset.num_samples(), 4)
+        
+    def test_load_labelled(self):
+        dataset = loader.load(self.relative("datasets/3f_ids_header.csv"))
+        self.assertTrue(dataset.is_labelled())
+        labels = dataset.get_labels()
+        assert_that(labels, equals_series({"V01": "c", "V02": "b", "V03": "b", 
+                                           "V04": "a"}))
+        
+    def test_load_unlabelled(self):
+        dataset = loader.load(self.relative("datasets/3f_ids_header_no_labels.csv"), 
+                              has_labels=False)
+        self.assertFalse(dataset.is_labelled())
+        self.assertEqual(dataset.num_features(), 3)
+        self.assertTrue(dataset.get_labels() is None)
         
 
 if __name__ == "__main__":

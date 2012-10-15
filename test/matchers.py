@@ -50,7 +50,7 @@ class IsDataSet(BaseMatcher):
             # if the dataset has been filtered the indices may not be a 
             # continuous range
             index = dataset._dataframe.index[i]
-            if not match_exactly(self.as_list[i], 
+            if not lists_match_exactly(self.as_list[i], 
                                  dataset.get_row(index).tolist()):
                 return False
         
@@ -60,6 +60,32 @@ class IsDataSet(BaseMatcher):
         description.append_text("dataset with elements: ")
         description.append_text(self.as_list.__str__())
     
+
+class IsSeries(BaseMatcher):
+    """
+    Matches a pandas Series data structure.
+    """
+    
+    def __init__(self, as_dict):
+        """
+        Creates a new matcher given the expected input as a dictionary.
+        """
+        self.as_dict = as_dict
+        
+    def _matches(self, series):
+        if len(self.as_dict) != len(series):
+            return False
+        
+        for key in self.as_dict:
+            if series[key] != self.as_dict[key]:
+                return False
+            
+        return True
+        
+    def describe_to(self, description):
+        description.append_text("pandas Series with elements: ")
+        description.append_text(self.as_dict.__str__())
+        
     
 def _equals(val1, val2):
     """
@@ -69,7 +95,7 @@ def _equals(val1, val2):
         return True
     return val1 == val2
     
-def match_exactly(list1, list2):
+def lists_match_exactly(list1, list2):
     """
     Compares two lists and returns True if they are exactly the same, False 
     otherwise.
@@ -82,3 +108,9 @@ def equals_dataset(as_list):
     Compares a DataSet object to the given list representation.
     """
     return IsDataSet(as_list)
+
+def equals_series(as_dict):
+    """
+    Compares a pandas Series object to the provided dictionary representation.
+    """
+    return IsSeries(as_dict)

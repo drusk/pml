@@ -33,7 +33,7 @@ class DataSet(object):
     or observations.
     """
     
-    def __init__(self, data):
+    def __init__(self, data, labels=None):
         """
         Creates a new DataSet from data of an unknown type.  If data is itself 
         a DataSet object, then its contents are copied and a new DataSet is 
@@ -45,9 +45,15 @@ class DataSet(object):
                 1) pandas DataFrame
                 2) Python lists or pandas DataFrame
                 3) an existing DataSet object 
+          labels: pandas Series
+            The classification labels for the samples in data.  If they are 
+            not known (i.e. it is an unlabelled data set) the value None 
+            should be used.  Default value is None (unlabelled).
         
         Raises:
-          ValueError if the data is not of a supported type.    
+          ValueError if the data is not of a supported type.  A ValueError is 
+          also raised if labels are supplied but there is a mismatch between 
+          the number of labels and samples.    
         """
         if isinstance(data, pd.DataFrame):
             self._dataframe = data
@@ -57,6 +63,13 @@ class DataSet(object):
             self._dataframe = data._dataframe.copy()
         else:
             raise ValueError("Unsupported representation of data set")        
+        
+        if labels is not None and self.num_samples() != len(labels):
+            raise ValueError(("Number of labels doesn't match the number ", 
+                              "of samples in the data."))
+
+        # will just be None if there are no labels
+        self.labels = labels
         
     def __str__(self):
         """
@@ -91,6 +104,21 @@ class DataSet(object):
           The number of features (columns) in the data set.
         """
         return self._dataframe.shape[1]
+    
+    def is_labelled(self):
+        """
+        Returns:
+          True if the dataset has classification labels for each sample, 
+          False otherwise.
+        """
+        return self.labels is not None
+    
+    def get_labels(self):
+        """
+        Returns:
+          The classification labels for each sample in the dataset.
+        """
+        return self.labels
     
     def reduce_rows(self, function):
         """
