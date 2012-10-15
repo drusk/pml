@@ -49,13 +49,19 @@ class Knn(object):
         
         Args:
           training_set: 
-            an array-like set of data used to train the classifier.
+            A labelled DataSet object used to train the classifier.
           k: 
-            the number of nearest neighbours to consider when voting for a 
+            The number of nearest neighbours to consider when voting for a 
             sample's class.  Must be a positive integer, preferably small.  
             Default value is 5.
+            
+        Raises:
+          ValueError if the training set is not labelled.
         """
-        self.training_set = model.as_dataset(training_set)
+        if not training_set.is_labelled():
+            raise ValueError("Training set must be labelled.")
+        
+        self.training_set = training_set
         self.k = k
         
     def __str__(self):
@@ -103,18 +109,14 @@ class Knn(object):
         Returns:
           The sample's classification.
         """
-        num_features = self.training_set.num_features()
-        labels = self.training_set.get_column(num_features - 1)
-        data = self.training_set.drop_column(num_features - 1)
-        
         # This function is used so that we can reduce each row with respect 
         # to the sample.
         def calc_dist(vector):
             return distance_utils.euclidean(vector, sample)
+
+        distances = self.training_set.reduce_rows(calc_dist)
         
-        distances = data.reduce_rows(calc_dist)
-        
-        votes = self._tally_votes(labels, distances)
+        votes = self._tally_votes(self.training_set.get_labels(), distances)
         most_voted = self._get_most_voted(votes)
         
         # TODO tie breaking?
