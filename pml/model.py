@@ -45,7 +45,7 @@ class DataSet(object):
                 1) pandas DataFrame
                 2) Python lists or pandas DataFrame
                 3) an existing DataSet object 
-          labels: pandas Series
+          labels: pandas Series or Python list
             The classification labels for the samples in data.  If they are 
             not known (i.e. it is an unlabelled data set) the value None 
             should be used.  Default value is None (unlabelled).
@@ -68,8 +68,11 @@ class DataSet(object):
             raise ValueError(("Number of labels doesn't match the number ", 
                               "of samples in the data."))
 
-        # will just be None if there are no labels
-        self.labels = labels
+        if isinstance(labels, list):
+            self.labels = pd.Series(labels)
+        else:
+            # will just be None if there are no labels
+            self.labels = labels
         
     def __str__(self):
         """
@@ -113,12 +116,23 @@ class DataSet(object):
         """
         return self.labels is not None
     
-    def get_labels(self):
+    def get_labels(self, indices=None):
         """
+        Selects classification labels for the specified samples (rows) in the 
+        DataSet.
+
+        Args:
+          indices: list
+            The list of row indices (0 based) which should be selected.  
+            Defaults to None, in which case all labels are selected.
+        
         Returns:
-          The classification labels for each sample in the dataset.
+          A pandas Series with the classification labels.
         """
-        return self.labels
+        if indices is None:
+            return self.labels
+        else:
+            return self.labels.take(indices)
     
     def reduce_rows(self, function):
         """
@@ -191,7 +205,8 @@ class DataSet(object):
         Returns:
           A new DataSet with the specified rows from the original.
         """
-        return DataSet(self._dataframe.take(indices))
+        labels = self.labels.take(indices) if self.is_labelled() else None
+        return DataSet(self._dataframe.take(indices), labels=labels)
 
     def split(self, percent):
         """
@@ -220,7 +235,7 @@ class DataSet(object):
         set1_rows = range(num_set1_samples)
         set2_rows = range(num_set1_samples, self.num_samples())
     
-        return DataSet(self.get_rows(set1_rows)), DataSet(self.get_rows(set2_rows))
+        return self.get_rows(set1_rows), self.get_rows(set2_rows)
     
     def fill_missing(self, fill_value):
         """

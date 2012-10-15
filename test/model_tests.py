@@ -26,7 +26,7 @@ Unit tests for the model module.
 import unittest
 from model import DataSet, as_dataset
 from hamcrest import assert_that, contains
-from matchers import equals_dataset
+from matchers import equals_dataset, equals_series
 import numpy as np
 import pandas as pd
 
@@ -65,6 +65,17 @@ class DataSetTest(unittest.TestCase):
         self.assertEqual(selection.num_samples(), 2)
         assert_that(selection, equals_dataset([[3, 4], [7, 8]]))
         
+    def test_get_labelled_rows(self):
+        dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]], 
+                          labels=["a", "a", "b", "b"])
+        selection = dataset.get_rows([1, 3])
+        
+        self.assertEqual(selection.num_samples(), 2)
+        self.assertTrue(selection.is_labelled())
+        # TODO incorporate labels equals_series into DataSet matcher?
+        assert_that(selection, equals_dataset([[3, 4], [7, 8]]))
+        assert_that(selection.get_labels(), equals_series({1: "a", 3: "b"}))
+        
     def test_split(self):
         dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]])
         first, second = dataset.split(0.5)
@@ -97,6 +108,15 @@ class DataSetTest(unittest.TestCase):
         dataset = DataSet([[1, np.NaN, 3], [np.NaN, 5, np.NaN]])
         dataset.fill_missing(0)
         assert_that(dataset, equals_dataset([[1, 0, 3], [0, 5, 0]]))
+    
+    def test_split_labelled(self):
+        dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]], 
+                          labels=["b", "b", "b", "a"])
+        first, second = dataset.split(0.5)
+        self.assertTrue(first.is_labelled())
+        assert_that(first.get_labels(), equals_series({0: "b", 1: "b"}))
+        self.assertTrue(second.is_labelled())
+        assert_that(second.get_labels(), equals_series({2: "b", 3: "a"}))
         
     def test_get_row(self):
         dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]])
@@ -105,7 +125,7 @@ class DataSetTest(unittest.TestCase):
         # check that changes made to selected row are reflected in original
         row[:] = 1
         assert_that(dataset.get_row(1), contains(1, 1))
-        
+    
     def test_get_row_by_id(self):
         df = pd.DataFrame([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 
                           index=["V01", "V02", "V03"])
