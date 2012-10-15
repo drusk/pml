@@ -49,22 +49,6 @@ class LoaderTest(base_tests.BaseFileLoadingTest):
         self.assertEqual(data_set.num_features(), 3)
         self.assertEqual(data_set.num_samples(), 4)
     
-    @unittest.skip("Filtering unimplemented")
-    def test_load_and_filter_to_single_value(self):
-        data_set = loader.load(self.relative("datasets/3f_header.csv"))
-        filtered = data_set.filter("y", 3)
-        self.assertEqual(filtered.num_samples(), 1)
-        self.assertEqual(filtered.get("x"), 1)
-        self.assertEqual(filtered.get("y"), 3)
-        self.assertEqual(filtered.get("label"), "b")
-    
-    @unittest.skip("Filtering unimplemented")
-    def test_load_and_filter_to_multiple_values(self):
-        data_set = loader.load(self.relative("datasets/3f_header.csv"))
-        filtered = data_set.filter("x", 1)
-        self.assertEqual(filtered.num_samples(), 2)
-        self.assertEqual(filtered.num_features(), 3)
-
     def test_load_has_ids(self):
         dataset = loader.load(self.relative("datasets/3f_ids_header.csv"))
         self.assertEqual(dataset.num_features(), 3)
