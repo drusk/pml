@@ -77,7 +77,7 @@ class DataSet(object):
           This object's string representation, primarily for debugging 
           purposes.
         """
-        return self._dataframe.__str__()
+        return "%s\nLabelled: %s" % (self._dataframe.__str__(), self.is_labelled())
     
     def __repr__(self):
         """
@@ -224,17 +224,16 @@ class DataSet(object):
     
     def fill_missing(self, fill_value):
         """
-        Fill in missing data with a constant value.
+        Fill in missing data with a constant value.  Changes are made in-place.
         
         Args:
           fill_value:
             The value to insert wherever data is missing.
             
         Returns:
-          A new DataSet object with missing values filled in.
+          Void.  The changes to the DataSet are made in-place.
         """
-        # fillna returns a new DataFrame, does not modify the original
-        return DataSet(self._dataframe.fillna(fill_value))
+        return self._dataframe.fillna(fill_value, inplace=True)
     
 
 def as_dataset(data):

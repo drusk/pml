@@ -95,11 +95,8 @@ class DataSetTest(unittest.TestCase):
         
     def test_fill_missing(self):
         dataset = DataSet([[1, np.NaN, 3], [np.NaN, 5, np.NaN]])
-        filled = dataset.fill_missing(0)
-        assert_that(filled, equals_dataset([[1, 0, 3], [0, 5, 0]]))
-        # verify original dataset is unchanged
-        assert_that(dataset, equals_dataset([[1, np.NaN, 3], 
-                                             [np.NaN, 5, np.NaN]]))
+        dataset.fill_missing(0)
+        assert_that(dataset, equals_dataset([[1, 0, 3], [0, 5, 0]]))
         
     def test_get_row(self):
         dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]])
