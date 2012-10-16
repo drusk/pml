@@ -24,6 +24,7 @@ Models for the data being analysed and manipulated.
 """
 
 import pandas as pd
+import random as rand
 
 class DataSet(object):
     """
@@ -208,7 +209,7 @@ class DataSet(object):
         labels = self.labels.take(indices) if self.is_labelled() else None
         return DataSet(self._dataframe.take(indices), labels=labels)
 
-    def split(self, percent):
+    def split(self, percent, random=False):
         """
         Splits the dataset in two.
         
@@ -218,6 +219,10 @@ class DataSet(object):
             placed in the first dataset returned.  The remainder are placed 
             in the second dataset.  This percentage must be specified as a 
             value between 0 and 1 inclusive.
+          random: boolean
+            Set to True if the samples selected for each new dataset should 
+            be picked randomly.  Defaults to False, meaning the samples are 
+            taken in their existing order.
         
         Returns:
           dataset1: DataSet object
@@ -232,8 +237,15 @@ class DataSet(object):
             raise ValueError("Percentage value must be >= 0 and <= 1.")
         
         num_set1_samples = int(percent * self.num_samples())
-        set1_rows = range(num_set1_samples)
-        set2_rows = range(num_set1_samples, self.num_samples())
+        
+        if not random:
+            set1_rows = range(num_set1_samples)
+            set2_rows = range(num_set1_samples, self.num_samples())
+        else:
+            all_rows = range(self.num_samples())
+            rand.shuffle(all_rows)
+            set1_rows = all_rows[:num_set1_samples]
+            set2_rows = all_rows[num_set1_samples:]
     
         return self.get_rows(set1_rows), self.get_rows(set2_rows)
     

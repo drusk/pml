@@ -103,6 +103,14 @@ class DataSetTest(unittest.TestCase):
     def test_split_invalid_percent(self):
         dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]])
         self.assertRaises(ValueError, dataset.split, 50)
+
+    def test_split_random(self):
+        dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]])
+        first, second = dataset.split(0.5, random=True)
+        # since the split is random, can't assert that first or second 
+        # contain particular rows, just the number of rows
+        self.assertEqual(first.num_samples(), 2)
+        self.assertEqual(second.num_samples(), 2)
         
     def test_fill_missing(self):
         dataset = DataSet([[1, np.NaN, 3], [np.NaN, 5, np.NaN]])
