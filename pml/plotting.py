@@ -17,10 +17,21 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
 # IN THE SOFTWARE.
+"""
+Provides capabilities for plotting DataSets.
 
-from classifiers import *
-from distance_utils import *
-from loader import *
-from model import *
-from metrics import *
-from plotting import *
+@author: drusk
+"""
+
+import matplotlib.pyplot as plt
+from pandas.tools.plotting import radviz
+
+def plot_radviz(dataset):
+    """
+    Generates a RadViz plot of the provided DataSet.  RadViz
+    """
+    # radviz takes a pandas DataFrame and the name of the column which 
+    # contains class membership info. 
+    # therefore need to pass in the dataset's merged data and labels
+    radviz(dataset.get_data_frame(), dataset.get_labels().name)
+    plt.show()

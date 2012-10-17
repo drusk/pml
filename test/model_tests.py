@@ -26,7 +26,7 @@ Unit tests for the model module.
 import unittest
 from model import DataSet, as_dataset
 from hamcrest import assert_that, contains
-from matchers import equals_dataset, equals_series
+from matchers import equals_dataset, equals_series, lists_match_exactly
 import numpy as np
 import pandas as pd
 
@@ -163,6 +163,25 @@ class DataSetTest(unittest.TestCase):
         dataset._dataframe.ix[1] = 1
         assert_that(dataset, equals_dataset([[1, 2], [1, 1], [5, 6]]))
         assert_that(original, equals_dataset([[1, 2], [1, 1], [5, 6]]))
+
+    def test_get_data_frame(self):
+        dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]], 
+                          labels=pd.Series(["b", "b", "b", "a"]))
+        df = dataset.get_data_frame()
+        
+        # TODO: really need a DataFrame matcher...
+        expected = [[1, 2, "b"], [3, 4, "b"], [5, 6, "b"], [7, 8, "a"]]
+        for i in range(len(expected)):
+            self.assertTrue(df.ix[i].tolist(), expected[i])
+
+    def test_get_data_frame_no_labels(self):
+        dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]])
+        df = dataset.get_data_frame()
+        
+        # TODO: really need a DataFrame matcher...
+        expected = [[1, 2], [3, 4], [5, 6], [7, 8]]
+        for i in range(len(expected)):
+            self.assertTrue(df.ix[i].tolist(), expected[i])
 
 
 if __name__ == "__main__":

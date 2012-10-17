@@ -95,6 +95,19 @@ class DataSet(object):
         """
         return self.__str__()  
         
+    def get_data_frame(self):
+        """
+        Retrieve the DataSet's underlying data as a pandas DataFrame object.
+        
+        Returns:
+          A pandas DataFrame with the DataSet's main data and the labels if 
+          they are present attached as the rightmost column.
+        """
+        if not self.is_labelled():
+            return self._dataframe
+        
+        return pd.concat([self._dataframe, pd.DataFrame(self.labels)], axis=1)
+        
     def num_samples(self):
         """
         Returns:
