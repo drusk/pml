@@ -275,6 +275,25 @@ class DataSet(object):
         """
         return self._dataframe.fillna(fill_value, inplace=True)
     
+    def combine_labels(self, to_combine, new_label):
+        """
+        Combines classification labels to have some new value.
+        
+        For example, consider a dataset with labels "cat", "crow" and 
+        "pidgeon".  Maybe you are only really worried about whether something 
+        is a cat or a bird, so you want to combine the "crow" and "pidgeon" 
+        labels into a new one called "bird".
+        
+        Args:
+          to_combine: list
+            The list of labels which will be combined to form one new 
+            classification label.
+          new_label: string
+            The new classification label for those which were combined.
+        """
+        # pd.Series.replace returns a new Series, leaves original unmodified
+        self.labels = self.labels.replace(to_combine, value=new_label)
+
 
 def as_dataset(data):
     """

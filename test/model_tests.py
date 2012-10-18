@@ -183,6 +183,13 @@ class DataSetTest(unittest.TestCase):
         for i in range(len(expected)):
             self.assertTrue(df.ix[i].tolist(), expected[i])
 
+    def test_combine_labels(self):
+        dataset = DataSet([[1, 2], [3, 4], [5, 6]], 
+                          labels=pd.Series(["cat", "crow", "pidgeon"]))
+        dataset.combine_labels(["crow", "pidgeon"], "bird")
+        labels = dataset.get_labels()
+        assert_that(labels, equals_series({0: "cat", 1: "bird", 2: "bird"}))
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
