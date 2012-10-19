@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>distance_utils &mdash; Python Machine Learning 0.0.1 documentation</title>
+    <title>metrics &mdash; Python Machine Learning 0.0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -48,7 +48,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <h1>Source code for distance_utils</h1><div class="highlight"><pre>
+  <h1>Source code for metrics</h1><div class="highlight"><pre>
 <span class="c"># Copyright (C) 2012 David Rusk</span>
 <span class="c">#</span>
 <span class="c"># Permission is hereby granted, free of charge, to any person obtaining a copy </span>
@@ -69,27 +69,48 @@
 <span class="c"># FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS </span>
 <span class="c"># IN THE SOFTWARE.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Algorithms for calculating distances between vectors in feature (n) space.</span>
+<span class="sd">Utilities for calculating metrics related to the performance of algorithms.</span>
 
 <span class="sd">@author: drusk</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-
-<div class="viewcode-block" id="euclidean"><a class="viewcode-back" href="../distance_utils.html#distance_utils.euclidean">[docs]</a><span class="k">def</span> <span class="nf">euclidean</span><span class="p">(</span><span class="n">vector1</span><span class="p">,</span> <span class="n">vector2</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_accuracy"><a class="viewcode-back" href="../metrics.html#metrics.compute_accuracy">[docs]</a><span class="k">def</span> <span class="nf">compute_accuracy</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculates the Euclidean distance between two vectors in n-space.</span>
+<span class="sd">    Used to calculate the percent accuracy of result labels from a classifier </span>
+<span class="sd">    if the classified data was an already labelled DataSet. </span>
 <span class="sd">    </span>
 <span class="sd">    Args:</span>
-<span class="sd">      vector1: </span>
-<span class="sd">        start point vector</span>
-<span class="sd">      vector2: </span>
-<span class="sd">        end point vector</span>
-<span class="sd">    </span>
+<span class="sd">      results: pandas Series</span>
+<span class="sd">        The results of classifying each sample in the dataset.</span>
+<span class="sd">      dataset: DataSet object</span>
+<span class="sd">        The original DataSet that was classified.  Must be labelled.</span>
+<span class="sd">        </span>
 <span class="sd">    Returns:</span>
-<span class="sd">      The distance (magnitude) between vector1 and vector2.</span>
+<span class="sd">      The percent accuracy of the classification results, i.e. the number of </span>
+<span class="sd">      samples correctly classified divided by the total number of samples.  </span>
+<span class="sd">      Should be a floating point number between 0 and 1.</span>
+<span class="sd">      </span>
+<span class="sd">    Raises:</span>
+<span class="sd">      ValueError if dataset is not labelled.  Also raises a ValueError if the </span>
+<span class="sd">      number of samples in the results and dataset do not match.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">vector1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">vector2</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span></div>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dataset</span><span class="o">.</span><span class="n">is_labelled</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s">&quot;DataSet must be labelled in order to compute &quot;</span><span class="p">,</span> 
+                          <span class="s">&quot;accuracy&quot;</span><span class="p">))</span>
+    
+    <span class="c"># TODO: should the actual indexes of each be compared?</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">!=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">num_samples</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s">&quot;Results and DataSet must have same number of &quot;</span><span class="p">,</span>
+                          <span class="s">&quot;samples&quot;</span><span class="p">))</span>
+    
+    <span class="n">true_labels</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">get_labels</span><span class="p">()</span>
+
+    <span class="n">correct</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">results</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">==</span> <span class="n">true_labels</span><span class="p">[</span><span class="n">ind</span><span class="p">]:</span>
+            <span class="n">correct</span> <span class="o">+=</span> <span class="mi">1</span>
+            
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">correct</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span></div>
 </pre></div>
 
           </div>

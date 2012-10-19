@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>classifiers Module &mdash; Python Machine Learning 0.1 documentation</title>
+    <title>classifiers Module &mdash; Python Machine Learning 0.0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.1',
+        VERSION:     '0.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Python Machine Learning 0.1 documentation" href="index.html" />
+    <link rel="top" title="Python Machine Learning 0.0.1 documentation" href="index.html" />
     <link rel="next" title="distance_utils Module" href="distance_utils.html" />
     <link rel="prev" title="Welcome to Python Machine Learning’s documentation!" href="index.html" /> 
   </head>
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="index.html" title="Welcome to Python Machine Learning’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Python Machine Learning 0.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Python Machine Learning 0.0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -83,6 +83,25 @@ deferred until classification.</p>
 </dd>
 <dt>Returns:</dt>
 <dd>The sample&#8217;s classification.</dd>
+<dt>Raises:</dt>
+<dd>ValueError if sample doesn&#8217;t have the same number of features as 
+the data in the training set.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="classifiers.Knn.classify_all">
+<tt class="descname">classify_all</tt><big>(</big><em>dataset</em><big>)</big><a class="headerlink" href="#classifiers.Knn.classify_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predicts the classification of each sample in a dataset.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>dataset: DataSet compatible object (see DataSet constructor)</dt>
+<dd>the dataset whose samples (observations) will be classified.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>a pandas Series containing each sample&#8217;s classification.</dd>
 </dl>
 </dd></dl>
 
@@ -139,7 +158,7 @@ deferred until classification.</p>
         <li class="right" >
           <a href="index.html" title="Welcome to Python Machine Learning’s documentation!"
              >previous</a> |</li>
-        <li><a href="index.html">Python Machine Learning 0.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Python Machine Learning 0.0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

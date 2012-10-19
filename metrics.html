@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>distance_utils Module &mdash; Python Machine Learning 0.0.1 documentation</title>
+    <title>metrics Module &mdash; Python Machine Learning 0.0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -26,8 +26,8 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="Python Machine Learning 0.0.1 documentation" href="index.html" />
-    <link rel="next" title="loader Module" href="loader.html" />
-    <link rel="prev" title="classifiers Module" href="classifiers.html" /> 
+    <link rel="next" title="model Module" href="model.html" />
+    <link rel="prev" title="loader Module" href="loader.html" /> 
   </head>
   <body>
     <div class="related">
@@ -40,10 +40,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="loader.html" title="loader Module"
+          <a href="model.html" title="model Module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="classifiers.html" title="classifiers Module"
+          <a href="loader.html" title="loader Module"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">Python Machine Learning 0.0.1 documentation</a> &raquo;</li> 
       </ul>
@@ -54,25 +54,31 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-distance_utils">
-<span id="distance-utils-module"></span><h1>distance_utils Module<a class="headerlink" href="#module-distance_utils" title="Permalink to this headline">¶</a></h1>
-<p>Algorithms for calculating distances between vectors in feature (n) space.</p>
+  <div class="section" id="module-metrics">
+<span id="metrics-module"></span><h1>metrics Module<a class="headerlink" href="#module-metrics" title="Permalink to this headline">¶</a></h1>
+<p>Utilities for calculating metrics related to the performance of algorithms.</p>
 <p>&#64;author: drusk</p>
 <dl class="function">
-<dt id="distance_utils.euclidean">
-<tt class="descclassname">distance_utils.</tt><tt class="descname">euclidean</tt><big>(</big><em>vector1</em>, <em>vector2</em><big>)</big><a class="reference internal" href="_modules/distance_utils.html#euclidean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#distance_utils.euclidean" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the Euclidean distance between two vectors in n-space.</p>
+<dt id="metrics.compute_accuracy">
+<tt class="descclassname">metrics.</tt><tt class="descname">compute_accuracy</tt><big>(</big><em>results</em>, <em>dataset</em><big>)</big><a class="reference internal" href="_modules/metrics.html#compute_accuracy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#metrics.compute_accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to calculate the percent accuracy of result labels from a classifier 
+if the classified data was an already labelled DataSet.</p>
 <dl class="docutils">
 <dt>Args:</dt>
 <dd><dl class="first last docutils">
-<dt>vector1: </dt>
-<dd>start point vector</dd>
-<dt>vector2: </dt>
-<dd>end point vector</dd>
+<dt>results: pandas Series</dt>
+<dd>The results of classifying each sample in the dataset.</dd>
+<dt>dataset: DataSet object</dt>
+<dd>The original DataSet that was classified.  Must be labelled.</dd>
 </dl>
 </dd>
 <dt>Returns:</dt>
-<dd>The distance (magnitude) between vector1 and vector2.</dd>
+<dd>The percent accuracy of the classification results, i.e. the number of 
+samples correctly classified divided by the total number of samples.  
+Should be a floating point number between 0 and 1.</dd>
+<dt>Raises:</dt>
+<dd>ValueError if dataset is not labelled.  Also raises a ValueError if the 
+number of samples in the results and dataset do not match.</dd>
 </dl>
 </dd></dl>
 
@@ -85,14 +91,14 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="classifiers.html"
-                        title="previous chapter">classifiers Module</a></p>
-  <h4>Next topic</h4>
   <p class="topless"><a href="loader.html"
-                        title="next chapter">loader Module</a></p>
+                        title="previous chapter">loader Module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="model.html"
+                        title="next chapter">model Module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="_sources/distance_utils.txt"
+    <li><a href="_sources/metrics.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -122,10 +128,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="loader.html" title="loader Module"
+          <a href="model.html" title="model Module"
              >next</a> |</li>
         <li class="right" >
-          <a href="classifiers.html" title="classifiers Module"
+          <a href="loader.html" title="loader Module"
              >previous</a> |</li>
         <li><a href="index.html">Python Machine Learning 0.0.1 documentation</a> &raquo;</li> 
       </ul>

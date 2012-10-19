@@ -1,0 +1,361 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>model Module &mdash; Python Machine Learning 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Python Machine Learning 0.0.1 documentation" href="index.html" />
+    <link rel="next" title="plotting Module" href="plotting.html" />
+    <link rel="prev" title="metrics Module" href="metrics.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plotting.html" title="plotting Module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="metrics.html" title="metrics Module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Python Machine Learning 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-model">
+<span id="model-module"></span><h1>model Module<a class="headerlink" href="#module-model" title="Permalink to this headline">¶</a></h1>
+<p>Models for the data being analysed and manipulated.</p>
+<p>&#64;author: drusk</p>
+<dl class="class">
+<dt id="model.DataSet">
+<em class="property">class </em><tt class="descclassname">model.</tt><tt class="descname">DataSet</tt><big>(</big><em>data</em>, <em>labels=None</em><big>)</big><a class="reference internal" href="_modules/model.html#DataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>A collection of data that may be analysed and manipulated.</p>
+<p>Columns are interpreted as features in the data set, and rows are samples 
+or observations.</p>
+<dl class="method">
+<dt id="model.DataSet.combine_labels">
+<tt class="descname">combine_labels</tt><big>(</big><em>to_combine</em>, <em>new_label</em><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.combine_labels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.combine_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines classification labels to have some new value.</p>
+<p>For example, consider a dataset with labels &#8220;cat&#8221;, &#8220;crow&#8221; and 
+&#8220;pidgeon&#8221;.  Maybe you are only really worried about whether something 
+is a cat or a bird, so you want to combine the &#8220;crow&#8221; and &#8220;pidgeon&#8221; 
+labels into a new one called &#8220;bird&#8221;.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>to_combine: list</dt>
+<dd>The list of labels which will be combined to form one new 
+classification label.</dd>
+<dt>new_label: string</dt>
+<dd>The new classification label for those which were combined.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.DataSet.drop_column">
+<tt class="descname">drop_column</tt><big>(</big><em>index</em><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.drop_column"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.drop_column" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a copy of the data set with a specified column removed.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>index: </dt>
+<dd>the index (0 based) of the column to drop.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>a new DataSet with the specified column removed.  The original 
+DataSet remains unaltered.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.DataSet.fill_missing">
+<tt class="descname">fill_missing</tt><big>(</big><em>fill_value</em><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.fill_missing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.fill_missing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill in missing data with a constant value.  Changes are made in-place.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>fill_value:</dt>
+<dd>The value to insert wherever data is missing.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>Void.  The changes to the DataSet are made in-place.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.DataSet.get_column">
+<tt class="descname">get_column</tt><big>(</big><em>index</em><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.get_column"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.get_column" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selects a column from the data set.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>index: </dt>
+<dd>the index (0 based) of the column to select.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>the columns at the specified index as a pandas Series object.  This 
+series is a view on the original data set, not a copy.  That means 
+any changes to it will also be applied to the original data set.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.DataSet.get_data_frame">
+<tt class="descname">get_data_frame</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.get_data_frame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.get_data_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the DataSet&#8217;s underlying data as a pandas DataFrame object.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>A pandas DataFrame with the DataSet&#8217;s main data and the labels if 
+they are present attached as the rightmost column.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.DataSet.get_labels">
+<tt class="descname">get_labels</tt><big>(</big><em>indices=None</em><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.get_labels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.get_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selects classification labels for the specified samples (rows) in the 
+DataSet.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>indices: list</dt>
+<dd>The list of row indices (0 based) which should be selected.  
+Defaults to None, in which case all labels are selected.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>A pandas Series with the classification labels.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.DataSet.get_row">
+<tt class="descname">get_row</tt><big>(</big><em>identifier</em><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.get_row"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.get_row" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selects a single row from the dataset.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>identifier:</dt>
+<dd>The id of the row to select.  If the DataSet has special indices 
+set up (ex: through a call to load with has_ids=True) these can 
+be used.  The integer index (0 based) can also be used.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>A pandas Series object representing the desired row.  NOTE: this is 
+a view on the original dataset.  Changes made to this Series will 
+also be made to the DataSet.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.DataSet.get_rows">
+<tt class="descname">get_rows</tt><big>(</big><em>indices</em><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.get_rows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.get_rows" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selects specified rows from the dataset.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>indices: list</dt>
+<dd>The list of row indices (0 based) which should be selected.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>A new DataSet with the specified rows from the original.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.DataSet.is_labelled">
+<tt class="descname">is_labelled</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.is_labelled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.is_labelled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:
+True if the dataset has classification labels for each sample, 
+False otherwise.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.DataSet.num_features">
+<tt class="descname">num_features</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.num_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.num_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:
+The number of features (columns) in the data set.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.DataSet.num_samples">
+<tt class="descname">num_samples</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.num_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.num_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:
+The number of samples (rows) in the data set.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.DataSet.reduce_rows">
+<tt class="descname">reduce_rows</tt><big>(</big><em>function</em><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.reduce_rows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.reduce_rows" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a row-wise reduction of the data set.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>function: </dt>
+<dd>the function which will be applied to each row in the data set.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd><dl class="first last docutils">
+<dt>a pandas Series object which is the one dimensional result of </dt>
+<dd>reduction (one value corresponding to each row).</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.DataSet.split">
+<tt class="descname">split</tt><big>(</big><em>percent</em>, <em>random=False</em><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.split"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Splits the dataset in two.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>percent: float</dt>
+<dd>The percentage of the original dataset samples which should be 
+placed in the first dataset returned.  The remainder are placed 
+in the second dataset.  This percentage must be specified as a 
+value between 0 and 1 inclusive.</dd>
+<dt>random: boolean</dt>
+<dd>Set to True if the samples selected for each new dataset should 
+be picked randomly.  Defaults to False, meaning the samples are 
+taken in their existing order.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd><dl class="first last docutils">
+<dt>dataset1: DataSet object</dt>
+<dd>A subset of the original dataset with &lt;percent&gt; samples.</dd>
+<dt>dataset2: DataSet object</dt>
+<dd>A subset of the original dataset with 1-&lt;percent&gt; samples.</dd>
+</dl>
+</dd>
+<dt>Raises:</dt>
+<dd>ValueError if percent &lt; 0 or percent &gt; 1.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="model.as_dataset">
+<tt class="descclassname">model.</tt><tt class="descname">as_dataset</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="_modules/model.html#as_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.as_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a DataSet from the provided data.  If data is already a DataSet, 
+return it directly.  Use this instead of the DataSet constructor if you 
+don&#8217;t know whether your data is a DataSet already, but you don&#8217;t want to 
+create a new one if it already is.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>data: </dt>
+<dd>Data of unknown type.  It may be a Python list or pandas DataFrame or 
+DataSet object.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>A DataSet object.  If the data was already a DataSet then the input 
+object will be directly returned.</dd>
+<dt>Raises:</dt>
+<dd>ValueError if the data is not of a supported type.</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="metrics.html"
+                        title="previous chapter">metrics Module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="plotting.html"
+                        title="next chapter">plotting Module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/model.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plotting.html" title="plotting Module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="metrics.html" title="metrics Module"
+             >previous</a> |</li>
+        <li><a href="index.html">Python Machine Learning 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, David Rusk.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
