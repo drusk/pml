@@ -14,6 +14,9 @@ Contents:
    classifiers
    distance_utils
    loader
+   metrics
+   model
+   plotting
 
 
 Indices and tables
