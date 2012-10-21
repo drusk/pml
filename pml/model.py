@@ -130,6 +130,13 @@ class DataSet(object):
         """
         return self.labels is not None
     
+    def feature_list(self):
+        """
+        Returns:
+          The list of features in the dataset. 
+        """
+        return self._dataframe.columns.tolist()
+    
     def get_labels(self, indices=None):
         """
         Selects classification labels for the specified samples (rows) in the 

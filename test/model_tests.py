@@ -195,6 +195,15 @@ class DataSetTest(unittest.TestCase):
         labels = dataset.get_labels()
         assert_that(labels, equals_series({0: "cat", 1: "bird", 2: "bird"}))
 
+    def test_feature_list(self):
+        dataset = DataSet(pd.DataFrame([[4, 1, 2], [5, 9, 8], [4, 3, 6]], 
+                          columns=["a", "b", "c"]))
+        assert_that(dataset.feature_list(), contains("a", "b", "c"))
+        
+    def test_default_feature_list(self):
+        dataset = DataSet(pd.DataFrame([[4, 1, 2], [5, 9, 8], [4, 3, 6]]))
+        assert_that(dataset.feature_list(), contains(0, 1, 2))
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
