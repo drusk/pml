@@ -204,6 +204,25 @@ class DataSetTest(unittest.TestCase):
         dataset = DataSet(pd.DataFrame([[4, 1, 2], [5, 9, 8], [4, 3, 6]]))
         assert_that(dataset.feature_list(), contains(0, 1, 2))
 
+    def test_has_missing_values(self):
+        dataset1 = DataSet([[4.2, np.NaN, 3.1], [2.5, 1.9, np.NaN], 
+                            [1.1, 1.2, 1.7]])
+        self.assertTrue(dataset1.has_missing_values())
+        
+        dataset2 = DataSet([[4.2, 3.9, 3.1], [2.5, 1.9, 2.2], [1.1, 1.2, 1.7]])
+        self.assertFalse(dataset2.has_missing_values())
+
+    def test_to_string(self):
+        df = pd.DataFrame([[4.2, np.NaN, 3.1], [2.5, 1.9, np.NaN], 
+                           [1.1, 1.2, 1.7]], 
+                          columns=["weight", "height", "length"])
+        dataset = DataSet(df, labels=["cat", "bird", "bat"])
+        expected = "\n".join(("Features: ['weight', 'height', 'length']",
+                              "Samples: 3",
+                              "Missing values? yes",
+                              "Labelled? yes"))
+        self.assertEqual(expected, dataset.__repr__())
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

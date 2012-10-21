@@ -81,7 +81,7 @@ class DataSet(object):
           This object's string representation, primarily for debugging 
           purposes.
         """
-        return "%s\nLabelled: %s" % (self._dataframe.__str__(), self.is_labelled())
+        return self.__repr__()
     
     def __repr__(self):
         """
@@ -90,11 +90,18 @@ class DataSet(object):
         displayed.
         
         Returns:
-          This object's string representation, primarily for debugging 
-          purposes.
+          This object's string representation, providing some summary 
+          information about it to the user.
         """
-        return self.__str__()  
+        def display(boolean):
+            return "yes" if boolean else "no"
         
+        return "\n".join(("Features: %s" % self.feature_list(), 
+                         "Samples: %d" % self.num_samples(),
+                         "Missing values? %s" 
+                            % display(self.has_missing_values()),
+                         "Labelled? %s" % display(self.is_labelled())))
+
     def get_data_frame(self):
         """
         Retrieve the DataSet's underlying data as a pandas DataFrame object.
@@ -129,6 +136,17 @@ class DataSet(object):
           False otherwise.
         """
         return self.labels is not None
+    
+    def has_missing_values(self):
+        """
+        Returns:
+          True if the dataset is missing values.  These will be represented 
+          as np.NaN.
+        """
+        # isnull returns booleans for each data point (True if null).  The 
+        # first any checks columns for any True, producing a 1d array of 
+        # booleans.  The second any checks that 1d array.
+        return pd.isnull(self._dataframe).any().any()
     
     def feature_list(self):
         """
