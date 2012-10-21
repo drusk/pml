@@ -86,6 +86,26 @@ class IsSeries(BaseMatcher):
         description.append_text("pandas Series with elements: ")
         description.append_text(self.as_dict.__str__())
         
+        
+class InRange(BaseMatcher):
+    """
+    Matches values within a specified range (inclusive).
+    """
+    
+    def __init__(self, minval, maxval):
+        """
+        Creates a new matcher given the expected minimum and maximum values.
+        """
+        self.minval = minval
+        self.maxval = maxval
+        
+    def _matches(self, val):
+        return val <= self.maxval and val >= self.minval
+        
+    def describe_to(self, description):
+        description.append_text("value between %s and %s" 
+                                %(self.minval, self.maxval))
+        
     
 def _equals(val1, val2):
     """
@@ -114,3 +134,10 @@ def equals_series(as_dict):
     Compares a pandas Series object to the provided dictionary representation.
     """
     return IsSeries(as_dict)
+
+def in_range(minval, maxval):
+    """
+    Checks if a value is within the range specified by minval and maxval, 
+    inclusive.
+    """
+    return InRange(minval, maxval)
