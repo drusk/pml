@@ -37,6 +37,11 @@ class DataSetTest(unittest.TestCase):
         reduced = dataset.reduce_rows(sum)
         assert_that(reduced.values, contains(6, 15, 24))
         
+    def test_reduce_features(self):
+        dataset = DataSet([[4, 9, 8], [2, 1, 7], [5, 6, 1]])
+        reduced = dataset.reduce_features(min)
+        assert_that(reduced.values, contains(2, 1, 1))
+        
     def test_drop_column(self):
         original = DataSet([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
         self.assertEqual(original.num_features(), 3)

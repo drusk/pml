@@ -162,6 +162,20 @@ class DataSet(object):
         """
         return self._dataframe.apply(function, axis=1)
 
+    def reduce_features(self, function):
+        """
+        Performs a feature-wise (i.e. column-wise) reduction of the data set.
+        
+        Args:
+          function:
+            The function which will be applied to each feature in the data set.
+            
+        Returns:
+          A pandas Series object which is the one dimensional result of the 
+          reduction (one value corresponding to each feature).
+        """
+        return self._dataframe.apply(function, axis=0)
+
     def drop_column(self, index):
         """
         Creates a copy of the data set with a specified column removed.
