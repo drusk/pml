@@ -70,6 +70,21 @@ class ClusteringTest(unittest.TestCase):
             assert_that(centroid["b"], in_range(-3, 9))
             assert_that(centroid["c"], in_range(-8, 6))
             
+    def test_get_distances_to_centroids(self):
+        dataset = DataSet([[1, 5], [2, 1], [6, 5]])
+        centroids = [pd.Series([4, 5]), pd.Series([6, 2])]
+        
+        results = clustering._get_distances_to_centroids(dataset, centroids)
+        
+        self.assertEqual(results.shape, (3, 2))
+        # TODO: really need a DataFrame matcher...
+        expected = [[3, 5.83], [4.47, 4.12], [2, 3]]
+        for i, row in enumerate(expected):
+            for j, element in enumerate(row):
+                self.assertAlmostEqual(results.ix[i].tolist()[j], element, 
+                                       places=2)
+                
+            
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

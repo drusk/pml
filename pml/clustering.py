@@ -28,6 +28,7 @@ import random
 import pandas as pd
 
 import model
+from distance_utils import euclidean
 
 def create_random_centroids(dataset, k):
     """
@@ -57,8 +58,8 @@ def create_random_centroids(dataset, k):
         """
         return random.uniform(range_tuple[0], range_tuple[1])
 
-    return [pd.Series(map(rand_range, min_maxs), index=dataset.feature_list()) 
-            for _ in range(k)]
+    return [pd.Series(map(rand_range, min_maxs), index=dataset.feature_list(), 
+                      name = i) for i in range(k)]
 
 def kmeans(dataset, k=2):
     """
@@ -79,10 +80,44 @@ def kmeans(dataset, k=2):
     # 1. Initialize k centroids
     centroids = create_random_centroids(dataset, k)
     
-    # 2. Calculate distance from each data point to each centroid
-    
-    # 3. Put datapoints in group with nearest centroid
-    
+    # 2. Calculate calc_distance from each data point to each centroid
+    distances = _get_distances_to_centroids(dataset, centroids)
+    print "***DISTANCES***"
+    print distances
+    # 3. Find each datapoint's nearest centroid
+    nearest_centroids = distances.idxmin(axis=1)
+    print "***NEAREST CENTROID***"
+    print nearest_centroids
+
+    def nearest_centroid(sample_index):
+        return nearest_centroids[sample_index]
+        
     # 4. Calculate mean position of datapoints in each centroid's cluster
-    
+    new_centroids = distances.groupby(nearest_centroid).mean()
+    return new_centroids
     # 5. Repeat 2-4 until clusters are stable
+
+def _get_distances_to_centroids(dataset, centroids):
+    """
+    Calculates the calc_distance from each data point to each centroid.
+    
+    Args:
+      dataset: model.DataSet
+        The DataSet whose samples are being 
+      centroids: list of pandas Series
+        The centroids to compare each data point with.
+        
+    Returns:
+      A pandas DataFrame with a row for each sample in dataset and a column 
+      for the distance to each centroid.
+    """
+    distances = {}
+    for i, centroid in enumerate(centroids):
+        def calc_distance(sample):
+            # TODO: parameter to pass in calc_distance function
+            return euclidean(sample, centroid)
+    
+        distances[i] = dataset.reduce_rows(calc_distance)
+
+    # each dictionary entry is interpreted as a column
+    return pd.DataFrame(distances)
