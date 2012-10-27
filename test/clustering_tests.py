@@ -30,7 +30,7 @@ from hamcrest import assert_that
 
 import clustering
 from model import DataSet
-from matchers import in_range
+from matchers import in_range, equals_series
 
 class ClusteringTest(unittest.TestCase):
 
@@ -83,7 +83,20 @@ class ClusteringTest(unittest.TestCase):
             for j, element in enumerate(row):
                 self.assertAlmostEqual(results.ix[i].tolist()[j], element, 
                                        places=2)
-                
+    
+    def test_compute_iteration(self):
+        dataset = DataSet([[1, 5], [2, 1], [6, 5]])
+        centroids = [pd.Series([4, 5]), pd.Series([6, 2])]
+        
+        new_cent, clusters = clustering._compute_iteration(dataset, centroids)
+        
+        expected_cent = [{0: 3.5, 1: 5}, {0: 2, 1: 1}]
+        
+        self.assertEqual(len(new_cent), len(expected_cent))
+        for i, cent in enumerate(new_cent):
+            assert_that(cent, equals_series(expected_cent[i]))
+        
+        assert_that(clusters, equals_series({0: 0, 1: 1, 2: 0}))
             
 
 if __name__ == "__main__":
