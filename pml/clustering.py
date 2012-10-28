@@ -29,6 +29,7 @@ import pandas as pd
 
 import model
 from distance_utils import euclidean
+from pandas_util import are_dataframes_equal
 
 def create_random_centroids(dataset, k):
     """
@@ -73,20 +74,27 @@ def kmeans(dataset, k=2):
         The DataSet to perform the clustering on.
       k: int
         The number of clusters to partition the dataset into.
+        
+    Returns:
+      A pandas Series.  Each sample index is assigned a numerical value 
+      representing the cluster it is part of.
     """
     # If dataset is not already a model.DataSet object, make it one.
     dataset = model.as_dataset(dataset)
     
-    # 1. Initialize k centroids
+    # Initialize k centroids
     centroids = create_random_centroids(dataset, k)
     
-    # TODO: make threshold keyed parameter
-    threshold = 0.1
-    centroids, assignments = _compute_iteration(dataset, centroids)
-    # TODO: 
-    # 1. calculate total change in centroids.
-    # 2. check if it is below threshold
-    # 3. compute iterations until below threhsold
+    # Iteratively compute best clusters until they stabilize
+    assignments = None
+    clusters_changed = True
+    while clusters_changed:
+        centroids, new_assignments = _compute_iteration(dataset, centroids)
+        if are_dataframes_equal(new_assignments, assignments):
+            clusters_changed = False
+        assignments = new_assignments
+    
+    return assignments
 
 def _get_distances_to_centroids(dataset, centroids):
     """
