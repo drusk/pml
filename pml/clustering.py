@@ -62,7 +62,7 @@ def create_random_centroids(dataset, k):
     return [pd.Series(map(rand_range, min_maxs), index=dataset.feature_list(), 
                       name = i) for i in range(k)]
 
-def kmeans(dataset, k=2):
+def kmeans(dataset, k=2, create_centroids=create_random_centroids):
     """
     K-means clustering algorithm.
     
@@ -74,6 +74,9 @@ def kmeans(dataset, k=2):
         The DataSet to perform the clustering on.
       k: int
         The number of clusters to partition the dataset into.
+      create_centroids: function
+        The function specifying how to create the initial centroids for the 
+        clusters.  Defaults to creating them randomly.
         
     Returns:
       A pandas Series.  Each sample index is assigned a numerical value 
@@ -83,7 +86,7 @@ def kmeans(dataset, k=2):
     dataset = model.as_dataset(dataset)
     
     # Initialize k centroids
-    centroids = create_random_centroids(dataset, k)
+    centroids = create_centroids(dataset, k)
     
     # Iteratively compute best clusters until they stabilize
     assignments = None
