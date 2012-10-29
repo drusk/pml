@@ -98,6 +98,22 @@ class ClusteringTest(unittest.TestCase):
         
         assert_that(clusters, equals_series({0: 0, 1: 1, 2: 0}))
             
+    def test_kmeans_k_3(self):
+        dataset = DataSet([[3, 13], [5, 13], [2, 11], [4, 11], [6, 11], 
+                           [8, 5], [5, 3], [6, 2], [9, 2], [16, 14], [18, 13], 
+                           [16, 11], [19, 10]])
+        
+        def create_centroids(dataset, k):
+            # Want pre-set centroids (not random) so that test outcome is known
+            # Therefore ignore input parameters.
+            return [pd.Series([4, 9]), pd.Series([10, 6]), pd.Series([17, 9])]
+        
+        clusters = clustering.kmeans(dataset, k=3, 
+                                     create_centroids=create_centroids)
+        assert_that(clusters, equals_series({0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 
+                                             5: 1, 6: 1, 7: 1, 8: 1, 9: 2, 
+                                             10: 2, 11: 2, 12: 2}))
+            
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
