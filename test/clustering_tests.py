@@ -34,6 +34,22 @@ from matchers import in_range, equals_series
 
 class ClusteringTest(unittest.TestCase):
 
+    def create_data(self, n_rows, n_columns):
+        """
+        Creates data when you don't care what the contents are.
+        
+        Args:
+          n_rows: int
+            The number of rows in the data.
+          n_columns: int
+            The number of columns in the data.
+            
+        Returns:
+          A Python list of lists with arbitrary data in the shape provided.  
+          Can then be passed to a DataSet constructor.
+        """
+        return [[i + j for j in range(n_columns)] for i in range(n_rows)]
+
     def test_create_random_centroids(self):
         dataset = DataSet(pd.DataFrame([[4, 1, 2], [5, 9, 8], [4, 3, 6]], 
                           columns=["a", "b", "c"]))
@@ -113,7 +129,34 @@ class ClusteringTest(unittest.TestCase):
         assert_that(clusters, equals_series({0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 
                                              5: 1, 6: 1, 7: 1, 8: 1, 9: 2, 
                                              10: 2, 11: 2, 12: 2}))
-            
+    
+    def test_calculate_purity(self):
+        # use example from http://nlp.stanford.edu/IR-book/html/htmledition/
+        # evaluation-of-clustering-1.html
+        data = self.create_data(17, 2)
+        unclustered_dataset = DataSet(data,
+            labels=["x", "x", "o", "x", "x", "x", "x", "o", "d", "o", "o", 
+                    "o", "x", "d", "d", "d", "x"])
+        cluster_assignments = pd.Series([1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 
+                                         3, 3, 3, 3, 3])
+        
+        clustered_dataset = clustering.ClusteredDataSet(unclustered_dataset, 
+                                                        cluster_assignments)
+        
+        self.assertAlmostEqual(clustered_dataset.calculate_purity(), 0.71, 2)
+        
+    def test_calculate_purity_unlabelled_dataset(self):
+        data = self.create_data(17, 2)
+        unclustered_dataset = DataSet(data) # NOTE: no labels
+        cluster_assignments = pd.Series([1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 
+                                         3, 3, 3, 3, 3])
+        
+        clustered_dataset = clustering.ClusteredDataSet(unclustered_dataset, 
+                                                        cluster_assignments)
+        
+        self.assertRaises(clustering.UnlabelledDataSetError, 
+                          clustered_dataset.calculate_purity)
+    
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

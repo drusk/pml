@@ -31,6 +31,94 @@ import model
 from distance_utils import euclidean
 from pandas_util import are_dataframes_equal
 
+class UnlabelledDataSetError(Exception):
+    """
+    A custom exception to be thrown when trying to perform an operation that 
+    requires a DataSet to be labelled when it is not.
+    """
+    
+    def __init__(self):
+        """
+        Constructs a new exception.
+        """
+        Exception.__init__(self, ("Operation requires the DataSet to be "
+                           "labelled, but it is not."))
+    
+
+class ClusteredDataSet(model.DataSet):
+    """
+    A collection of data which has been analysed by a clustering algorithm 
+    """
+    
+    def __init__(self, dataset, cluster_assignments):
+        """
+        Creates a new ClusteredDataSet.
+        
+        Args:
+          dataset: model.DataSet
+            A dataset which does not have cluster assignments.
+          cluster_assignments: pandas.Series
+            A Series with the cluster assignment for each sample in the 
+            dataset.
+        """
+        super(ClusteredDataSet, self).__init__(dataset.get_data_frame(), 
+                                               dataset.get_labels())
+        self.cluster_assignments = cluster_assignments
+    
+    def calculate_purity(self):
+        """
+        Calculate the purity, a measurement of quality for the clustering 
+        results.
+        
+        Each cluster is assigned to the class which is most frequent in the 
+        cluster.  Using these classes, the percent accuracy is then calculated.
+        
+        Returns:
+          A number between 0 and 1.  Poor clusterings have a purity close to 0 
+          while a perfect clustering has a purity of 1.
+          
+        Raises:
+          UnlabelledDataSetError if the dataset is not labelled.
+        """
+        if not self.is_labelled():
+            raise UnlabelledDataSetError()
+        
+        # get the set of unique cluster ids
+        clusters = set(self.cluster_assignments.values)
+
+        # find out what class is most frequent in each cluster
+        cluster_classes = {}
+        for cluster in clusters:
+            # get the indices of rows in this cluster
+            indices = self.cluster_assignments[self.cluster_assignments == 
+                                               cluster].index
+
+            # filter the labels series down to those in this cluster
+            cluster_labels = self.labels[indices]
+
+            # assign the most common label to be the label for this cluster
+            cluster_classes[cluster] = cluster_labels.value_counts().idxmax()
+        
+        def get_label(cluster):
+            """
+            Get the label for a sample based on its cluster.
+            """
+            return cluster_classes[cluster]
+        
+        # get the list of labels as determined by each cluster's most frequent 
+        # label
+        labels_by_clustering = self.cluster_assignments.map(get_label)
+
+        # See how the clustering labels compare with the actual labels.  
+        # Return the percentage of indices in agreement.
+        num_agreed = 0
+        for ind in labels_by_clustering.index:
+            if labels_by_clustering[ind] == self.labels[ind]:
+                num_agreed += 1
+        
+        return float(num_agreed) / labels_by_clustering.size
+        
+
 def create_random_centroids(dataset, k):
     """
     Initializes centroids at random positions.
