@@ -36,49 +36,29 @@ from metrics import compute_accuracy
 
 class IntegrationTest(base_tests.BaseFileLoadingTest):
     
-    def knn_classify_iris(self):
-        # iris.data has 150 samples with 4 features.
-        # It has headers but no ids.  No missing data.
-        data = load(self.relative("datasets/iris.data"), has_ids=False)
-        train, test = data.split(0.8, random=True)
+    def test_knn_classify_iris(self):
+        """
+        NOTE: if data was split randomly, the accuracy would fluctuate with 
+        each run, making it difficult to put a reasonable bound on the 
+        assertion.  Therefore, the iris.data set was rearranged (and named 
+        iris_rearranged.data) to have a good mix of training data first and 
+        then test data second which can be cleanly split.
+        
+        iris_rearranged.data has 150 samples with 4 features.
+        It has headers but no ids.  No missing data.
+        """
+        data = load(self.relative("datasets/iris_rearranged.data"), 
+                    has_ids=False)
+        train, test = data.split(0.8)
         self.assertEqual(train.num_samples(), 120)
         self.assertEqual(test.num_samples(), 30)
         
         knn = Knn(train)
         results = knn.classify_all(test)
-        return compute_accuracy(results, test)
-        
-    def test_knn_classify_iris(self):
-        """
-        Due to the random selection of data for training and testing, the 
-        exact accuracy will fluctuate.  To try and combat this, run the 
-        workflow multiple times and average the accuracies before checking 
-        the value.
-        """
-        self.assertGreater(run(self.knn_classify_iris, iterations=10), 0.90)
+        accuracy = compute_accuracy(results, test)
+        self.assertAlmostEqual(accuracy, 0.97, 2)
     
     
-def run(workflow, iterations=5):
-    """
-    Due to the random selection of data for training and testing, the 
-    exact accuracy of a process will fluctuate.  To try and combat this, 
-    run the workflow multiple times and average the accuracies before 
-    checking the value.
-       
-    Args:
-      workflow:
-        A workflow which executes a workflow and returns the accuracy of 
-        its results.
-      iterations: int
-        The number of times to execute the workflow.  Increase this to 
-        increase the averaging effect.  Defaults to 10.
-    """
-    total = 0
-    for _ in xrange(iterations):
-        total += workflow()
-    return float(total) / iterations
-   
-            
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
