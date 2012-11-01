@@ -223,6 +223,11 @@ class DataSetTest(unittest.TestCase):
                               "Labelled? yes"))
         self.assertEqual(expected, dataset.__repr__())
 
+    def test_get_sample_ids(self):
+        dataset = DataSet([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        sample_ids = dataset.get_sample_ids()
+        assert_that(sample_ids, contains(0, 1, 2))
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

@@ -155,6 +155,13 @@ class DataSet(object):
         """
         return self._dataframe.columns.tolist()
     
+    def get_sample_ids(self):
+        """
+        Returns:
+          A Python list of the ids of the samples in the dataset.
+        """
+        return self._dataframe.index.tolist()
+    
     def get_labels(self, indices=None):
         """
         Selects classification labels for the specified samples (rows) in the 
