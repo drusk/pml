@@ -157,6 +157,32 @@ class ClusteringTest(unittest.TestCase):
         self.assertRaises(clustering.UnlabelledDataSetError, 
                           clustered_dataset.calculate_purity)
     
+    def test_calculate_rand_index(self):
+        data = self.create_data(17, 2)
+        unclustered_dataset = DataSet(data,
+            labels=["x", "x", "o", "x", "x", "x", "x", "o", "d", "o", "o", 
+                    "o", "x", "d", "d", "d", "x"])
+        cluster_assignments = pd.Series([1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 
+                                         3, 3, 3, 3, 3])
+        
+        clustered_dataset = clustering.ClusteredDataSet(unclustered_dataset, 
+                                                        cluster_assignments)
+        
+        self.assertAlmostEqual(clustered_dataset.calculate_rand_index(), 0.68, 
+                               2)
+        
+    def test_calculate_rand_index_unlabelled_dataset(self):
+        data = self.create_data(17, 2)
+        unclustered_dataset = DataSet(data) # NOTE: no labels
+        cluster_assignments = pd.Series([1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 
+                                         3, 3, 3, 3, 3])
+        
+        clustered_dataset = clustering.ClusteredDataSet(unclustered_dataset, 
+                                                        cluster_assignments)
+        
+        self.assertRaises(clustering.UnlabelledDataSetError, 
+                          clustered_dataset.calculate_rand_index)
+        
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

@@ -23,6 +23,7 @@ Clustering algorithms for unsupervised learning tasks.
 @author: drusk
 """
 
+import itertools
 import random
 
 import pandas as pd
@@ -117,6 +118,47 @@ class ClusteredDataSet(model.DataSet):
                 num_agreed += 1
         
         return float(num_agreed) / labels_by_clustering.size
+        
+    def calculate_rand_index(self):
+        """
+        Calculate the Rand index, a measurement of quality for the clustering 
+        results.  It is essentially the percent accuracy of the clustering.
+        
+        The clustering is viewed as a series of decisions.  There are 
+        N*(N-1)/2 pairs of samples in the dataset to be considered.  The 
+        decision is considered correct if the pairs have the same label and 
+        are in the same cluster, or have different labels and are in different 
+        clusters.  The number of correct decisions divided by the total number 
+        of decisions gives the Rand index, or accuracy.
+        
+        Returns:
+          The accuracy, a number between 0 and 1.  The closer to 1, the better 
+          the clustering.
+        
+        Raises:
+          UnlabelledDataSetError if the dataset is not labelled.
+        """
+        if not self.is_labelled():
+            raise UnlabelledDataSetError()
+        
+        correct = 0
+        total = 0
+        for index_combo in itertools.combinations(self.get_sample_ids(), 2):
+            index1 = index_combo[0]
+            index2 = index_combo[1]
+                
+            same_class = (self.labels[index1] == self.labels[index2])
+            same_cluster = (self.cluster_assignments[index1] 
+                            == self.cluster_assignments[index2])
+            
+            if same_class and same_cluster:
+                correct += 1
+            elif not same_class and not same_cluster:
+                correct += 1
+                
+            total += 1
+            
+        return float(correct) / total
         
 
 def create_random_centroids(dataset, k):
