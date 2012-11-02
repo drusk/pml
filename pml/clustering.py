@@ -48,7 +48,9 @@ class UnlabelledDataSetError(Exception):
 
 class ClusteredDataSet(model.DataSet):
     """
-    A collection of data which has been analysed by a clustering algorithm 
+    A collection of data which has been analysed by a clustering algorithm.  
+    It contains both the original DataSet and the results of the clustering.  
+    It provides methods for analysing these clustering results.  
     """
     
     def __init__(self, dataset, cluster_assignments):
