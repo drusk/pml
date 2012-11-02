@@ -26,7 +26,7 @@ Unit tests for metrics module.
 import unittest
 import pandas as pd
 from model import DataSet
-import metrics
+from classifiers import ClassifiedDataSet
 
 class MetricsTest(unittest.TestCase):
 
@@ -39,10 +39,10 @@ class MetricsTest(unittest.TestCase):
         return DataSet(raw_data, labels=labels)
 
     def test_accuracy_integer_index(self):
-        results = pd.Series(["a", "b", "c", "a"])
         dataset = self.create_dataset(["a", "b", "c", "b"])
-        self.assertAlmostEqual(metrics.compute_accuracy(results, dataset), 
-                               0.75, places=2)
+        classified = ClassifiedDataSet(dataset, 
+                                       pd.Series(["a", "b", "c", "a"]))
+        self.assertAlmostEqual(classified.compute_accuracy(), 0.75, places=2)
     
     def test_accuracy_string_index(self):
         results = pd.Series(["a", "b", "c", "a"], 
@@ -50,24 +50,26 @@ class MetricsTest(unittest.TestCase):
         labels = pd.Series(["a", "b", "c", "b"], 
                            index=["V01", "V02", "V03", "V04"])
         dataset = self.create_dataset(labels)
-        self.assertAlmostEqual(metrics.compute_accuracy(results, dataset), 
-                               0.75, places=2)
+        classified = ClassifiedDataSet(dataset, results)
+        self.assertAlmostEqual(classified.compute_accuracy(), 0.75, places=2)
     
+    @unittest.skip("This test will no longer be needed, leaving as a reminder"
+                   " to add index checks in DataSet constructors (and test)")
     def test_accuracy_unequal_lengths(self):
         results = pd.Series(["a", "b", "c", "a"], 
                             index=["V01", "V02", "V03", "V04"])
         labels = pd.Series(["a", "b", "c"], 
                            index=["V01", "V02", "V03"])
         dataset = self.create_dataset(labels)
-        self.assertRaises(ValueError, metrics.compute_accuracy, results, 
-                          dataset)
+        classified = ClassifiedDataSet(dataset, results)
+        self.assertRaises(ValueError, classified.compute_accuracy)
     
     def test_accuracy_dataset_unlabelled(self):
         results = pd.Series(["a", "b", "c", "a"], 
                             index=["V01", "V02", "V03", "V04"])
         dataset = DataSet([[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]])
-        self.assertRaises(ValueError, metrics.compute_accuracy, results, 
-                          dataset)
+        classified = ClassifiedDataSet(dataset, results)
+        self.assertRaises(ValueError, classified.compute_accuracy)
 
 
 if __name__ == "__main__":
