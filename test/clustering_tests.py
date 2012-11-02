@@ -124,11 +124,12 @@ class ClusteringTest(unittest.TestCase):
             # Therefore ignore input parameters.
             return [pd.Series([4, 9]), pd.Series([10, 6]), pd.Series([17, 9])]
         
-        clusters = clustering.kmeans(dataset, k=3, 
-                                     create_centroids=create_centroids)
-        assert_that(clusters, equals_series({0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 
-                                             5: 1, 6: 1, 7: 1, 8: 1, 9: 2, 
-                                             10: 2, 11: 2, 12: 2}))
+        clustered = clustering.kmeans(dataset, k=3, 
+                                      create_centroids=create_centroids)
+        assert_that(clustered.get_cluster_assignments(), equals_series({0: 0, 
+                                            1: 0, 2: 0, 3: 0, 4: 0, 5: 1, 
+                                            6: 1, 7: 1, 8: 1, 9: 2, 10: 2, 
+                                            11: 2, 12: 2}))
     
     def test_calculate_purity(self):
         # use example from http://nlp.stanford.edu/IR-book/html/htmledition/

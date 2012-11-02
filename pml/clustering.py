@@ -66,6 +66,17 @@ class ClusteredDataSet(model.DataSet):
                                                dataset.get_labels())
         self.cluster_assignments = cluster_assignments
     
+    def get_cluster_assignments(self):
+        """
+        Retrieves the cluster assignments produced for this dataset by a 
+        clustering algorithm.
+        
+        Returns:
+          A pandas Series.  It contains the index of the original dataset 
+          with a numerical value representing the cluster it is a part of.
+        """
+        return self.cluster_assignments
+    
     def calculate_purity(self):
         """
         Calculate the purity, a measurement of quality for the clustering 
@@ -209,8 +220,9 @@ def kmeans(dataset, k=2, create_centroids=create_random_centroids):
         clusters.  Defaults to creating them randomly.
         
     Returns:
-      A pandas Series.  Each sample index is assigned a numerical value 
-      representing the cluster it is part of.
+      A ClusteredDataSet which contains the cluster assignments as well as the 
+      original data.  In the cluster assignments, each sample index is 
+      assigned a numerical value representing the cluster it is part of.
     """
     # If dataset is not already a model.DataSet object, make it one.
     dataset = model.as_dataset(dataset)
@@ -227,7 +239,7 @@ def kmeans(dataset, k=2, create_centroids=create_random_centroids):
             clusters_changed = False
         assignments = new_assignments
     
-    return assignments
+    return ClusteredDataSet(dataset, assignments)
 
 def _get_distances_to_centroids(dataset, centroids):
     """
