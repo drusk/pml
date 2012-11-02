@@ -65,7 +65,7 @@ class KnnTest(unittest.TestCase):
                                labels=["a", "a", "b", "b"])
         classifier = classifiers.Knn(training_set, k=3)
         dataset = [[1.5, 1.3], [12.2, 12.9]]
-        classes = classifier.classify_all(dataset)
+        classes = classifier.classify_all(dataset).get_classifications()
         assert_that(classes, contains("a", "b"))
         
     def test_create_knn_unlabelled_raises_exception(self):

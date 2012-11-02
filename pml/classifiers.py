@@ -27,6 +27,61 @@ import model
 import distance_utils
 import collections
 
+class ClassifiedDataSet(model.DataSet):
+    """
+    A collection of data which has been analysed by a classification 
+    algorithm.  It contains both the original DataSet and the results of 
+    the classification.  It provides methods for analysing these 
+    classification results.  
+    """
+    
+    def __init__(self, dataset, classifications):
+        """
+        Creates a new ClassifiedDataSet.
+        
+        Args:
+          dataset: model.DataSet
+            A dataset which has been classified but does not hold the results.
+          classifications: pandas.Series
+            A Series with the classification results.
+        """
+        super(ClassifiedDataSet, self).__init__(dataset.get_data_frame(), 
+                                                dataset.get_labels())
+        self.classifications = classifications
+    
+    def get_classifications(self):
+        """
+        Retrieves the classifications computed for this dataset.
+        
+        Returns:
+          A pandas Series containing each sample's classification.
+        """
+        return self.classifications
+    
+    def compute_accuracy(self):
+        """
+        Calculates the percent accuracy of classification results.
+        
+        Returns:
+          The percent accuracy of the classification results, i.e. the number 
+          of samples correctly classified divided by the total number of 
+          samples.  Should be a floating point number between 0 and 1.
+          
+        Raises:
+          ValueError if dataset is not labelled.
+        """
+        if not self.is_labelled():
+            raise ValueError(("DataSet must be labelled in order to compute ", 
+                              "accuracy"))
+        
+        correct = 0
+        for ind in self.classifications.index:
+            if self.classifications[ind] == self.labels[ind]:
+                correct += 1
+            
+        return float(correct) / len(self.classifications)
+
+
 class Knn(object):
     """
     K-Nearest Neighbours classifier.
@@ -94,9 +149,11 @@ class Knn(object):
             the dataset whose samples (observations) will be classified.
             
         Returns:
-          a pandas Series containing each sample's classification.
+          A ClassifiedDataSet which contains the classification results for 
+          each sample.  It also contains the original data.
         """
-        return model.as_dataset(dataset).reduce_rows(self.classify)
+        dataset = model.as_dataset(dataset)
+        return ClassifiedDataSet(dataset, dataset.reduce_rows(self.classify))
         
     def classify(self, sample):
         """

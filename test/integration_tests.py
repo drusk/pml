@@ -55,7 +55,7 @@ class IntegrationTest(base_tests.BaseFileLoadingTest):
         
         knn = Knn(train)
         results = knn.classify_all(test)
-        accuracy = compute_accuracy(results, test)
+        accuracy = results.compute_accuracy()
         self.assertAlmostEqual(accuracy, 0.97, 2)
     
     
