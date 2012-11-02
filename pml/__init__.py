@@ -23,5 +23,4 @@ from clustering import *
 from distance_utils import *
 from loader import *
 from model import *
-from metrics import *
 from plotting import *
