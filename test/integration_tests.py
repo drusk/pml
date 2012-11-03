@@ -32,7 +32,6 @@ import base_tests
 
 from loader import load
 from classifiers import Knn
-from metrics import compute_accuracy
 
 class IntegrationTest(base_tests.BaseFileLoadingTest):
     
@@ -55,8 +54,7 @@ class IntegrationTest(base_tests.BaseFileLoadingTest):
         
         knn = Knn(train)
         results = knn.classify_all(test)
-        accuracy = results.compute_accuracy()
-        self.assertAlmostEqual(accuracy, 0.97, 2)
+        self.assertAlmostEqual(results.compute_accuracy(), 0.97, 2)
     
     
 if __name__ == "__main__":
