@@ -29,22 +29,9 @@ import random
 import pandas as pd
 
 import model
+from errors import UnlabelledDataSetError
 from distance_utils import euclidean
 from pandas_util import are_dataframes_equal
-
-class UnlabelledDataSetError(Exception):
-    """
-    A custom exception to be thrown when trying to perform an operation that 
-    requires a DataSet to be labelled when it is not.
-    """
-    
-    def __init__(self):
-        """
-        Constructs a new exception.
-        """
-        Exception.__init__(self, ("Operation requires the DataSet to be "
-                           "labelled, but it is not."))
-    
 
 class ClusteredDataSet(model.DataSet):
     """

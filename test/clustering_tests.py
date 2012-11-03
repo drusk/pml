@@ -30,6 +30,7 @@ from hamcrest import assert_that
 
 import clustering
 from model import DataSet
+from errors import UnlabelledDataSetError
 from matchers import in_range, equals_series
 
 class ClusteringTest(unittest.TestCase):
@@ -155,7 +156,7 @@ class ClusteringTest(unittest.TestCase):
         clustered_dataset = clustering.ClusteredDataSet(unclustered_dataset, 
                                                         cluster_assignments)
         
-        self.assertRaises(clustering.UnlabelledDataSetError, 
+        self.assertRaises(UnlabelledDataSetError, 
                           clustered_dataset.calculate_purity)
     
     def test_calculate_rand_index(self):
@@ -181,7 +182,7 @@ class ClusteringTest(unittest.TestCase):
         clustered_dataset = clustering.ClusteredDataSet(unclustered_dataset, 
                                                         cluster_assignments)
         
-        self.assertRaises(clustering.UnlabelledDataSetError, 
+        self.assertRaises(UnlabelledDataSetError, 
                           clustered_dataset.calculate_rand_index)
         
 
