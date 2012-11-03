@@ -23,9 +23,11 @@ Classification algorithms for supervised learning tasks.
 @author: drusk
 """
 
+import collections
+
 import model
 import distance_utils
-import collections
+from errors import UnlabelledDataSetError
 
 class ClassifiedDataSet(model.DataSet):
     """
@@ -68,11 +70,10 @@ class ClassifiedDataSet(model.DataSet):
           samples.  Should be a floating point number between 0 and 1.
           
         Raises:
-          ValueError if dataset is not labelled.
+          UnlabelledDataSetError if the dataset is not labelled.
         """
         if not self.is_labelled():
-            raise ValueError(("DataSet must be labelled in order to compute ", 
-                              "accuracy"))
+            raise UnlabelledDataSetError()
         
         correct = 0
         for ind in self.classifications.index:
@@ -111,10 +112,11 @@ class Knn(object):
             Default value is 5.
             
         Raises:
-          ValueError if the training set is not labelled.
+          UnlabelledDataSetError if the training set is not labelled.
         """
         if not training_set.is_labelled():
-            raise ValueError("Training set must be labelled.")
+            raise UnlabelledDataSetError(custom_message=("Training set must "
+                                                         "be labelled."))
         
         self.training_set = training_set
         self.k = k

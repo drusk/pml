@@ -27,6 +27,7 @@ import unittest
 import pandas as pd
 from model import DataSet
 from classifiers import ClassifiedDataSet
+from errors import UnlabelledDataSetError
 
 class MetricsTest(unittest.TestCase):
 
@@ -69,7 +70,7 @@ class MetricsTest(unittest.TestCase):
                             index=["V01", "V02", "V03", "V04"])
         dataset = DataSet([[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]])
         classified = ClassifiedDataSet(dataset, results)
-        self.assertRaises(ValueError, classified.compute_accuracy)
+        self.assertRaises(UnlabelledDataSetError, classified.compute_accuracy)
 
 
 if __name__ == "__main__":

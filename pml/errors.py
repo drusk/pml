@@ -29,10 +29,11 @@ class UnlabelledDataSetError(Exception):
     requires a DataSet to be labelled when it is not.
     """
     
-    def __init__(self):
+    def __init__(self, custom_message=None):
         """
         Constructs a new exception.
         """
-        Exception.__init__(self, ("Operation requires the DataSet to be "
-                           "labelled, but it is not."))
+        message = ("Operation requires the DataSet to be labelled, but it is "
+                   "not.") if custom_message is None else custom_message
+        Exception.__init__(self, message)
 

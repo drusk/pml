@@ -24,8 +24,10 @@ Unit tests for the KNN algorithm.
 """
 
 import unittest
+
 import classifiers
 from model import DataSet
+from errors import UnlabelledDataSetError
 from hamcrest import assert_that, contains
 
 class KnnTest(unittest.TestCase):
@@ -70,7 +72,8 @@ class KnnTest(unittest.TestCase):
         
     def test_create_knn_unlabelled_raises_exception(self):
         training_set = DataSet([[1, 2], [3, 4]])
-        self.assertRaises(ValueError, classifiers.Knn, training_set)
+        self.assertRaises(UnlabelledDataSetError, classifiers.Knn, 
+                          training_set)
         
     def test_classify_incomplete_sample(self):
         training_set = DataSet([[1, 2, 3], [4, 5, 6]], labels=["a", "a"])
