@@ -23,17 +23,45 @@ Implements principal component analysis (PCA) and related operations.
 @author: drusk
 """
 
+import numpy as np
+
+def remove_means(dataset):
+    """
+    Remove the column mean from each value in the dataset.
+    
+    For example, if a certain column as values [1, 2, 3], the column mean is 
+    2.  When the column means are removed, that column will then have the 
+    values [-1, 0, 1].
+    
+    NOTE: the modifications are made in place in dataset.
+    
+    Args:
+      dataset: model.DataSet
+        The dataset to remove the column means from.
+    """
+    column_means = dataset.reduce_features(np.mean)
+    
+    for feature in dataset.feature_list():
+        def subtract_mean(sample):
+            """
+            Subtracts the current column/feature's mean value from a sample.
+            """
+            return sample - column_means[feature]
+
+        dataset.set_column(feature, 
+                           dataset.get_column(feature).map(subtract_mean))
+
 def pca(dataset):
     """
     """
-    # remove the mean
+    # 1. remove the mean
     
-    # compute the covariance matrix
+    # 2. compute the covariance matrix
     
-    # find the eigenvalues and eigenvectors of the covariance matrix
+    # 3. find the eigenvalues and eigenvectors of the covariance matrix
     
-    # sort the eigenvalues from largest to smallest
+    # 4. sort the eigenvalues from largest to smallest
     
-    # take the top N eigenvectors
+    # 5. take the top N eigenvectors
     
-    # transform the data into the new space created by the top N eigenvectors
+    # 6. transform the data into the new space created by the top N eigenvectors
