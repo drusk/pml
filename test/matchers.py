@@ -26,12 +26,14 @@ Custom Hamcrest matchers.
 import numpy as np
 from hamcrest.core.base_matcher import BaseMatcher
 
+import util
+
 class IsDataSet(BaseMatcher):
     """
     Used for asserting the contents of a DataSet object are as expected.
     """
     
-    def __init__(self, as_list):
+    def __init__(self, as_list, places=None):
         """
         Creates a new matcher given an expected input.
         
@@ -39,8 +41,13 @@ class IsDataSet(BaseMatcher):
           as_list: 2d list
             A 2d list where each sub-list represents a row in the dataset's 
             underlying DataFrame.
+          places: int
+            The number of decimal places to check when comparing data values.
+            Defaults to None, in which case full equality is checked (good for 
+            ints, but not for floats).
         """
         self.as_list = as_list
+        self.places = places
     
     def _matches(self, dataset):
         if dataset.num_samples() != len(self.as_list):
@@ -50,8 +57,9 @@ class IsDataSet(BaseMatcher):
             # if the dataset has been filtered the indices may not be a 
             # continuous range
             index = dataset._dataframe.index[i]
-            if not lists_match_exactly(self.as_list[i], 
-                                 dataset.get_row(index).tolist()):
+            if not lists_match(self.as_list[i], 
+                               dataset.get_row(index).tolist(), 
+                               places=self.places):
                 return False
         
         return True    
@@ -107,27 +115,51 @@ class InRange(BaseMatcher):
                                 %(self.minval, self.maxval))
         
     
-def _equals(val1, val2):
+def _equals(val1, val2, places=None):
     """
     Special equals method to make NaN's considered equal to each other.
+    
+    places: int
+            The number of decimal places to check when comparing data values.
+            Defaults to None, in which case full equality is checked (good for 
+            ints, but not for floats).
     """
     if np.isnan(val1) and np.isnan(val2):
         return True
-    return val1 == val2
     
-def lists_match_exactly(list1, list2):
+    if places is None:
+        return val1 == val2
+    else:
+        return util.almost_equal(val1, val2, places)
+    
+def lists_match(list1, list2, places=None):
     """
     Compares two lists and returns True if they are exactly the same, False 
     otherwise.
+    
+    places: int
+            The number of decimal places to check when comparing data values.
+            Defaults to None, in which case full equality is checked (good for 
+            ints, but not for floats).
     """
     return len(list1) == len(list2) and \
-        all([_equals(list1[i], list2[i]) for i in xrange(len(list1))])
+        all([_equals(list1[i], list2[i], places=places) 
+             for i in xrange(len(list1))])
     
-def equals_dataset(as_list):
+def equals_dataset(as_list, places=None):
     """
     Compares a DataSet object to the given list representation.
+    
+    Args:
+      as_list: Python list of lists
+        The expected data.
+      places: int
+        The number of decimal places to check when comparing data values.
+        Defaults to None, in which case full equality is checked (good for 
+        ints, but not for floats).
+      
     """
-    return IsDataSet(as_list)
+    return IsDataSet(as_list, places=places)
 
 def equals_series(as_dict):
     """
