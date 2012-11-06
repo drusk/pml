@@ -63,6 +63,18 @@ class DataSetTest(unittest.TestCase):
         dataset.get_column(1)[:] = 1
         assert_that(dataset.get_column(1), contains(1, 1, 1))
         
+    def test_set_column(self):
+        dataset = DataSet([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        dataset.set_column(1, [11, 11, 11])
+        assert_that(dataset, equals_dataset([[1, 11, 3], [4, 11, 6], 
+                                             [7, 11, 9]]))
+    
+    def test_set_new_column(self):
+        dataset = DataSet([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        dataset.set_column(3, [11, 11, 11])
+        assert_that(dataset, equals_dataset([[1, 2, 3, 11], [4, 5, 6, 11], 
+                                             [7, 8, 9, 11]]))
+        
     def test_get_rows(self):
         dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]])
         selection = dataset.get_rows([1, 3])

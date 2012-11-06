@@ -228,14 +228,28 @@ class DataSet(object):
         
         Args:
           index: 
-            the index (0 based) of the column to select.
+            The column index.  If the columns are named, this is the column 
+            name.  Otherwise it is the 0-based index.
           
         Returns:
           the columns at the specified index as a pandas Series object.  This 
           series is a view on the original data set, not a copy.  That means 
           any changes to it will also be applied to the original data set.
         """
-        return self._dataframe.ix[:, index]
+        return self._dataframe[index]
+
+    def set_column(self, index, new_column):
+        """
+        Set the new values for a column.  Can be used to create a new column.
+        
+        Args:
+          index: 
+            The column index.  If the columns are named, this is the column 
+            name.  Otherwise it is the 0-based index.
+          new_column: pandas.Series or compatible object
+            The new column data to be placed at the specified index.
+        """
+        self._dataframe[index] = new_column
 
     def get_row(self, identifier):
         """
