@@ -26,7 +26,7 @@ Unit tests for the model module.
 import unittest
 from model import DataSet, as_dataset
 from hamcrest import assert_that, contains
-from matchers import equals_dataset, equals_series, lists_match_exactly
+from matchers import equals_dataset, equals_series
 import numpy as np
 import pandas as pd
 
