@@ -102,6 +102,16 @@ class DataSet(object):
                             % display(self.has_missing_values()),
                          "Labelled? %s" % display(self.is_labelled())))
 
+    def copy(self):
+        """
+        Creates a copy of this dataset.  Changes made to one dataset will not 
+        affect the other.
+        
+        Returns:
+          A new DataSet with the current data and labels.
+        """
+        return DataSet(self._dataframe.copy(), labels=self.labels.copy())
+
     def get_data_frame(self):
         """
         Retrieve the DataSet's underlying data as a pandas DataFrame object.

@@ -240,6 +240,16 @@ class DataSetTest(unittest.TestCase):
         sample_ids = dataset.get_sample_ids()
         assert_that(sample_ids, contains(0, 1, 2))
 
+    def test_copy(self):
+        dataset1 = DataSet([[1, 2], [3, 4]], labels=pd.Series(["a", "b"]))
+        dataset2 = dataset1.copy()
+        dataset2.set_column(1, pd.Series([4, 5]))
+        
+        assert_that(dataset2, equals_dataset([[1, 4], [3, 5]]))
+        assert_that(dataset2.get_labels(), equals_series({0: "a", 1: "b"}))
+        assert_that(dataset1, equals_dataset([[1, 2], [3, 4]]))
+        assert_that(dataset2.get_labels(), equals_series({0: "a", 1: "b"}))
+        
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
