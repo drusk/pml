@@ -66,7 +66,7 @@ class DataSet(object):
             raise ValueError("Unsupported representation of data set")        
         
         if labels is not None and self.num_samples() != len(labels):
-            raise ValueError(("Number of labels doesn't match the number ", 
+            raise ValueError(("Number of labels doesn't match the number " 
                               "of samples in the data."))
 
         if isinstance(labels, list):
