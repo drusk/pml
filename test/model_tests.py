@@ -250,6 +250,16 @@ class DataSetTest(unittest.TestCase):
         assert_that(dataset1, equals_dataset([[1, 2], [3, 4]]))
         assert_that(dataset2.get_labels(), equals_series({0: "a", 1: "b"}))
         
+    def test_copy_no_labels(self):
+        dataset1 = DataSet([[1, 2], [3, 4]])
+        dataset2 = dataset1.copy()
+        dataset2.set_column(1, pd.Series([4, 5]))
+        
+        assert_that(dataset2, equals_dataset([[1, 4], [3, 5]]))
+        self.assertFalse(dataset2.is_labelled())
+        assert_that(dataset1, equals_dataset([[1, 2], [3, 4]]))
+        self.assertFalse(dataset1.is_labelled())
+        
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

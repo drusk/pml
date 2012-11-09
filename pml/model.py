@@ -110,7 +110,11 @@ class DataSet(object):
         Returns:
           A new DataSet with the current data and labels.
         """
-        return DataSet(self._dataframe.copy(), labels=self.labels.copy())
+        def copy_if_not_none(copyable):
+            return copyable.copy() if copyable is not None else None
+        
+        return DataSet(self._dataframe.copy(), 
+                       labels=copy_if_not_none(self.labels))
 
     def get_data_frame(self):
         """
