@@ -42,6 +42,20 @@ class PCATest(unittest.TestCase):
                                              [1.33, -0.67, -1]], 
                                             places=2))
 
+    def test_otago_example(self):
+        # example data from Otago university tutorial
+        dataset = DataSet([[2.5, 2.4], [0.5, 0.7], [2.2, 2.9], [1.9, 2.2], 
+                           [3.1, 3.0], [2.3, 2.7], [2, 1.6], [1, 1.1], 
+                           [1.5, 1.6], [1.1, 0.9]])
+        transformed = [[-0.828, -0.175], [1.778, 0.143], [-0.992, 0.384], 
+                       [-0.274, 0.130], [-1.676, -0.209], [-0.913, 0.175], 
+                       [0.099, -0.350], [1.145, 0.046], [0.4380, 0.018], 
+                       [1.224, -0.163]]
+        
+        principal_components = pca.pca(dataset, 2)
+        assert_that(principal_components, equals_dataset(transformed, 
+                                                         places=2))
+        
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
