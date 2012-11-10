@@ -210,6 +210,11 @@ class DataSetTest(unittest.TestCase):
         for i in range(len(expected)):
             self.assertTrue(df.ix[i].tolist(), expected[i])
 
+    def test_get_row_index(self):
+        dataset = DataSet(pd.DataFrame([[1, 2], [3, 4], [5, 6]], 
+                                       index=["a", "b", "c"]))
+        assert_that(dataset.get_row_index(), contains("a", "b", "c"))
+
     def test_combine_labels(self):
         dataset = DataSet([[1, 2], [3, 4], [5, 6]], 
                           labels=pd.Series(["cat", "crow", "pidgeon"]))
