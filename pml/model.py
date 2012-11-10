@@ -116,18 +116,6 @@ class DataSet(object):
         return DataSet(self._dataframe.copy(), 
                        labels=copy_if_not_none(self.labels))
 
-    def get_row_index(self):
-        """
-        Retrieves the index for rows in the DataSet.  These can be considered 
-        the names of the observations (rows).  They may be strings, but if not 
-        set they will default to integers starting at 0.
-        
-        Returns:
-          A 1 dimensional array-like object with the index for the rows in the 
-          DataSet. 
-        """
-        return self.get_data_frame().index
-
     def get_data_frame(self):
         """
         Retrieve the DataSet's underlying data as a pandas DataFrame object.
@@ -201,7 +189,7 @@ class DataSet(object):
         Returns:
           A Python list of the ids of the samples in the dataset.
         """
-        return self._dataframe.index.tolist()
+        return self.get_data_frame().index.tolist()
     
     def get_labels(self, indices=None):
         """

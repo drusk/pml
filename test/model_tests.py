@@ -210,11 +210,6 @@ class DataSetTest(unittest.TestCase):
         for i in range(len(expected)):
             self.assertTrue(df.ix[i].tolist(), expected[i])
 
-    def test_get_row_index(self):
-        dataset = DataSet(pd.DataFrame([[1, 2], [3, 4], [5, 6]], 
-                                       index=["a", "b", "c"]))
-        assert_that(dataset.get_row_index(), contains("a", "b", "c"))
-
     def test_combine_labels(self):
         dataset = DataSet([[1, 2], [3, 4], [5, 6]], 
                           labels=pd.Series(["cat", "crow", "pidgeon"]))
@@ -252,8 +247,13 @@ class DataSetTest(unittest.TestCase):
 
     def test_get_sample_ids(self):
         dataset = DataSet([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-        sample_ids = dataset.get_sample_ids()
-        assert_that(sample_ids, contains(0, 1, 2))
+        assert_that(dataset.get_sample_ids(), contains(0, 1, 2))
+
+    def test_get_sample_ids_named(self):
+        dataset = DataSet(pd.DataFrame([[1, 2], [3, 4], [5, 6]], 
+                                       index=["a", "b", "c"]))
+        assert_that(dataset.get_sample_ids(), contains("a", "b", "c"))
+
 
     def test_copy(self):
         dataset1 = DataSet([[1, 2], [3, 4]], labels=pd.Series(["a", "b"]))

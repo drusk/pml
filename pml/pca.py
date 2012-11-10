@@ -46,15 +46,15 @@ class ReducedDataSet(model.DataSet):
     reduced features.
     """
     
-    def __init__(self, data, row_index, labels, eigen_values):
+    def __init__(self, data, sample_ids, labels, eigen_values):
         """
         Creates a new ReducedDataSet.
         
         Args:
           data: numpy.array
             The raw array with the new data.
-          row_index: pandas.Index
-            The index of row (observation) names.
+          sample_ids: list
+            The ids for the samples (rows, observations) in the data set.
           labels: pandas.Series
             The labels, if any, provided for the observations.
           eigen_values: numpy.array (1D)
@@ -62,7 +62,7 @@ class ReducedDataSet(model.DataSet):
             the new feature space were most important.
         """
         # build a pandas DataFrame with the original row index
-        dataframe = pd.DataFrame(data, index=row_index)
+        dataframe = pd.DataFrame(data, index=sample_ids)
         super(ReducedDataSet, self).__init__(dataframe, labels=labels)
         
         self.eigen_values = eigen_values
@@ -127,6 +127,5 @@ def pca(dataset, num_components):
     transformed_data = np.dot(dataset.get_data_frame(), 
                               eigen_vectors[:, selected_indices])
     
-    # TODO DataSet.get_row_index()
-    return ReducedDataSet(transformed_data, dataset.get_row_index(), 
+    return ReducedDataSet(transformed_data, dataset.get_sample_ids(), 
                           dataset.get_labels(), eigen_values)

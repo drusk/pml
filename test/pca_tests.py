@@ -61,7 +61,7 @@ class PCATest(unittest.TestCase):
         dataset = DataSet(pd.DataFrame([[1, 2], [3, 4], [5, 6]], 
                           index=["Cat", "Dog", "Rat"]))
         reduced = pca.pca(dataset, 2)
-        assert_that(reduced.get_row_index(), contains("Cat", "Dog", "Rat"))
+        assert_that(reduced.get_sample_ids(), contains("Cat", "Dog", "Rat"))
         
 
 if __name__ == "__main__":
