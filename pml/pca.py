@@ -27,7 +27,46 @@ import numpy as np
 import numpy.linalg as linalg
 import pandas as pd
 
-from model import DataSet
+import model
+
+class ReducedDataSet(model.DataSet):
+    """
+    A DataSet which has had dimensionality reduction performed on it.
+    
+    Columns are interpreted as features in the data set, and rows are 
+    observations.
+    
+    This dimensionally reduced data set has all of the observations of the 
+    original, but its features have been adjusted to be linear combinations 
+    of the originals.  
+    
+    Those features with little variance may have been dropped during the 
+    dimensionality reduction process.  Use the percent_variance() method to 
+    find out how much of the original variance has been retained in the 
+    reduced features.
+    """
+    
+    def __init__(self, data, row_index, labels, eigen_values):
+        """
+        Creates a new ReducedDataSet.
+        
+        Args:
+          data: numpy.array
+            The raw array with the new data.
+          row_index: pandas.Index
+            The index of row (observation) names.
+          labels: pandas.Series
+            The labels, if any, provided for the observations.
+          eigen_values: numpy.array (1D)
+            The list of eigen values produced to determine which components in 
+            the new feature space were most important.
+        """
+        # build a pandas DataFrame with the original row index
+        dataframe = pd.DataFrame(data, index=row_index)
+        super(ReducedDataSet, self).__init__(dataframe, labels=labels)
+        
+        self.eigen_values = eigen_values
+    
 
 def remove_means(dataset):
     """
@@ -90,4 +129,6 @@ def pca(dataset, num_components):
     transformed_data = np.dot(dataset._dataframe, 
                               eigen_vectors[:, selected_indices])
     
-    return DataSet(pd.DataFrame(transformed_data))
+    # TODO DataSet.get_row_index()
+    return ReducedDataSet(transformed_data, dataset._dataframe.index, 
+                          dataset.get_labels(), eigen_values)
