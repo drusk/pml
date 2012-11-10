@@ -46,7 +46,7 @@ class ReducedDataSet(model.DataSet):
     reduced features.
     """
     
-    def __init__(self, data, sample_ids, labels, eigen_values):
+    def __init__(self, data, sample_ids, labels, eigenvalues):
         """
         Creates a new ReducedDataSet.
         
@@ -57,16 +57,16 @@ class ReducedDataSet(model.DataSet):
             The ids for the samples (rows, observations) in the data set.
           labels: pandas.Series
             The labels, if any, provided for the observations.
-          eigen_values: numpy.array (1D)
-            The list of eigen values produced to determine which components in 
+          eigenvalues: numpy.array (1D)
+            The list of eigenvalues produced to determine which components in 
             the new feature space were most important.  This includes all of 
-            the eigen values, not just the ones for the components selected.
+            the eigenvalues, not just the ones for the components selected.
         """
         # build a pandas DataFrame with the original row index
         dataframe = pd.DataFrame(data, index=sample_ids)
         super(ReducedDataSet, self).__init__(dataframe, labels=labels)
         
-        self.eigen_values = eigen_values
+        self.eigenvalues = eigenvalues
 
     def percent_variance(self):
         """
@@ -77,7 +77,7 @@ class ReducedDataSet(model.DataSet):
           A floating point number between 0.0 and 1.0 representing the 
           percentage. 
         """
-        return _percent_variance(self.eigen_values, self.num_features())
+        return _percent_variance(self.eigenvalues, self.num_features())
     
 def _percent_variance(eigenvalues, num_components):
     """
@@ -151,11 +151,11 @@ def pca(dataset, num_components):
     cov_mat = np.cov(dataset.get_data_frame(), rowvar=0)
     
     # 3. find the eigenvalues and eigenvectors of the covariance matrix
-    eigen_values, eigen_vectors = linalg.eig(cov_mat)
+    eigenvalues, eigenvectors = linalg.eig(cov_mat)
 
     # 4. sort the eigenvalues from largest to smallest
     # get a list of indices for the eigenvalues ordered largest to smallest
-    indices = np.argsort(eigen_values).tolist()
+    indices = np.argsort(eigenvalues).tolist()
     indices.reverse()
     
     # 5. take the top N eigenvectors
@@ -163,7 +163,7 @@ def pca(dataset, num_components):
 
     # 6. transform the data into the new space created by the top N eigenvectors
     transformed_data = np.dot(dataset.get_data_frame(), 
-                              eigen_vectors[:, selected_indices])
+                              eigenvectors[:, selected_indices])
     
     return ReducedDataSet(transformed_data, dataset.get_sample_ids(), 
-                          dataset.get_labels(), eigen_values)
+                          dataset.get_labels(), eigenvalues)
