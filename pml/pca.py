@@ -59,14 +59,52 @@ class ReducedDataSet(model.DataSet):
             The labels, if any, provided for the observations.
           eigen_values: numpy.array (1D)
             The list of eigen values produced to determine which components in 
-            the new feature space were most important.
+            the new feature space were most important.  This includes all of 
+            the eigen values, not just the ones for the components selected.
         """
         # build a pandas DataFrame with the original row index
         dataframe = pd.DataFrame(data, index=sample_ids)
         super(ReducedDataSet, self).__init__(dataframe, labels=labels)
         
         self.eigen_values = eigen_values
+
+    def percent_variance(self):
+        """
+        Calculates the percentage of the original DataSet's variance which is  
+        still present in this dimensionally reduced DataSet.
+        
+        Returns:
+          A floating point number between 0.0 and 1.0 representing the 
+          percentage. 
+        """
+        return _percent_variance(self.eigen_values, self.num_features())
     
+def _percent_variance(eigenvalues, num_components):
+    """
+    Calculates the percentage of total variance found in the top princpal 
+    components.
+    
+    Args:
+      eigenvalues: numpy.array (1D)
+        The list of all eigenvalues for a data set.
+      num_components: int
+        The number of principal components which will be selected.
+        
+    Returns:
+      The percentage of total variance for the top number of principal 
+      components selected.  This will be a floating point number between 0.0 
+      and 1.0. 
+    """
+    # make sure eigenvalues are a numpy array (allows fancy indexing)
+    eigenvalues = np.array(eigenvalues)
+    
+    # get indices sorted smallest to largest
+    sorted_indices = np.argsort(eigenvalues)
+    
+    # get largest
+    selected_indices = sorted_indices[-num_components:]
+    
+    return np.sum(eigenvalues[selected_indices]) / np.sum(eigenvalues)
 
 def remove_means(dataset):
     """

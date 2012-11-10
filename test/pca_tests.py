@@ -63,6 +63,11 @@ class PCATest(unittest.TestCase):
         reduced = pca.pca(dataset, 2)
         assert_that(reduced.get_sample_ids(), contains("Cat", "Dog", "Rat"))
         
+    def test_percent_variance(self):
+        eigenvalues = [1.50, 2.20, 0.60, 4.90, 3.80, 5.75]
+        self.assertAlmostEqual(pca._percent_variance(eigenvalues, 3), 0.77, 
+                               places=2)
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
