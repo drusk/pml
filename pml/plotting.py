@@ -33,5 +33,5 @@ def plot_radviz(dataset):
     # radviz takes a pandas DataFrame and the name of the column which 
     # contains class membership info. 
     # therefore need to pass in the dataset's merged data and labels
-    radviz(dataset.get_data_frame(), dataset.get_labels().name)
+    radviz(dataset.get_labelled_data_frame(), dataset.get_labels().name)
     plt.show()

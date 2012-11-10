@@ -120,6 +120,20 @@ class DataSet(object):
         """
         Retrieve the DataSet's underlying data as a pandas DataFrame object.
         
+        See also get_labelled_data_frame().
+        
+        Returns:
+          A pandas DataFrame with the DataSet's main data, but no labels.
+        """
+        return self._dataframe
+
+    def get_labelled_data_frame(self):
+        """
+        Retrieve the DataSet's underlying data as a pandas DataFrame object, 
+        including any labels.
+        
+        See also get_data_frame().
+        
         Returns:
           A pandas DataFrame with the DataSet's main data and the labels if 
           they are present attached as the rightmost column.
