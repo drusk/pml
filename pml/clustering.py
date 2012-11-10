@@ -51,7 +51,7 @@ class ClusteredDataSet(model.DataSet):
             A Series with the cluster assignment for each sample in the 
             dataset.
         """
-        super(ClusteredDataSet, self).__init__(dataset._dataframe, 
+        super(ClusteredDataSet, self).__init__(dataset.get_data_frame(), 
                                                dataset.get_labels())
         self.cluster_assignments = cluster_assignments
     

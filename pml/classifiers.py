@@ -47,7 +47,7 @@ class ClassifiedDataSet(model.DataSet):
           classifications: pandas.Series
             A Series with the classification results.
         """
-        super(ClassifiedDataSet, self).__init__(dataset._dataframe, 
+        super(ClassifiedDataSet, self).__init__(dataset.get_data_frame(), 
                                                 dataset.get_labels())
         self.classifications = classifications
     

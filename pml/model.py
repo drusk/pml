@@ -151,9 +151,10 @@ class DataSet(object):
           they are present attached as the rightmost column.
         """
         if not self.is_labelled():
-            return self._dataframe
+            return self.get_data_frame()
         
-        return pd.concat([self._dataframe, pd.DataFrame(self.labels)], axis=1)
+        return pd.concat([self.get_data_frame(), pd.DataFrame(self.labels)], 
+                         axis=1)
         
     def num_samples(self):
         """

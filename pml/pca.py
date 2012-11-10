@@ -109,10 +109,8 @@ def pca(dataset, num_components):
     remove_means(dataset)
     
     # 2. compute the covariance matrix
-    # TODO fix up DataSet.get_dataframe()
     # rowvar=0 so that rows are interpreted as observations
-    cov_mat = np.cov(dataset._dataframe, rowvar=0)
-    # XXX should I use np.corrcoef (normalized covariance matrix)?
+    cov_mat = np.cov(dataset.get_data_frame(), rowvar=0)
     
     # 3. find the eigenvalues and eigenvectors of the covariance matrix
     eigen_values, eigen_vectors = linalg.eig(cov_mat)
@@ -126,9 +124,9 @@ def pca(dataset, num_components):
     selected_indices = indices[:num_components]
 
     # 6. transform the data into the new space created by the top N eigenvectors
-    transformed_data = np.dot(dataset._dataframe, 
+    transformed_data = np.dot(dataset.get_data_frame(), 
                               eigen_vectors[:, selected_indices])
     
     # TODO DataSet.get_row_index()
-    return ReducedDataSet(transformed_data, dataset._dataframe.index, 
+    return ReducedDataSet(transformed_data, dataset.get_row_index(), 
                           dataset.get_labels(), eigen_values)

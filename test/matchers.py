@@ -56,7 +56,7 @@ class IsDataSet(BaseMatcher):
         for i in xrange(dataset.num_samples()):
             # if the dataset has been filtered the indices may not be a 
             # continuous range
-            index = dataset._dataframe.index[i]
+            index = dataset.get_sample_ids()[i]
             if not lists_match(self.as_list[i], 
                                dataset.get_row(index).tolist(), 
                                places=self.places):
