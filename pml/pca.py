@@ -145,7 +145,7 @@ def _copy_and_remove_means(dataset):
     remove_means(dataset)
     return dataset
 
-def recommend_num_components(dataset, min_pct_variance):
+def recommend_num_components(dataset, min_pct_variance=0.9):
     """
     Recommends the number of principal components that should be selected in 
     order to keep a minimum specified percentage of the original data's 
@@ -158,6 +158,7 @@ def recommend_num_components(dataset, min_pct_variance):
         The minimum percent of variance which should be maintained when 
         selecting the recommended number of principal components.  Should be 
         between 0.0 and 1.0.
+        Defaults to 0.9 (i.e. 90%).
         
     Returns:
       The integer number of principal components which should be selected for 

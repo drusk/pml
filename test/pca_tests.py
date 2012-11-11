@@ -96,6 +96,10 @@ class PCATest(unittest.TestCase):
     def test_recommend_num_components_invalid_percent(self):
         dataset = self.create_otago_dataset()
         self.assertRaises(ValueError, pca.recommend_num_components, dataset, 95)
+        
+    def test_default_recommended_num_components(self):
+        dataset = self.create_otago_dataset()
+        self.assertEqual(pca.recommend_num_components(dataset), 1)
 
 
 if __name__ == "__main__":
