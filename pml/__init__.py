@@ -20,6 +20,7 @@
 
 from classifiers import *
 from clustering import *
+from pca import *
 from distance_utils import *
 from loader import *
 from model import *
