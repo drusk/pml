@@ -29,6 +29,7 @@ import pandas as pd
 from hamcrest import assert_that, contains
 
 import pca
+from pca import ReducedDataSet
 from model import DataSet
 from matchers import equals_dataset
 
@@ -66,6 +67,15 @@ class PCATest(unittest.TestCase):
     def test_percent_variance(self):
         eigenvalues = [1.50, 2.20, 0.60, 4.90, 3.80, 5.75]
         self.assertAlmostEqual(pca._percent_variance(eigenvalues, 3), 0.77, 
+                               places=2)
+        
+    def test_reduced_data_set_percent_variance(self):
+        data = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+        sample_ids = [0, 1, 2]
+        labels = None
+        eigenvalues = [1.50, 2.20, 0.60, 4.90, 3.80, 5.75]
+        reduced_dataset = ReducedDataSet(data, sample_ids, labels, eigenvalues)
+        self.assertAlmostEqual(reduced_dataset.percent_variance(), 0.77, 
                                places=2)
 
 

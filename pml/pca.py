@@ -79,6 +79,7 @@ class ReducedDataSet(model.DataSet):
         """
         return _percent_variance(self.eigenvalues, self.num_features())
     
+    
 def _percent_variance(eigenvalues, num_components):
     """
     Calculates the percentage of total variance found in the top princpal 
