@@ -35,6 +35,12 @@ from matchers import equals_dataset
 
 class PCATest(unittest.TestCase):
 
+    def create_otago_dataset(self):
+        # example data from Otago university tutorial
+        return DataSet([[2.5, 2.4], [0.5, 0.7], [2.2, 2.9], [1.9, 2.2], 
+                        [3.1, 3.0], [2.3, 2.7], [2, 1.6], [1, 1.1], 
+                        [1.5, 1.6], [1.1, 0.9]])
+
     def test_remove_means(self):
         dataset = DataSet([[4, 1, 9], [2, 3, 0], [5, 1, 3]])
         # column means are: 3.6667, 1.6667, 4
@@ -45,10 +51,8 @@ class PCATest(unittest.TestCase):
                                             places=2))
 
     def test_otago_example(self):
-        # example data from Otago university tutorial
-        dataset = DataSet([[2.5, 2.4], [0.5, 0.7], [2.2, 2.9], [1.9, 2.2], 
-                           [3.1, 3.0], [2.3, 2.7], [2, 1.6], [1, 1.1], 
-                           [1.5, 1.6], [1.1, 0.9]])
+        dataset = self.create_otago_dataset()
+        # values provided in Otago university tutorial
         transformed = [[-0.828, -0.175], [1.778, 0.143], [-0.992, 0.384], 
                        [-0.274, 0.130], [-1.676, -0.209], [-0.913, 0.175], 
                        [0.099, -0.350], [1.145, 0.046], [0.4380, 0.018], 
@@ -77,6 +81,21 @@ class PCATest(unittest.TestCase):
         reduced_dataset = ReducedDataSet(data, sample_ids, labels, eigenvalues)
         self.assertAlmostEqual(reduced_dataset.percent_variance(), 0.77, 
                                places=2)
+
+    def test_recommend_num_components(self):
+        dataset = self.create_otago_dataset()
+        # eigenvalues = [0.0490834   1.28402771]
+        # 96.3% of variance in first principal component
+        
+        recommendation1 = pca.recommend_num_components(dataset, 0.95)
+        self.assertEqual(recommendation1, 1)
+        
+        recommendation2 = pca.recommend_num_components(dataset, 0.97)
+        self.assertEqual(recommendation2, 2)
+        
+    def test_recommend_num_components_invalid_percent(self):
+        dataset = self.create_otago_dataset()
+        self.assertRaises(ValueError, pca.recommend_num_components, dataset, 95)
 
 
 if __name__ == "__main__":

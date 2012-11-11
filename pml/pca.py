@@ -107,6 +107,90 @@ def _percent_variance(eigenvalues, num_components):
     
     return np.sum(eigenvalues[selected_indices]) / np.sum(eigenvalues)
 
+def _get_cov_mat_eigen_values_and_vectors(dataset):
+    """
+    Calculates the eigenvalues and eigenvectors for the covariance matrix of a 
+    DataSet. 
+    
+    Args:
+      dataset: model.DataSet
+        The data whose covariance matrix will be calculated.
+    
+    Returns:
+      eigenvalues: numpy.array
+        A 1D array of the eigenvalues of the covariance matrix.
+      eigenvectors: numpy.array
+        A 2D array of the eigenvectors of the covariance matrix.
+    """
+    # rowvar=0 so that rows are interpreted as observations
+    cov_mat = np.cov(dataset.get_data_frame(), rowvar=0)
+    
+    eigenvalues, eigenvectors = linalg.eig(cov_mat)
+    
+    return eigenvalues, eigenvectors
+
+def _copy_and_remove_means(dataset):
+    """
+    Copies the DataSet before removing the column means in order to preserve 
+    the original data.
+    
+    Args:
+      dataset: model.DataSet
+        The DataSet to copy and remove means from.
+    
+    Returns:
+      The new, copied DataSet with column means removed.
+    """
+    dataset = dataset.copy()
+    remove_means(dataset)
+    return dataset
+
+def recommend_num_components(dataset, min_pct_variance):
+    """
+    Recommends the number of principal components that should be selected in 
+    order to keep a minimum specified percentage of the original data's 
+    variance while also minimizing dimensionality.
+    
+    Args:
+      dataset: model.DataSet
+        The dataset in question.
+      min_pct_variance: float
+        The minimum percent of variance which should be maintained when 
+        selecting the recommended number of principal components.  Should be 
+        between 0.0 and 1.0.
+        
+    Returns:
+      The integer number of principal components which should be selected for 
+      Principal Component Analysis.
+      
+    Raises:
+      ValueError if min_pct_variance is < 0 or > 1.
+    """
+    if min_pct_variance < 0 or min_pct_variance > 1:
+        raise ValueError("Invalid minimum percent variance "
+                         "(must be between 0 and 1): %f" %min_pct_variance)
+    
+    dataset = _copy_and_remove_means(dataset)
+    eigenvalues, _ = _get_cov_mat_eigen_values_and_vectors(dataset)
+    eigenvalues = eigenvalues.tolist()
+    
+    # sort from largest to smallest
+    eigenvalues.sort()
+    eigenvalues.reverse()
+    
+    cumulative_pct_variance = np.cumsum(eigenvalues) / np.sum(eigenvalues)
+    
+    num_components = 1
+    for pct_variance in cumulative_pct_variance:
+        if pct_variance >= min_pct_variance:
+            return num_components
+        
+        num_components += 1
+        
+    # should never reach this point since if all components are used the 
+    # percent variance will be 100%, and the min percent variance specified 
+    # can never be greater than 100% 
+
 def remove_means(dataset):
     """
     Remove the column mean from each value in the dataset.
@@ -143,26 +227,17 @@ def pca(dataset, num_components):
       num_components: int
         The number of principal components to select.
     """
-    # 1. remove the mean
-    dataset = dataset.copy()
-    remove_means(dataset)
-    
-    # 2. compute the covariance matrix
-    # rowvar=0 so that rows are interpreted as observations
-    cov_mat = np.cov(dataset.get_data_frame(), rowvar=0)
-    
-    # 3. find the eigenvalues and eigenvectors of the covariance matrix
-    eigenvalues, eigenvectors = linalg.eig(cov_mat)
+    dataset = _copy_and_remove_means(dataset)
+    eigenvalues, eigenvectors = _get_cov_mat_eigen_values_and_vectors(dataset)
 
-    # 4. sort the eigenvalues from largest to smallest
     # get a list of indices for the eigenvalues ordered largest to smallest
     indices = np.argsort(eigenvalues).tolist()
     indices.reverse()
     
-    # 5. take the top N eigenvectors
+    # take the top N eigenvectors
     selected_indices = indices[:num_components]
 
-    # 6. transform the data into the new space created by the top N eigenvectors
+    # transform the data into the new space created by the top N eigenvectors
     transformed_data = np.dot(dataset.get_data_frame(), 
                               eigenvectors[:, selected_indices])
     
