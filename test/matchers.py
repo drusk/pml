@@ -74,18 +74,40 @@ class IsSeries(BaseMatcher):
     Matches a pandas Series data structure.
     """
     
-    def __init__(self, as_dict):
+    def __init__(self, as_dict, places=None):
         """
         Creates a new matcher given the expected input as a dictionary.
+        
+        Args:
+          as_dict: dictionary
+            The expected data in key-value format.
+          places: int
+            The number of decimal places to check when comparing data values.
+            Defaults to None, in which case full equality is checked (good for 
+            ints, but not for floats).
         """
         self.as_dict = as_dict
+        self.places = places
+        
+    def _numeric_equals(self, val1, val2):
+        return _equals(val1, val2, self.places)
+        
+    def _non_numeric_equals(self, val1, val2):
+        return val1 == val2
+        
+    def _get_equals_function(self, data):
+        if is_numeric_type(data):
+            return self._numeric_equals
+        else:
+            return self._non_numeric_equals
         
     def _matches(self, series):
+        equals = self._get_equals_function(series)
         if len(self.as_dict) != len(series):
             return False
         
         for key in self.as_dict:
-            if series[key] != self.as_dict[key]:
+            if not equals(series[key], self.as_dict[key]):
                 return False
             
         return True
@@ -114,6 +136,19 @@ class InRange(BaseMatcher):
         description.append_text("value between %s and %s" 
                                 %(self.minval, self.maxval))
         
+    
+def is_numeric_type(data):
+    """
+    Checks if the data is any of the numeric types.
+    
+    Args:
+      data: data structure with dtype, i.e. pandas.Series, pandas.DataFrame
+        The data whose type will be checked.
+        
+    Returns:
+      True if the data type is numeric, false otherwise.
+    """
+    return "int" in data.dtype.name or "float" in data.dtype.name
     
 def _equals(val1, val2, places=None):
     """
@@ -161,11 +196,19 @@ def equals_dataset(as_list, places=None):
     """
     return IsDataSet(as_list, places=places)
 
-def equals_series(as_dict):
+def equals_series(as_dict, places=None):
     """
     Compares a pandas Series object to the provided dictionary representation.
+    
+    Args:
+      as_dict: dictionary
+        The expected data in key-value format.
+      places: int
+        The number of decimal places to check when comparing data values.
+        Defaults to None, in which case full equality is checked (good for 
+        ints, but not for floats).
     """
-    return IsSeries(as_dict)
+    return IsSeries(as_dict, places)
 
 def in_range(minval, maxval):
     """
