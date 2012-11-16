@@ -145,6 +145,44 @@ def _copy_and_remove_means(dataset):
     remove_means(dataset)
     return dataset
 
+def _get_descending_cov_mat_eigenvalues(dataset):
+    """
+    Get the eigenvalues of the covariance matrix sorted largest to smallest.
+    
+    Args:
+      dataset: model.DataSet
+        The data whose covariance matrix will be calculated.
+        
+    Returns:
+      eigenvalues: list
+        The list of eigenvalues in descending order of magnitude.
+    """
+    eigenvalues, _ = _get_cov_mat_eigen_values_and_vectors(dataset)
+    eigenvalues = eigenvalues.tolist()
+    
+    # sort from largest to smallest
+    eigenvalues.sort()
+    eigenvalues.reverse()
+    return eigenvalues
+
+def get_pct_variance_per_principal_component(dataset):
+    """
+    Determines the percentage of variance captured by each principal component 
+    in the data set.
+    
+    Args:
+      dataset: model.DataSet
+        The data set whose principal components will be examined.  Should not 
+        already be reduced.
+        
+    Returns:
+      variances: pandas.Series
+        The percentage of variance (as a float between 0.0 and 1.0) for each 
+        principal component.
+    """
+    eigenvalues = _get_descending_cov_mat_eigenvalues(dataset)
+    return pd.Series(eigenvalues) / np.sum(eigenvalues)
+
 def recommend_num_components(dataset, min_pct_variance=0.9):
     """
     Recommends the number of principal components that should be selected in 
@@ -172,12 +210,7 @@ def recommend_num_components(dataset, min_pct_variance=0.9):
                          "(must be between 0 and 1): %f" %min_pct_variance)
     
     dataset = _copy_and_remove_means(dataset)
-    eigenvalues, _ = _get_cov_mat_eigen_values_and_vectors(dataset)
-    eigenvalues = eigenvalues.tolist()
-    
-    # sort from largest to smallest
-    eigenvalues.sort()
-    eigenvalues.reverse()
+    eigenvalues = _get_descending_cov_mat_eigenvalues(dataset)
     
     cumulative_pct_variance = np.cumsum(eigenvalues) / np.sum(eigenvalues)
     

@@ -31,7 +31,7 @@ from hamcrest import assert_that, contains
 import pca
 from pca import ReducedDataSet
 from model import DataSet
-from matchers import equals_dataset
+from matchers import equals_dataset, equals_series
 
 class PCATest(unittest.TestCase):
 
@@ -100,6 +100,11 @@ class PCATest(unittest.TestCase):
     def test_default_recommended_num_components(self):
         dataset = self.create_otago_dataset()
         self.assertEqual(pca.recommend_num_components(dataset), 1)
+
+    def test_get_pct_variance_per_principal_component(self):
+        dataset = self.create_otago_dataset()
+        pct_variances = pca.get_pct_variance_per_principal_component(dataset)
+        assert_that(pct_variances, equals_series({0: 0.9632, 1: 0.0368}, places=4))
 
 
 if __name__ == "__main__":
