@@ -19,7 +19,7 @@
 # IN THE SOFTWARE.
 
 from pml.supervised.classifiers import *
-from clustering import *
+from pml.unsupervised.clustering import *
 from pca import *
 from distance_utils import *
 from loader import *
