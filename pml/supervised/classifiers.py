@@ -27,7 +27,7 @@ import collections
 
 from pml.data import model
 from pml.utils import distance_utils
-from pml.errors import UnlabelledDataSetError
+from pml.utils.errors import UnlabelledDataSetError
 
 class ClassifiedDataSet(model.DataSet):
     """

@@ -28,7 +28,7 @@ import pandas as pd
 
 from pml.data.model import DataSet
 from pml.supervised.classifiers import ClassifiedDataSet
-from pml.errors import UnlabelledDataSetError
+from pml.utils.errors import UnlabelledDataSetError
 
 class MetricsTest(unittest.TestCase):
 

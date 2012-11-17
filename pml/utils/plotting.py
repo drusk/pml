@@ -26,7 +26,7 @@ Provides capabilities for plotting DataSets.
 import matplotlib.pyplot as plt
 from pandas.tools.plotting import radviz
 
-import errors
+from pml.utils import errors
 
 def plot_radviz(dataset):
     """

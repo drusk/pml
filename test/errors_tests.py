@@ -25,7 +25,7 @@ Unit tests for errors module.
 
 import unittest
 
-import errors
+from pml.utils import errors
 
 class ErrorsTest(unittest.TestCase):
 

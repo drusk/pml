@@ -30,7 +30,7 @@ from hamcrest import assert_that
 
 from pml.unsupervised import clustering
 from pml.data.model import DataSet
-from errors import UnlabelledDataSetError
+from pml.utils.errors import UnlabelledDataSetError
 
 from matchers import in_range, equals_series
 
