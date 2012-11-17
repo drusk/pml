@@ -31,7 +31,7 @@ import pandas as pd
 from pml.data import model
 from errors import UnlabelledDataSetError
 from distance_utils import euclidean
-from pandas_util import are_dataframes_equal
+from pml.utils.pandas_util import are_dataframes_equal
 
 class ClusteredDataSet(model.DataSet):
     """

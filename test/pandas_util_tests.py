@@ -27,7 +27,7 @@ import unittest
 
 import pandas as pd
 
-import pandas_util
+from pml.utils import pandas_util
 
 class PandasUtilTest(unittest.TestCase):
 
