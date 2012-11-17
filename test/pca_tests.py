@@ -28,9 +28,10 @@ import unittest
 import pandas as pd
 from hamcrest import assert_that, contains
 
-import pca
-from pca import ReducedDataSet
+from pml.unsupervised import pca
+from pml.unsupervised.pca import ReducedDataSet
 from model import DataSet
+
 from matchers import equals_dataset, equals_series
 
 class PCATest(unittest.TestCase):
