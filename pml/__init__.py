@@ -24,4 +24,4 @@ from pml.unsupervised.pca import *
 from distance_utils import *
 from pml.data.loader import *
 from pml.data.model import *
-from plotting import *
+from pml.utils.plotting import *

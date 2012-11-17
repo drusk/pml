@@ -28,7 +28,7 @@ import numpy.linalg as linalg
 import pandas as pd
 
 from pml.data import model
-import plotting
+from pml.utils import plotting
 
 class ReducedDataSet(model.DataSet):
     """

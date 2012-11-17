@@ -25,7 +25,7 @@ Unit tests for plotting module.
 
 import unittest
 
-import plotting
+from pml.utils import plotting
 import errors
 
 class PlottingTest(unittest.TestCase):
