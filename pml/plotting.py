@@ -26,6 +26,8 @@ Provides capabilities for plotting DataSets.
 import matplotlib.pyplot as plt
 from pandas.tools.plotting import radviz
 
+import errors
+
 def plot_radviz(dataset):
     """
     Generates a RadViz plot of the provided DataSet.  RadViz
@@ -35,3 +37,50 @@ def plot_radviz(dataset):
     # therefore need to pass in the dataset's merged data and labels
     radviz(dataset.get_labelled_data_frame(), dataset.get_labels().name)
     plt.show()
+
+def plot_percent_series(series, plot_type):
+    """
+    Plots a series of values against a y axis formatted for percentages.
+    
+    Args:
+      dataset: model.DataSet
+        The data set whose principal components will be examined.  Should not 
+        already be reduced.
+      plot_type: string
+        The plot type to generate.  Supported plot types are:
+          'bar': vertical bar chart
+          'barh': horizontal bar chart
+          'line': line chart
+        Default is 'bar'. 
+        
+    Returns:
+      void, but produces a matplotlib plot. 
+      
+    Raises:
+      UnsupportedPlotTypeError if plot_type is not recognized.
+    """
+    verify_supported_series_plot_type(plot_type)
+    series.plot(kind=plot_type)
+    plt.show()
+    
+def verify_supported_series_plot_type(plot_type):
+    """
+    Checks if a plot type is among those supported for plotting a series.
+    
+    Args:
+      plot_type: string
+        The plot type to generate.  Supported plot types are:
+          'bar': vertical bar chart
+          'barh': horizontal bar chart
+          'line': line chart
+    
+    Returns:
+      void
+          
+    Raises:
+      UnsupportedPlotTypeError if the plot type is not supported.
+    """
+    supported_plot_types = ["bar", "barh", "line"]
+    if plot_type not in supported_plot_types:
+        raise errors.UnsupportedPlotTypeError(plot_type, supported_plot_types)
+

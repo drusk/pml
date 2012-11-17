@@ -28,6 +28,7 @@ import numpy.linalg as linalg
 import pandas as pd
 
 import model
+import plotting
 
 class ReducedDataSet(model.DataSet):
     """
@@ -164,6 +165,36 @@ def _get_descending_cov_mat_eigenvalues(dataset):
     eigenvalues.sort()
     eigenvalues.reverse()
     return eigenvalues
+
+def plot_pct_variance_per_principal_component(dataset, plot_type="bar"):
+    """
+    Generates a plot to visualize the percentage of variance captured 
+    by each principal component in the data set.
+
+    Args:
+      dataset: model.DataSet
+        The data set whose principal components will be examined.  Should not 
+        already be reduced.
+      plot_type: string
+        The plot type to generate.  Supported plot types are:
+          'bar': vertical bar chart
+          'barh': horizontal bar chart
+          'line': line chart
+        Default is 'bar'. 
+        
+    Returns:
+      void, but produces a matplotlib plot. 
+      
+    Raises:
+      UnsupportedPlotTypeError if plot_type is not recognized.
+    """
+    # Fail early: check plot type here right away even though the plotting 
+    # module will check it later.  Don't want a user with a large data set to 
+    # wait for all the processing to occur only to find out they made a typo 
+    # on the plot type.
+    plotting.verify_supported_series_plot_type(plot_type)
+    variances = get_pct_variance_per_principal_component(dataset)
+    plotting.plot_percent_series(variances, plot_type)
 
 def get_pct_variance_per_principal_component(dataset):
     """
