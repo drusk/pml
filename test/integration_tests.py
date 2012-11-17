@@ -28,10 +28,11 @@ which have random elements.
 """
 
 import unittest
-import base_tests
 
 from pml.data.loader import load
 from pml.supervised.classifiers import Knn
+
+import base_tests
 
 class IntegrationTest(base_tests.BaseFileLoadingTest):
     

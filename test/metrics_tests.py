@@ -24,6 +24,7 @@ Unit tests for metrics module.
 """
 
 import unittest
+
 import pandas as pd
 
 from pml.data.model import DataSet
