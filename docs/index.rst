@@ -18,6 +18,7 @@ Contents:
    loader
    model
    pandas_util
+   pca
    plotting
 
 
