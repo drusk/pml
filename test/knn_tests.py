@@ -28,7 +28,7 @@ import unittest
 from hamcrest import assert_that, contains
 
 from pml.supervised import classifiers
-from pml.model import DataSet
+from pml.data.model import DataSet
 from pml.errors import UnlabelledDataSetError
 
 class KnnTest(unittest.TestCase):

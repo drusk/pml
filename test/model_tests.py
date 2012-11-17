@@ -24,11 +24,14 @@ Unit tests for the model module.
 """
 
 import unittest
-from model import DataSet, as_dataset
-from hamcrest import assert_that, contains
-from matchers import equals_dataset, equals_series
+
 import numpy as np
 import pandas as pd
+from hamcrest import assert_that, contains
+
+from pml.data.model import DataSet, as_dataset
+
+from matchers import equals_dataset, equals_series
 
 class DataSetTest(unittest.TestCase):
 

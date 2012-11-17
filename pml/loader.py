@@ -24,7 +24,8 @@ Utilities for loading data sets.
 """
 
 import pandas as pd
-import model
+
+from pml.data import model
 
 def load(path, has_ids=True, has_header=True, has_labels=True, delimiter=","):
     """

@@ -29,8 +29,9 @@ import pandas as pd
 from hamcrest import assert_that
 
 from pml.unsupervised import clustering
-from model import DataSet
+from pml.data.model import DataSet
 from errors import UnlabelledDataSetError
+
 from matchers import in_range, equals_series
 
 class ClusteringTest(unittest.TestCase):

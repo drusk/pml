@@ -30,7 +30,7 @@ from hamcrest import assert_that, contains
 
 from pml.unsupervised import pca
 from pml.unsupervised.pca import ReducedDataSet
-from model import DataSet
+from pml.data.model import DataSet
 
 from matchers import equals_dataset, equals_series
 

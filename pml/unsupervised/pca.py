@@ -27,7 +27,7 @@ import numpy as np
 import numpy.linalg as linalg
 import pandas as pd
 
-import model
+from pml.data import model
 import plotting
 
 class ReducedDataSet(model.DataSet):

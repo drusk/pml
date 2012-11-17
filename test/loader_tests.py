@@ -24,8 +24,10 @@ Unit tests for the loader module.
 """
 
 import unittest
-import base_tests
+
 import loader
+
+import base_tests
 from hamcrest import assert_that
 from matchers import equals_series
 

@@ -28,7 +28,7 @@ import random
 
 import pandas as pd
 
-import model
+from pml.data import model
 from errors import UnlabelledDataSetError
 from distance_utils import euclidean
 from pandas_util import are_dataframes_equal
