@@ -18,37 +18,25 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
 # IN THE SOFTWARE.
 """
-Custom errors which provide feedback to the user.
+Unit tests for errors module.
 
 @author: drusk
 """
 
-class UnlabelledDataSetError(Exception):
-    """
-    A custom exception to be thrown when trying to perform an operation that 
-    requires a DataSet to be labelled when it is not.
-    """
+import unittest
+
+import errors
+
+class ErrorsTest(unittest.TestCase):
+
+    def test_unsupported_plot_type_error_message(self):
+        err = errors.UnsupportedPlotTypeError("pie", ["bar", "line"])
+        self.assertEquals(err.message, 
+                          ("'pie' is not a supported plot type for this "
+                          "operation.  Supported plot types are: [bar, line]"))
+
+
+if __name__ == "__main__":
+    #import sys;sys.argv = ['', 'Test.testName']
+    unittest.main()
     
-    def __init__(self, custom_message=None):
-        """
-        Constructs a new exception.
-        """
-        message = ("Operation requires the DataSet to be labelled, but it is "
-                   "not.") if custom_message is None else custom_message
-        Exception.__init__(self, message)
-
-
-class UnsupportedPlotTypeError(Exception):
-    """
-    A custom exception to be thrown when trying to select a plot type that is 
-    not available.
-    """
-
-    def __init__(self, requested_type, supported_types):
-        """
-        Constructs a new exception.
-        """
-        Exception.__init__(self, ("'%s' is not a supported plot type for this "
-                           "operation.  Supported plot types are: [%s]") 
-                           %(requested_type, ", ".join(supported_types)))
-
