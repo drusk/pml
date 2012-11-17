@@ -22,6 +22,6 @@ from pml.supervised.classifiers import *
 from pml.unsupervised.clustering import *
 from pml.unsupervised.pca import *
 from distance_utils import *
-from loader import *
+from pml.data.loader import *
 from pml.data.model import *
 from plotting import *

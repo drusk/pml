@@ -25,10 +25,11 @@ Unit tests for the loader module.
 
 import unittest
 
-import loader
+from hamcrest import assert_that
+
+from pml.data import loader
 
 import base_tests
-from hamcrest import assert_that
 from matchers import equals_series
 
 class LoaderTest(base_tests.BaseFileLoadingTest):
