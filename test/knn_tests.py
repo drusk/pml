@@ -25,10 +25,11 @@ Unit tests for the KNN algorithm.
 
 import unittest
 
-import classifiers
-from model import DataSet
-from errors import UnlabelledDataSetError
 from hamcrest import assert_that, contains
+
+from pml.supervised import classifiers
+from pml.model import DataSet
+from pml.errors import UnlabelledDataSetError
 
 class KnnTest(unittest.TestCase):
 

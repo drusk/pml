@@ -25,9 +25,9 @@ Classification algorithms for supervised learning tasks.
 
 import collections
 
-import model
-import distance_utils
-from errors import UnlabelledDataSetError
+from pml import model
+from pml import distance_utils
+from pml.errors import UnlabelledDataSetError
 
 class ClassifiedDataSet(model.DataSet):
     """

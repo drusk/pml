@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
 # IN THE SOFTWARE.
 
-from classifiers import *
+from pml.supervised.classifiers import *
 from clustering import *
 from pca import *
 from distance_utils import *

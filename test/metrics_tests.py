@@ -25,9 +25,10 @@ Unit tests for metrics module.
 
 import unittest
 import pandas as pd
-from model import DataSet
-from classifiers import ClassifiedDataSet
-from errors import UnlabelledDataSetError
+
+from pml.model import DataSet
+from pml.supervised.classifiers import ClassifiedDataSet
+from pml.errors import UnlabelledDataSetError
 
 class MetricsTest(unittest.TestCase):
 
