@@ -24,7 +24,8 @@ Unit tests for the distance_utils module.
 """
 
 import unittest
-import distance_utils
+
+from pml.utils import distance_utils
 
 class DistutilsTest(unittest.TestCase):
 
