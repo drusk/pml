@@ -10,8 +10,8 @@ Online documentation can be found at:
 http://drusk.github.com/pml/
 
 ## Dependencies:
-NumPy: http://numpy.scipy.org/
-pandas: http://pandas.pydata.org/
+  NumPy: http://numpy.scipy.org/
+  pandas: http://pandas.pydata.org/
 
 Optional:
-ipython (for shell): ipython.org
+  ipython (for shell): ipython.org
