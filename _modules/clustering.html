@@ -1,0 +1,383 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>clustering &mdash; Python Machine Learning 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Python Machine Learning 0.0.1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">Python Machine Learning 0.0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for clustering</h1><div class="highlight"><pre>
+<span class="c"># Copyright (C) 2012 David Rusk</span>
+<span class="c">#</span>
+<span class="c"># Permission is hereby granted, free of charge, to any person obtaining a copy </span>
+<span class="c"># of this software and associated documentation files (the &quot;Software&quot;), to </span>
+<span class="c"># deal in the Software without restriction, including without limitation the </span>
+<span class="c"># rights to use, copy, modify, merge, publish, distribute, sublicense, and/or </span>
+<span class="c"># sell copies of the Software, and to permit persons to whom the Software is </span>
+<span class="c"># furnished to do so, subject to the following conditions:</span>
+<span class="c">#</span>
+<span class="c"># The above copyright notice and this permission notice shall be included in </span>
+<span class="c"># all copies or substantial portions of the Software.</span>
+<span class="c">#</span>
+<span class="c"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR </span>
+<span class="c"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, </span>
+<span class="c"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE </span>
+<span class="c"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER </span>
+<span class="c"># LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING </span>
+<span class="c"># FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS </span>
+<span class="c"># IN THE SOFTWARE.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Clustering algorithms for unsupervised learning tasks.</span>
+
+<span class="sd">@author: drusk</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">model</span>
+<span class="kn">from</span> <span class="nn">errors</span> <span class="kn">import</span> <span class="n">UnlabelledDataSetError</span>
+<span class="kn">from</span> <span class="nn">distance_utils</span> <span class="kn">import</span> <span class="n">euclidean</span>
+<span class="kn">from</span> <span class="nn">pandas_util</span> <span class="kn">import</span> <span class="n">are_dataframes_equal</span>
+
+<div class="viewcode-block" id="ClusteredDataSet"><a class="viewcode-back" href="../clustering.html#clustering.ClusteredDataSet">[docs]</a><span class="k">class</span> <span class="nc">ClusteredDataSet</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">DataSet</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A collection of data which has been analysed by a clustering algorithm.  </span>
+<span class="sd">    It contains both the original DataSet and the results of the clustering.  </span>
+<span class="sd">    It provides methods for analysing these clustering results.  </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">cluster_assignments</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a new ClusteredDataSet.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">          dataset: model.DataSet</span>
+<span class="sd">            A dataset which does not have cluster assignments.</span>
+<span class="sd">          cluster_assignments: pandas.Series</span>
+<span class="sd">            A Series with the cluster assignment for each sample in the </span>
+<span class="sd">            dataset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ClusteredDataSet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">_dataframe</span><span class="p">,</span> 
+                                               <span class="n">dataset</span><span class="o">.</span><span class="n">get_labels</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cluster_assignments</span> <span class="o">=</span> <span class="n">cluster_assignments</span>
+    
+<div class="viewcode-block" id="ClusteredDataSet.get_cluster_assignments"><a class="viewcode-back" href="../clustering.html#clustering.ClusteredDataSet.get_cluster_assignments">[docs]</a>    <span class="k">def</span> <span class="nf">get_cluster_assignments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the cluster assignments produced for this dataset by a </span>
+<span class="sd">        clustering algorithm.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          A pandas Series.  It contains the index of the original dataset </span>
+<span class="sd">          with a numerical value representing the cluster it is a part of.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_assignments</span>
+    </div>
+<div class="viewcode-block" id="ClusteredDataSet.calculate_purity"><a class="viewcode-back" href="../clustering.html#clustering.ClusteredDataSet.calculate_purity">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_purity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the purity, a measurement of quality for the clustering </span>
+<span class="sd">        results.</span>
+<span class="sd">        </span>
+<span class="sd">        Each cluster is assigned to the class which is most frequent in the </span>
+<span class="sd">        cluster.  Using these classes, the percent accuracy is then calculated.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          A number between 0 and 1.  Poor clusterings have a purity close to 0 </span>
+<span class="sd">          while a perfect clustering has a purity of 1.</span>
+<span class="sd">          </span>
+<span class="sd">        Raises:</span>
+<span class="sd">          UnlabelledDataSetError if the dataset is not labelled.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_labelled</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">UnlabelledDataSetError</span><span class="p">()</span>
+        
+        <span class="c"># get the set of unique cluster ids</span>
+        <span class="n">clusters</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_assignments</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+        <span class="c"># find out what class is most frequent in each cluster</span>
+        <span class="n">cluster_classes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">cluster</span> <span class="ow">in</span> <span class="n">clusters</span><span class="p">:</span>
+            <span class="c"># get the indices of rows in this cluster</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_assignments</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_assignments</span> <span class="o">==</span> 
+                                               <span class="n">cluster</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+
+            <span class="c"># filter the labels series down to those in this cluster</span>
+            <span class="n">cluster_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+
+            <span class="c"># assign the most common label to be the label for this cluster</span>
+            <span class="n">cluster_classes</span><span class="p">[</span><span class="n">cluster</span><span class="p">]</span> <span class="o">=</span> <span class="n">cluster_labels</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()</span>
+        
+        <span class="k">def</span> <span class="nf">get_label</span><span class="p">(</span><span class="n">cluster</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Get the label for a sample based on its cluster.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">cluster_classes</span><span class="p">[</span><span class="n">cluster</span><span class="p">]</span>
+        
+        <span class="c"># get the list of labels as determined by each cluster&#39;s most frequent </span>
+        <span class="c"># label</span>
+        <span class="n">labels_by_clustering</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_assignments</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">get_label</span><span class="p">)</span>
+
+        <span class="c"># See how the clustering labels compare with the actual labels.  </span>
+        <span class="c"># Return the percentage of indices in agreement.</span>
+        <span class="n">num_agreed</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">labels_by_clustering</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">labels_by_clustering</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">ind</span><span class="p">]:</span>
+                <span class="n">num_agreed</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">num_agreed</span><span class="p">)</span> <span class="o">/</span> <span class="n">labels_by_clustering</span><span class="o">.</span><span class="n">size</span>
+        </div>
+<div class="viewcode-block" id="ClusteredDataSet.calculate_rand_index"><a class="viewcode-back" href="../clustering.html#clustering.ClusteredDataSet.calculate_rand_index">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_rand_index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the Rand index, a measurement of quality for the clustering </span>
+<span class="sd">        results.  It is essentially the percent accuracy of the clustering.</span>
+<span class="sd">        </span>
+<span class="sd">        The clustering is viewed as a series of decisions.  There are </span>
+<span class="sd">        N*(N-1)/2 pairs of samples in the dataset to be considered.  The </span>
+<span class="sd">        decision is considered correct if the pairs have the same label and </span>
+<span class="sd">        are in the same cluster, or have different labels and are in different </span>
+<span class="sd">        clusters.  The number of correct decisions divided by the total number </span>
+<span class="sd">        of decisions gives the Rand index, or accuracy.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          The accuracy, a number between 0 and 1.  The closer to 1, the better </span>
+<span class="sd">          the clustering.</span>
+<span class="sd">        </span>
+<span class="sd">        Raises:</span>
+<span class="sd">          UnlabelledDataSetError if the dataset is not labelled.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_labelled</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">UnlabelledDataSetError</span><span class="p">()</span>
+        
+        <span class="n">correct</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">index_combo</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_sample_ids</span><span class="p">(),</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">index1</span> <span class="o">=</span> <span class="n">index_combo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">index2</span> <span class="o">=</span> <span class="n">index_combo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                
+            <span class="n">same_class</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">index1</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">index2</span><span class="p">])</span>
+            <span class="n">same_cluster</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_assignments</span><span class="p">[</span><span class="n">index1</span><span class="p">]</span> 
+                            <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_assignments</span><span class="p">[</span><span class="n">index2</span><span class="p">])</span>
+            
+            <span class="k">if</span> <span class="n">same_class</span> <span class="ow">and</span> <span class="n">same_cluster</span><span class="p">:</span>
+                <span class="n">correct</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="n">same_class</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">same_cluster</span><span class="p">:</span>
+                <span class="n">correct</span> <span class="o">+=</span> <span class="mi">1</span>
+                
+            <span class="n">total</span> <span class="o">+=</span> <span class="mi">1</span>
+            
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">correct</span><span class="p">)</span> <span class="o">/</span> <span class="n">total</span>
+        
+</div></div>
+<div class="viewcode-block" id="create_random_centroids"><a class="viewcode-back" href="../clustering.html#clustering.create_random_centroids">[docs]</a><span class="k">def</span> <span class="nf">create_random_centroids</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initializes centroids at random positions.</span>
+<span class="sd">    </span>
+<span class="sd">    The random value chosen for each feature will always be limited to the </span>
+<span class="sd">    range of values found in the dataset.  For example, if a certain feature </span>
+<span class="sd">    has a minimum value of 0 in the dataset, and maximum value of 9, the</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">      dataset: DataSet</span>
+<span class="sd">        The DataSet to create the random centroids for.</span>
+<span class="sd">      k: int</span>
+<span class="sd">        The number of centroids to create.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">      A list of centroids.  Each centroid is a pandas Series with the same </span>
+<span class="sd">      labels as the dataset&#39;s headers.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">min_maxs</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">reduce_features</span><span class="p">(</span><span class="nb">min</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> 
+                   <span class="n">dataset</span><span class="o">.</span><span class="n">reduce_features</span><span class="p">(</span><span class="nb">max</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">rand_range</span><span class="p">(</span><span class="n">range_tuple</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a random floating point number in the range specified by </span>
+<span class="sd">        the tuple.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">range_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">range_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">rand_range</span><span class="p">,</span> <span class="n">min_maxs</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="n">dataset</span><span class="o">.</span><span class="n">feature_list</span><span class="p">(),</span> 
+                      <span class="n">name</span> <span class="o">=</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span>
+</div>
+<div class="viewcode-block" id="kmeans"><a class="viewcode-back" href="../clustering.html#clustering.kmeans">[docs]</a><span class="k">def</span> <span class="nf">kmeans</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">create_centroids</span><span class="o">=</span><span class="n">create_random_centroids</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    K-means clustering algorithm.</span>
+<span class="sd">    </span>
+<span class="sd">    This algorithm partitions a dataset into k clusters in which each </span>
+<span class="sd">    observation (sample) belongs to the cluster with the nearest mean.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">      dataset: model.DataSet</span>
+<span class="sd">        The DataSet to perform the clustering on.</span>
+<span class="sd">      k: int</span>
+<span class="sd">        The number of clusters to partition the dataset into.</span>
+<span class="sd">      create_centroids: function</span>
+<span class="sd">        The function specifying how to create the initial centroids for the </span>
+<span class="sd">        clusters.  Defaults to creating them randomly.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">      A ClusteredDataSet which contains the cluster assignments as well as the </span>
+<span class="sd">      original data.  In the cluster assignments, each sample index is </span>
+<span class="sd">      assigned a numerical value representing the cluster it is part of.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># If dataset is not already a model.DataSet object, make it one.</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">as_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+    
+    <span class="c"># Initialize k centroids</span>
+    <span class="n">centroids</span> <span class="o">=</span> <span class="n">create_centroids</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    
+    <span class="c"># Iteratively compute best clusters until they stabilize</span>
+    <span class="n">assignments</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">clusters_changed</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">while</span> <span class="n">clusters_changed</span><span class="p">:</span>
+        <span class="n">centroids</span><span class="p">,</span> <span class="n">new_assignments</span> <span class="o">=</span> <span class="n">_compute_iteration</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">centroids</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">are_dataframes_equal</span><span class="p">(</span><span class="n">new_assignments</span><span class="p">,</span> <span class="n">assignments</span><span class="p">):</span>
+            <span class="n">clusters_changed</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">assignments</span> <span class="o">=</span> <span class="n">new_assignments</span>
+    
+    <span class="k">return</span> <span class="n">ClusteredDataSet</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">assignments</span><span class="p">)</span>
+</div>
+<span class="k">def</span> <span class="nf">_get_distances_to_centroids</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">centroids</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the calc_distance from each data point to each centroid.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">      dataset: model.DataSet</span>
+<span class="sd">        The DataSet whose samples are being </span>
+<span class="sd">      centroids: list of pandas Series</span>
+<span class="sd">        The centroids to compare each data point with.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">      A pandas DataFrame with a row for each sample in dataset and a column </span>
+<span class="sd">      for the distance to each centroid.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">centroid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">centroids</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">calc_distance</span><span class="p">(</span><span class="n">sample</span><span class="p">):</span>
+            <span class="c"># TODO: parameter to pass in calc_distance function</span>
+            <span class="k">return</span> <span class="n">euclidean</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">centroid</span><span class="p">)</span>
+    
+        <span class="n">distances</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">reduce_rows</span><span class="p">(</span><span class="n">calc_distance</span><span class="p">)</span>
+
+    <span class="c"># each dictionary entry is interpreted as a column</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_compute_iteration</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">centroids</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes an iteration of the k-means algorithm.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">      dataset: model.DataSet</span>
+<span class="sd">        The dataset being clustered.</span>
+<span class="sd">      centroids: list of pandas Series</span>
+<span class="sd">        The current centroids at the start of the iteration.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">      new_centroids: list of pandas Series</span>
+<span class="sd">        The updated centroids.</span>
+<span class="sd">      cluster_assignments: pandas Series</span>
+<span class="sd">        The current cluster assignments for each sample.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># 2. Calculate calc_distance from each data point to each centroid</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">_get_distances_to_centroids</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">centroids</span><span class="p">)</span>
+
+    <span class="c"># 3. Find each datapoint&#39;s nearest centroid</span>
+    <span class="n">cluster_assignments</span> <span class="o">=</span> <span class="n">distances</span><span class="o">.</span><span class="n">idxmin</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">nearest_centroid</span><span class="p">(</span><span class="n">sample_index</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">cluster_assignments</span><span class="p">[</span><span class="n">sample_index</span><span class="p">]</span>
+        
+    <span class="c"># 4. Calculate mean position of datapoints in each centroid&#39;s cluster</span>
+    <span class="n">new_centroids</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">get_data_frame</span><span class="p">()</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">nearest_centroid</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+    <span class="c"># XXX turning each row in dataframe into a series... refactor!    </span>
+    <span class="n">list_of_series</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_centroids</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">new_centroids</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+    
+    <span class="k">return</span> <span class="n">list_of_series</span><span class="p">,</span> <span class="n">cluster_assignments</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">Python Machine Learning 0.0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, David Rusk.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

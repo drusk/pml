@@ -26,8 +26,8 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="Python Machine Learning 0.0.1 documentation" href="index.html" />
-    <link rel="next" title="plotting Module" href="plotting.html" />
-    <link rel="prev" title="metrics Module" href="metrics.html" /> 
+    <link rel="next" title="pandas_util Module" href="pandas_util.html" />
+    <link rel="prev" title="loader Module" href="loader.html" /> 
   </head>
   <body>
     <div class="related">
@@ -40,10 +40,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="plotting.html" title="plotting Module"
+          <a href="pandas_util.html" title="pandas_util Module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="metrics.html" title="metrics Module"
+          <a href="loader.html" title="loader Module"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">Python Machine Learning 0.0.1 documentation</a> &raquo;</li> 
       </ul>
@@ -86,6 +86,17 @@ classification label.</dd>
 </dd></dl>
 
 <dl class="method">
+<dt id="model.DataSet.copy">
+<tt class="descname">copy</tt><big>(</big><big>)</big><a class="headerlink" href="#model.DataSet.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a copy of this dataset.  Changes made to one dataset will not 
+affect the other.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>A new DataSet with the current data and labels.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="model.DataSet.drop_column">
 <tt class="descname">drop_column</tt><big>(</big><em>index</em><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.drop_column"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.drop_column" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a copy of the data set with a specified column removed.</p>
@@ -100,6 +111,13 @@ classification label.</dd>
 <dd>a new DataSet with the specified column removed.  The original 
 DataSet remains unaltered.</dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.DataSet.feature_list">
+<tt class="descname">feature_list</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.feature_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.feature_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:
+The list of features in the dataset.</p>
 </dd></dl>
 
 <dl class="method">
@@ -126,7 +144,8 @@ DataSet remains unaltered.</dd>
 <dt>Args:</dt>
 <dd><dl class="first last docutils">
 <dt>index: </dt>
-<dd>the index (0 based) of the column to select.</dd>
+<dd>The column index.  If the columns are named, this is the column 
+name.  Otherwise it is the 0-based index.</dd>
 </dl>
 </dd>
 <dt>Returns:</dt>
@@ -140,6 +159,19 @@ any changes to it will also be applied to the original data set.</dd>
 <dt id="model.DataSet.get_data_frame">
 <tt class="descname">get_data_frame</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.get_data_frame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.get_data_frame" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the DataSet&#8217;s underlying data as a pandas DataFrame object.</p>
+<p>See also get_labelled_data_frame().</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>A pandas DataFrame with the DataSet&#8217;s main data, but no labels.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.DataSet.get_labelled_data_frame">
+<tt class="descname">get_labelled_data_frame</tt><big>(</big><big>)</big><a class="headerlink" href="#model.DataSet.get_labelled_data_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the DataSet&#8217;s underlying data as a pandas DataFrame object, 
+including any labels.</p>
+<p>See also get_data_frame().</p>
 <dl class="docutils">
 <dt>Returns:</dt>
 <dd>A pandas DataFrame with the DataSet&#8217;s main data and the labels if 
@@ -202,6 +234,21 @@ also be made to the DataSet.</dd>
 </dd></dl>
 
 <dl class="method">
+<dt id="model.DataSet.get_sample_ids">
+<tt class="descname">get_sample_ids</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.get_sample_ids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.get_sample_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:
+A Python list of the ids of the samples in the dataset.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.DataSet.has_missing_values">
+<tt class="descname">has_missing_values</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.has_missing_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.has_missing_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:
+True if the dataset is missing values.  These will be represented 
+as np.NaN.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="model.DataSet.is_labelled">
 <tt class="descname">is_labelled</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.is_labelled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.is_labelled" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns:
@@ -224,6 +271,23 @@ The number of samples (rows) in the data set.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="model.DataSet.reduce_features">
+<tt class="descname">reduce_features</tt><big>(</big><em>function</em><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.reduce_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.reduce_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a feature-wise (i.e. column-wise) reduction of the data set.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>function:</dt>
+<dd>The function which will be applied to each feature in the data set.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>A pandas Series object which is the one dimensional result of the 
+reduction (one value corresponding to each feature).</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="model.DataSet.reduce_rows">
 <tt class="descname">reduce_rows</tt><big>(</big><em>function</em><big>)</big><a class="reference internal" href="_modules/model.html#DataSet.reduce_rows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.DataSet.reduce_rows" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs a row-wise reduction of the data set.</p>
@@ -238,6 +302,23 @@ The number of samples (rows) in the data set.</p>
 <dd><dl class="first last docutils">
 <dt>a pandas Series object which is the one dimensional result of </dt>
 <dd>reduction (one value corresponding to each row).</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.DataSet.set_column">
+<tt class="descname">set_column</tt><big>(</big><em>index</em>, <em>new_column</em><big>)</big><a class="headerlink" href="#model.DataSet.set_column" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the new values for a column.  Can be used to create a new column.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>index: </dt>
+<dd>The column index.  If the columns are named, this is the column 
+name.  Otherwise it is the 0-based index.</dd>
+<dt>new_column: pandas.Series or compatible object</dt>
+<dd>The new column data to be placed at the specified index.</dd>
 </dl>
 </dd>
 </dl>
@@ -308,11 +389,11 @@ object will be directly returned.</dd>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="metrics.html"
-                        title="previous chapter">metrics Module</a></p>
+  <p class="topless"><a href="loader.html"
+                        title="previous chapter">loader Module</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="plotting.html"
-                        title="next chapter">plotting Module</a></p>
+  <p class="topless"><a href="pandas_util.html"
+                        title="next chapter">pandas_util Module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/model.txt"
@@ -345,10 +426,10 @@ object will be directly returned.</dd>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="plotting.html" title="plotting Module"
+          <a href="pandas_util.html" title="pandas_util Module"
              >next</a> |</li>
         <li class="right" >
-          <a href="metrics.html" title="metrics Module"
+          <a href="loader.html" title="loader Module"
              >previous</a> |</li>
         <li><a href="index.html">Python Machine Learning 0.0.1 documentation</a> &raquo;</li> 
       </ul>

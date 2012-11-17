@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>loader &mdash; Python Machine Learning 0.0.1 documentation</title>
+    <title>pandas_util &mdash; Python Machine Learning 0.0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -48,7 +48,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <h1>Source code for loader</h1><div class="highlight"><pre>
+  <h1>Source code for pandas_util</h1><div class="highlight"><pre>
 <span class="c"># Copyright (C) 2012 David Rusk</span>
 <span class="c">#</span>
 <span class="c"># Permission is hereby granted, free of charge, to any person obtaining a copy </span>
@@ -69,48 +69,32 @@
 <span class="c"># FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS </span>
 <span class="c"># IN THE SOFTWARE.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Utilities for loading data sets.</span>
+<span class="sd">Utility functions for working with pandas datatypes, i.e. DataFrames and </span>
+<span class="sd">Series.</span>
 
 <span class="sd">@author: drusk</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">model</span>
-
-<div class="viewcode-block" id="load"><a class="viewcode-back" href="../loader.html#loader.load">[docs]</a><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">has_ids</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">has_header</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">has_labels</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">&quot;,&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="are_dataframes_equal"><a class="viewcode-back" href="../pandas_util.html#pandas_util.are_dataframes_equal">[docs]</a><span class="k">def</span> <span class="nf">are_dataframes_equal</span><span class="p">(</span><span class="n">dataframe1</span><span class="p">,</span> <span class="n">dataframe2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Loads a data set from a delimited text file.</span>
+<span class="sd">    Compares two pandas DataFrame objects to see if they are equal.</span>
 <span class="sd">    </span>
 <span class="sd">    Args:</span>
-<span class="sd">      path: </span>
-<span class="sd">        the path to the file containing the data set.</span>
-<span class="sd">      has_ids: boolean</span>
-<span class="sd">        set to False if the first column in the loaded dataset should not be </span>
-<span class="sd">        interpreted as a feature instead of sample identifiers.  Defaults to </span>
-<span class="sd">        True, i.e. first column are interpreted as sample identifiers.</span>
-<span class="sd">      has_header: boolean</span>
-<span class="sd">        set to False if the data being loaded does not have column headers on </span>
-<span class="sd">        the first line.  Defaults to true.</span>
-<span class="sd">      has_labels: boolean</span>
-<span class="sd">        set to False if the data being loaded does not have classification </span>
-<span class="sd">        labels for each sample.  Defaults to True.  The labels should be the </span>
-<span class="sd">        last column in the dataset being loaded.</span>
-<span class="sd">      delimiter: string</span>
-<span class="sd">        the symbol used to separate columns in the file.  Default value is </span>
-<span class="sd">        &#39;,&#39;.  Hint: delimiter for tab-delimited files is &#39;\t&#39;.</span>
+<span class="sd">      dataframe1: pandas.DataFrame</span>
+<span class="sd">      dataframe2: pandas.DataFrame</span>
 <span class="sd">      </span>
 <span class="sd">    Returns:</span>
-<span class="sd">      A DataSet object.</span>
+<span class="sd">      True if the DataFrames are identically-labeled and all elements are the </span>
+<span class="sd">      same.  False otherwise. </span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">header</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">has_header</span> <span class="k">else</span> <span class="bp">None</span>
-    <span class="n">id_col</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">has_ids</span> <span class="k">else</span> <span class="bp">None</span>
-
-    <span class="n">dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="n">id_col</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> 
-                            <span class="n">delimiter</span><span class="o">=</span><span class="n">delimiter</span><span class="p">)</span>
-    
-    <span class="n">labels</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">dataframe</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="n">has_labels</span> <span class="k">else</span> <span class="bp">None</span>
-
-    <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">DataSet</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span></div>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c"># reduce 2d boolean array down to a single answer</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">dataframe1</span> <span class="o">==</span> <span class="n">dataframe2</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="c"># pandas throws:</span>
+        <span class="c"># &quot;Exception: Can only compare identically-labeled DataFrame objects&quot;</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    </div>
 </pre></div>
 
           </div>

@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to Python Machine Learning’s documentation! &mdash; Python Machine Learning 0.0.1 documentation</title>
+    <title>pandas_util Module &mdash; Python Machine Learning 0.0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -25,8 +25,9 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Python Machine Learning 0.0.1 documentation" href="#" />
-    <link rel="next" title="classifiers Module" href="classifiers.html" /> 
+    <link rel="top" title="Python Machine Learning 0.0.1 documentation" href="index.html" />
+    <link rel="next" title="pca Module" href="pca.html" />
+    <link rel="prev" title="model Module" href="model.html" /> 
   </head>
   <body>
     <div class="related">
@@ -39,9 +40,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="classifiers.html" title="classifiers Module"
+          <a href="pca.html" title="pca Module"
              accesskey="N">next</a> |</li>
-        <li><a href="#">Python Machine Learning 0.0.1 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="model.html" title="model Module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Python Machine Learning 0.0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -50,30 +54,25 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="welcome-to-python-machine-learning-s-documentation">
-<h1>Welcome to Python Machine Learning&#8217;s documentation!<a class="headerlink" href="#welcome-to-python-machine-learning-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Contents:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="classifiers.html">classifiers Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="clustering.html">clustering Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="distance_utils.html">distance_utils Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="errors.html">errors Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="loader.html">loader Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model.html">model Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pandas_util.html">pandas_util Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pca.html">pca Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plotting.html">plotting Module</a></li>
-</ul>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
-</ul>
+  <div class="section" id="module-pandas_util">
+<span id="pandas-util-module"></span><h1>pandas_util Module<a class="headerlink" href="#module-pandas_util" title="Permalink to this headline">¶</a></h1>
+<p>Utility functions for working with pandas datatypes, i.e. DataFrames and 
+Series.</p>
+<p>&#64;author: drusk</p>
+<dl class="function">
+<dt id="pandas_util.are_dataframes_equal">
+<tt class="descclassname">pandas_util.</tt><tt class="descname">are_dataframes_equal</tt><big>(</big><em>dataframe1</em>, <em>dataframe2</em><big>)</big><a class="reference internal" href="_modules/pandas_util.html#are_dataframes_equal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pandas_util.are_dataframes_equal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares two pandas DataFrame objects to see if they are equal.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>dataframe1: pandas.DataFrame
+dataframe2: pandas.DataFrame</dd>
+<dt>Returns:</dt>
+<dd>True if the DataFrames are identically-labeled and all elements are the 
+same.  False otherwise.</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
@@ -82,20 +81,15 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Welcome to Python Machine Learning&#8217;s documentation!</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
-
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="model.html"
+                        title="previous chapter">model Module</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="classifiers.html"
-                        title="next chapter">classifiers Module</a></p>
+  <p class="topless"><a href="pca.html"
+                        title="next chapter">pca Module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="_sources/index.txt"
+    <li><a href="_sources/pandas_util.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -125,9 +119,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="classifiers.html" title="classifiers Module"
+          <a href="pca.html" title="pca Module"
              >next</a> |</li>
-        <li><a href="#">Python Machine Learning 0.0.1 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="model.html" title="model Module"
+             >previous</a> |</li>
+        <li><a href="index.html">Python Machine Learning 0.0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

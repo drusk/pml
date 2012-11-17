@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="Python Machine Learning 0.0.1 documentation" href="index.html" />
-    <link rel="next" title="distance_utils Module" href="distance_utils.html" />
+    <link rel="next" title="clustering Module" href="clustering.html" />
     <link rel="prev" title="Welcome to Python Machine Learning’s documentation!" href="index.html" /> 
   </head>
   <body>
@@ -40,7 +40,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="distance_utils.html" title="distance_utils Module"
+          <a href="clustering.html" title="clustering Module"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to Python Machine Learning’s documentation!"
@@ -58,6 +58,39 @@
 <span id="classifiers-module"></span><h1>classifiers Module<a class="headerlink" href="#module-classifiers" title="Permalink to this headline">¶</a></h1>
 <p>Classification algorithms for supervised learning tasks.</p>
 <p>&#64;author: drusk</p>
+<dl class="class">
+<dt id="classifiers.ClassifiedDataSet">
+<em class="property">class </em><tt class="descclassname">classifiers.</tt><tt class="descname">ClassifiedDataSet</tt><big>(</big><em>dataset</em>, <em>classifications</em><big>)</big><a class="reference internal" href="_modules/classifiers.html#ClassifiedDataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#classifiers.ClassifiedDataSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>A collection of data which has been analysed by a classification 
+algorithm.  It contains both the original DataSet and the results of 
+the classification.  It provides methods for analysing these 
+classification results.</p>
+<dl class="method">
+<dt id="classifiers.ClassifiedDataSet.compute_accuracy">
+<tt class="descname">compute_accuracy</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/classifiers.html#ClassifiedDataSet.compute_accuracy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#classifiers.ClassifiedDataSet.compute_accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the percent accuracy of classification results.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>The percent accuracy of the classification results, i.e. the number 
+of samples correctly classified divided by the total number of 
+samples.  Should be a floating point number between 0 and 1.</dd>
+<dt>Raises:</dt>
+<dd>UnlabelledDataSetError if the dataset is not labelled.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="classifiers.ClassifiedDataSet.get_classifications">
+<tt class="descname">get_classifications</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/classifiers.html#ClassifiedDataSet.get_classifications"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#classifiers.ClassifiedDataSet.get_classifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the classifications computed for this dataset.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>A pandas Series containing each sample&#8217;s classification.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="class">
 <dt id="classifiers.Knn">
 <em class="property">class </em><tt class="descclassname">classifiers.</tt><tt class="descname">Knn</tt><big>(</big><em>training_set</em>, <em>k=5</em><big>)</big><a class="reference internal" href="_modules/classifiers.html#Knn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#classifiers.Knn" title="Permalink to this definition">¶</a></dt>
@@ -91,7 +124,7 @@ the data in the training set.</dd>
 
 <dl class="method">
 <dt id="classifiers.Knn.classify_all">
-<tt class="descname">classify_all</tt><big>(</big><em>dataset</em><big>)</big><a class="headerlink" href="#classifiers.Knn.classify_all" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">classify_all</tt><big>(</big><em>dataset</em><big>)</big><a class="reference internal" href="_modules/classifiers.html#Knn.classify_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#classifiers.Knn.classify_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predicts the classification of each sample in a dataset.</p>
 <dl class="docutils">
 <dt>Args:</dt>
@@ -101,7 +134,8 @@ the data in the training set.</dd>
 </dl>
 </dd>
 <dt>Returns:</dt>
-<dd>a pandas Series containing each sample&#8217;s classification.</dd>
+<dd>A ClassifiedDataSet which contains the classification results for 
+each sample.  It also contains the original data.</dd>
 </dl>
 </dd></dl>
 
@@ -119,8 +153,8 @@ the data in the training set.</dd>
   <p class="topless"><a href="index.html"
                         title="previous chapter">Welcome to Python Machine Learning&#8217;s documentation!</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="distance_utils.html"
-                        title="next chapter">distance_utils Module</a></p>
+  <p class="topless"><a href="clustering.html"
+                        title="next chapter">clustering Module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/classifiers.txt"
@@ -153,7 +187,7 @@ the data in the training set.</dd>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="distance_utils.html" title="distance_utils Module"
+          <a href="clustering.html" title="clustering Module"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to Python Machine Learning’s documentation!"

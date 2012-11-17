@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to Python Machine Learning’s documentation! &mdash; Python Machine Learning 0.0.1 documentation</title>
+    <title>errors Module &mdash; Python Machine Learning 0.0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -25,8 +25,9 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Python Machine Learning 0.0.1 documentation" href="#" />
-    <link rel="next" title="classifiers Module" href="classifiers.html" /> 
+    <link rel="top" title="Python Machine Learning 0.0.1 documentation" href="index.html" />
+    <link rel="next" title="loader Module" href="loader.html" />
+    <link rel="prev" title="distance_utils Module" href="distance_utils.html" /> 
   </head>
   <body>
     <div class="related">
@@ -39,9 +40,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="classifiers.html" title="classifiers Module"
+          <a href="loader.html" title="loader Module"
              accesskey="N">next</a> |</li>
-        <li><a href="#">Python Machine Learning 0.0.1 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="distance_utils.html" title="distance_utils Module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Python Machine Learning 0.0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -50,30 +54,17 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="welcome-to-python-machine-learning-s-documentation">
-<h1>Welcome to Python Machine Learning&#8217;s documentation!<a class="headerlink" href="#welcome-to-python-machine-learning-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Contents:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="classifiers.html">classifiers Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="clustering.html">clustering Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="distance_utils.html">distance_utils Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="errors.html">errors Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="loader.html">loader Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model.html">model Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pandas_util.html">pandas_util Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pca.html">pca Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plotting.html">plotting Module</a></li>
-</ul>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
-</ul>
+  <div class="section" id="module-errors">
+<span id="errors-module"></span><h1>errors Module<a class="headerlink" href="#module-errors" title="Permalink to this headline">¶</a></h1>
+<p>Custom errors which provide feedback to the user.</p>
+<p>&#64;author: drusk</p>
+<dl class="exception">
+<dt id="errors.UnlabelledDataSetError">
+<em class="property">exception </em><tt class="descclassname">errors.</tt><tt class="descname">UnlabelledDataSetError</tt><big>(</big><em>custom_message=None</em><big>)</big><a class="reference internal" href="_modules/errors.html#UnlabelledDataSetError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#errors.UnlabelledDataSetError" title="Permalink to this definition">¶</a></dt>
+<dd><p>A custom exception to be thrown when trying to perform an operation that 
+requires a DataSet to be labelled when it is not.</p>
+</dd></dl>
+
 </div>
 
 
@@ -82,20 +73,15 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Welcome to Python Machine Learning&#8217;s documentation!</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
-
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="distance_utils.html"
+                        title="previous chapter">distance_utils Module</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="classifiers.html"
-                        title="next chapter">classifiers Module</a></p>
+  <p class="topless"><a href="loader.html"
+                        title="next chapter">loader Module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="_sources/index.txt"
+    <li><a href="_sources/errors.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -125,9 +111,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="classifiers.html" title="classifiers Module"
+          <a href="loader.html" title="loader Module"
              >next</a> |</li>
-        <li><a href="#">Python Machine Learning 0.0.1 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="distance_utils.html" title="distance_utils Module"
+             >previous</a> |</li>
+        <li><a href="index.html">Python Machine Learning 0.0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

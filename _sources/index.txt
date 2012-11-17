@@ -12,10 +12,13 @@ Contents:
    :maxdepth: 4
 
    classifiers
+   clustering
    distance_utils
+   errors
    loader
-   metrics
    model
+   pandas_util
+   pca
    plotting
 
 
