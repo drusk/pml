@@ -1,6 +1,6 @@
 clustering Module
 =================
 
-.. automodule:: clustering
+.. automodule:: pml.unsupervised.clustering
     :members:
     :undoc-members:

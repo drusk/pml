@@ -1,6 +1,6 @@
 classifiers Module
 ==================
 
-.. automodule:: classifiers
+.. automodule:: pml.supervised.classifiers
     :members:
     :undoc-members:

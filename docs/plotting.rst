@@ -1,6 +1,6 @@
 plotting Module
 ===============
 
-.. automodule:: plotting
+.. automodule:: pml.utils.plotting
     :members:
     :undoc-members:

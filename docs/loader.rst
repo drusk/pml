@@ -1,6 +1,6 @@
 loader Module
 =============
 
-.. automodule:: loader
+.. automodule:: pml.data.loader
     :members:
     :undoc-members:

@@ -170,7 +170,7 @@ def plot_pct_variance_per_principal_component(dataset, plot_type="bar"):
     """
     Generates a plot to visualize the percentage of variance captured 
     by each principal component in the data set.
-
+    
     Args:
       dataset: model.DataSet
         The data set whose principal components will be examined.  Should not 
@@ -180,7 +180,7 @@ def plot_pct_variance_per_principal_component(dataset, plot_type="bar"):
           'bar': vertical bar chart
           'barh': horizontal bar chart
           'line': line chart
-        Default is 'bar'. 
+          Default is 'bar'. 
         
     Returns:
       void, but produces a matplotlib plot. 
