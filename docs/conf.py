@@ -306,7 +306,7 @@ class Mock(object):
 
 MOCK_MODULES = ['pandas', 'pandas.tools', 'pandas.tools.plotting', 
                 'matplotlib', 'matplotlib.pyplot', 
-                'numpy', 'linalg' 
+                'numpy', 'numpy.linalg' 
                 ]
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = Mock()
