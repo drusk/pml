@@ -304,7 +304,7 @@ class Mock(object):
         else:
             return Mock()
 
-MOCK_MODULES = ['pandas', 'tools.plotting', # pandas imports
+MOCK_MODULES = ['pandas', 'pandas.tools.plotting', # pandas imports
                 'matplotlib', 'matplotlib.pyplot', # matplotlib imports
                 'numpy', 'linalg' # numpy imports
                 ]
