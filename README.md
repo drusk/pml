@@ -7,7 +7,7 @@ Still in early development.
 
 ## Documentation
 Online documentation can be found at:
-http://drusk.github.com/pml/
+http://pml.readthedocs.org/en/latest/index.html
 
 ## Dependencies:
   NumPy: http://numpy.scipy.org/
