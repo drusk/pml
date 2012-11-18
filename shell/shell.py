@@ -71,7 +71,7 @@ if __name__ == "__main__":
     
     # Import pml library.  These imports will be available in the shell that 
     # is created.
-    from pml import *
+    from pml.api import *
     
     shell = setup_shell()
     sys.exit(shell())
