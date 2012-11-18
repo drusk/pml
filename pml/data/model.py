@@ -26,6 +26,8 @@ Models for the data being analysed and manipulated.
 import pandas as pd
 import random as rand
 
+from pml.utils import plotting
+
 class DataSet(object):
     """
     A collection of data that may be analysed and manipulated.
@@ -382,6 +384,16 @@ class DataSet(object):
         """
         # pd.Series.replace returns a new Series, leaves original unmodified
         self.labels = self.labels.replace(to_combine, value=new_label)
+        
+    def plot_radviz(self):
+        """
+        Generates a RadViz plot of the data set.  Radviz is useful for 
+        visualizing data with more than two dimensions.
+        
+        Returns:
+          void, but a plot is generated.
+        """
+        plotting.plot_radviz(self)
 
 
 def as_dataset(data):

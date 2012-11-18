@@ -30,7 +30,8 @@ from pml.utils import errors
 
 def plot_radviz(dataset):
     """
-    Generates a RadViz plot of the provided DataSet.  RadViz
+    Generates a RadViz plot of the provided DataSet.  RadViz is useful for 
+    visualizing data with more than two dimensions.
     """
     # radviz takes a pandas DataFrame and the name of the column which 
     # contains class membership info. 
