@@ -54,20 +54,20 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-classifiers">
-<span id="classifiers-module"></span><h1>classifiers Module<a class="headerlink" href="#module-classifiers" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pml.supervised.classifiers">
+<span id="classifiers-module"></span><h1>classifiers Module<a class="headerlink" href="#module-pml.supervised.classifiers" title="Permalink to this headline">¶</a></h1>
 <p>Classification algorithms for supervised learning tasks.</p>
 <p>&#64;author: drusk</p>
 <dl class="class">
-<dt id="classifiers.ClassifiedDataSet">
-<em class="property">class </em><tt class="descclassname">classifiers.</tt><tt class="descname">ClassifiedDataSet</tt><big>(</big><em>dataset</em>, <em>classifications</em><big>)</big><a class="reference internal" href="_modules/classifiers.html#ClassifiedDataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#classifiers.ClassifiedDataSet" title="Permalink to this definition">¶</a></dt>
+<dt id="pml.supervised.classifiers.ClassifiedDataSet">
+<em class="property">class </em><tt class="descclassname">pml.supervised.classifiers.</tt><tt class="descname">ClassifiedDataSet</tt><big>(</big><em>dataset</em>, <em>classifications</em><big>)</big><a class="reference internal" href="_modules/pml/supervised/classifiers.html#ClassifiedDataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pml.supervised.classifiers.ClassifiedDataSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>A collection of data which has been analysed by a classification 
 algorithm.  It contains both the original DataSet and the results of 
 the classification.  It provides methods for analysing these 
 classification results.</p>
 <dl class="method">
-<dt id="classifiers.ClassifiedDataSet.compute_accuracy">
-<tt class="descname">compute_accuracy</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/classifiers.html#ClassifiedDataSet.compute_accuracy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#classifiers.ClassifiedDataSet.compute_accuracy" title="Permalink to this definition">¶</a></dt>
+<dt id="pml.supervised.classifiers.ClassifiedDataSet.compute_accuracy">
+<tt class="descname">compute_accuracy</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/pml/supervised/classifiers.html#ClassifiedDataSet.compute_accuracy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pml.supervised.classifiers.ClassifiedDataSet.compute_accuracy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the percent accuracy of classification results.</p>
 <dl class="docutils">
 <dt>Returns:</dt>
@@ -80,8 +80,8 @@ samples.  Should be a floating point number between 0 and 1.</dd>
 </dd></dl>
 
 <dl class="method">
-<dt id="classifiers.ClassifiedDataSet.get_classifications">
-<tt class="descname">get_classifications</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/classifiers.html#ClassifiedDataSet.get_classifications"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#classifiers.ClassifiedDataSet.get_classifications" title="Permalink to this definition">¶</a></dt>
+<dt id="pml.supervised.classifiers.ClassifiedDataSet.get_classifications">
+<tt class="descname">get_classifications</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/pml/supervised/classifiers.html#ClassifiedDataSet.get_classifications"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pml.supervised.classifiers.ClassifiedDataSet.get_classifications" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves the classifications computed for this dataset.</p>
 <dl class="docutils">
 <dt>Returns:</dt>
@@ -92,8 +92,8 @@ samples.  Should be a floating point number between 0 and 1.</dd>
 </dd></dl>
 
 <dl class="class">
-<dt id="classifiers.Knn">
-<em class="property">class </em><tt class="descclassname">classifiers.</tt><tt class="descname">Knn</tt><big>(</big><em>training_set</em>, <em>k=5</em><big>)</big><a class="reference internal" href="_modules/classifiers.html#Knn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#classifiers.Knn" title="Permalink to this definition">¶</a></dt>
+<dt id="pml.supervised.classifiers.Knn">
+<em class="property">class </em><tt class="descclassname">pml.supervised.classifiers.</tt><tt class="descname">Knn</tt><big>(</big><em>training_set</em>, <em>k=5</em><big>)</big><a class="reference internal" href="_modules/pml/supervised/classifiers.html#Knn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pml.supervised.classifiers.Knn" title="Permalink to this definition">¶</a></dt>
 <dd><p>K-Nearest Neighbours classifier.</p>
 <p>This algorithm classifies samples based on the &#8216;k&#8217; closest training 
 examples in the feature space.  The sample&#8217;s class is predicted through a 
@@ -104,8 +104,8 @@ is selected to break the tie.</p>
 <p>This is an example of a &#8216;lazy learning&#8217; algorithm where all computation is 
 deferred until classification.</p>
 <dl class="method">
-<dt id="classifiers.Knn.classify">
-<tt class="descname">classify</tt><big>(</big><em>sample</em><big>)</big><a class="reference internal" href="_modules/classifiers.html#Knn.classify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#classifiers.Knn.classify" title="Permalink to this definition">¶</a></dt>
+<dt id="pml.supervised.classifiers.Knn.classify">
+<tt class="descname">classify</tt><big>(</big><em>sample</em><big>)</big><a class="reference internal" href="_modules/pml/supervised/classifiers.html#Knn.classify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pml.supervised.classifiers.Knn.classify" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predicts a sample&#8217;s classification based on the training set.</p>
 <dl class="docutils">
 <dt>Args:</dt>
@@ -123,8 +123,8 @@ the data in the training set.</dd>
 </dd></dl>
 
 <dl class="method">
-<dt id="classifiers.Knn.classify_all">
-<tt class="descname">classify_all</tt><big>(</big><em>dataset</em><big>)</big><a class="reference internal" href="_modules/classifiers.html#Knn.classify_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#classifiers.Knn.classify_all" title="Permalink to this definition">¶</a></dt>
+<dt id="pml.supervised.classifiers.Knn.classify_all">
+<tt class="descname">classify_all</tt><big>(</big><em>dataset</em><big>)</big><a class="reference internal" href="_modules/pml/supervised/classifiers.html#Knn.classify_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pml.supervised.classifiers.Knn.classify_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predicts the classification of each sample in a dataset.</p>
 <dl class="docutils">
 <dt>Args:</dt>

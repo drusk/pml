@@ -1,6 +1,6 @@
 distance_utils Module
 =====================
 
-.. automodule:: distance_utils
+.. automodule:: pml.utils.distance_utils
     :members:
     :undoc-members:

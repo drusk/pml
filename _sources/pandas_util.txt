@@ -1,6 +1,6 @@
 pandas_util Module
 ==================
 
-.. automodule:: pandas_util
+.. automodule:: pml.utils.pandas_util
     :members:
     :undoc-members:

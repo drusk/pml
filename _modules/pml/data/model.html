@@ -1,0 +1,504 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pml.data.model &mdash; Python Machine Learning 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Python Machine Learning 0.0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Python Machine Learning 0.0.1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pml.data.model</h1><div class="highlight"><pre>
+<span class="c"># Copyright (C) 2012 David Rusk</span>
+<span class="c">#</span>
+<span class="c"># Permission is hereby granted, free of charge, to any person obtaining a copy </span>
+<span class="c"># of this software and associated documentation files (the &quot;Software&quot;), to </span>
+<span class="c"># deal in the Software without restriction, including without limitation the </span>
+<span class="c"># rights to use, copy, modify, merge, publish, distribute, sublicense, and/or </span>
+<span class="c"># sell copies of the Software, and to permit persons to whom the Software is </span>
+<span class="c"># furnished to do so, subject to the following conditions:</span>
+<span class="c">#</span>
+<span class="c"># The above copyright notice and this permission notice shall be included in </span>
+<span class="c"># all copies or substantial portions of the Software.</span>
+<span class="c">#</span>
+<span class="c"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR </span>
+<span class="c"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, </span>
+<span class="c"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE </span>
+<span class="c"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER </span>
+<span class="c"># LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING </span>
+<span class="c"># FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS </span>
+<span class="c"># IN THE SOFTWARE.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Models for the data being analysed and manipulated.</span>
+
+<span class="sd">@author: drusk</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">random</span> <span class="kn">as</span> <span class="nn">rand</span>
+
+<div class="viewcode-block" id="DataSet"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet">[docs]</a><span class="k">class</span> <span class="nc">DataSet</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A collection of data that may be analysed and manipulated.</span>
+<span class="sd">    </span>
+<span class="sd">    Columns are interpreted as features in the data set, and rows are samples </span>
+<span class="sd">    or observations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a new DataSet from data of an unknown type.  If data is itself </span>
+<span class="sd">        a DataSet object, then its contents are copied and a new DataSet is </span>
+<span class="sd">        created from the copies.</span>
+<span class="sd">    </span>
+<span class="sd">        Args:</span>
+<span class="sd">          data: </span>
+<span class="sd">            Data of unknown type.  The supported types are:</span>
+<span class="sd">                1) pandas DataFrame</span>
+<span class="sd">                2) Python lists or pandas DataFrame</span>
+<span class="sd">                3) an existing DataSet object </span>
+<span class="sd">          labels: pandas Series or Python list</span>
+<span class="sd">            The classification labels for the samples in data.  If they are </span>
+<span class="sd">            not known (i.e. it is an unlabelled data set) the value None </span>
+<span class="sd">            should be used.  Default value is None (unlabelled).</span>
+<span class="sd">        </span>
+<span class="sd">        Raises:</span>
+<span class="sd">          ValueError if the data is not of a supported type.  A ValueError is </span>
+<span class="sd">          also raised if labels are supplied but there is a mismatch between </span>
+<span class="sd">          the number of labels and samples.    </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dataframe</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">DataSet</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dataframe</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">_dataframe</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Unsupported representation of data set&quot;</span><span class="p">)</span>        
+        
+        <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="p">()</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s">&quot;Number of labels doesn&#39;t match the number &quot;</span> 
+                              <span class="s">&quot;of samples in the data.&quot;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># will just be None if there are no labels</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span>
+        
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">          This object&#39;s string representation, primarily for debugging </span>
+<span class="sd">          purposes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This gets called when the object&#39;s name is typed into IPython on its </span>
+<span class="sd">        own line, causing a string representation of the object to be </span>
+<span class="sd">        displayed.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          This object&#39;s string representation, providing some summary </span>
+<span class="sd">          information about it to the user.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="n">boolean</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s">&quot;yes&quot;</span> <span class="k">if</span> <span class="n">boolean</span> <span class="k">else</span> <span class="s">&quot;no&quot;</span>
+        
+        <span class="k">return</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="s">&quot;Features: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_list</span><span class="p">(),</span> 
+                         <span class="s">&quot;Samples: </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="p">(),</span>
+                         <span class="s">&quot;Missing values? </span><span class="si">%s</span><span class="s">&quot;</span> 
+                            <span class="o">%</span> <span class="n">display</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">has_missing_values</span><span class="p">()),</span>
+                         <span class="s">&quot;Labelled? </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">display</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_labelled</span><span class="p">())))</span>
+
+<div class="viewcode-block" id="DataSet.copy"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a copy of this dataset.  Changes made to one dataset will not </span>
+<span class="sd">        affect the other.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          A new DataSet with the current data and labels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">copy_if_not_none</span><span class="p">(</span><span class="n">copyable</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">copyable</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">if</span> <span class="n">copyable</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+        
+        <span class="k">return</span> <span class="n">DataSet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dataframe</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> 
+                       <span class="n">labels</span><span class="o">=</span><span class="n">copy_if_not_none</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="DataSet.get_data_frame"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet.get_data_frame">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve the DataSet&#39;s underlying data as a pandas DataFrame object.</span>
+<span class="sd">        </span>
+<span class="sd">        See also get_labelled_data_frame().</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          A pandas DataFrame with the DataSet&#39;s main data, but no labels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataframe</span>
+</div>
+<div class="viewcode-block" id="DataSet.get_labelled_data_frame"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet.get_labelled_data_frame">[docs]</a>    <span class="k">def</span> <span class="nf">get_labelled_data_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve the DataSet&#39;s underlying data as a pandas DataFrame object, </span>
+<span class="sd">        including any labels.</span>
+<span class="sd">        </span>
+<span class="sd">        See also get_data_frame().</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          A pandas DataFrame with the DataSet&#39;s main data and the labels if </span>
+<span class="sd">          they are present attached as the rightmost column.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_labelled</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data_frame</span><span class="p">()</span>
+        
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">get_data_frame</span><span class="p">(),</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">)],</span> 
+                         <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        </div>
+<div class="viewcode-block" id="DataSet.num_samples"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet.num_samples">[docs]</a>    <span class="k">def</span> <span class="nf">num_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">          The number of samples (rows) in the data set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>    
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataframe</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    </div>
+<div class="viewcode-block" id="DataSet.num_features"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet.num_features">[docs]</a>    <span class="k">def</span> <span class="nf">num_features</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">          The number of features (columns) in the data set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataframe</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    </div>
+<div class="viewcode-block" id="DataSet.is_labelled"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet.is_labelled">[docs]</a>    <span class="k">def</span> <span class="nf">is_labelled</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">          True if the dataset has classification labels for each sample, </span>
+<span class="sd">          False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+    </div>
+<div class="viewcode-block" id="DataSet.has_missing_values"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet.has_missing_values">[docs]</a>    <span class="k">def</span> <span class="nf">has_missing_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">          True if the dataset is missing values.  These will be represented </span>
+<span class="sd">          as np.NaN.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># isnull returns booleans for each data point (True if null).  The </span>
+        <span class="c"># first any checks columns for any True, producing a 1d array of </span>
+        <span class="c"># booleans.  The second any checks that 1d array.</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dataframe</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
+    </div>
+<div class="viewcode-block" id="DataSet.feature_list"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet.feature_list">[docs]</a>    <span class="k">def</span> <span class="nf">feature_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">          The list of features in the dataset. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataframe</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    </div>
+<div class="viewcode-block" id="DataSet.get_sample_ids"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet.get_sample_ids">[docs]</a>    <span class="k">def</span> <span class="nf">get_sample_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">          A Python list of the ids of the samples in the dataset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data_frame</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    </div>
+<div class="viewcode-block" id="DataSet.get_labels"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet.get_labels">[docs]</a>    <span class="k">def</span> <span class="nf">get_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Selects classification labels for the specified samples (rows) in the </span>
+<span class="sd">        DataSet.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">          indices: list</span>
+<span class="sd">            The list of row indices (0 based) which should be selected.  </span>
+<span class="sd">            Defaults to None, in which case all labels are selected.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          A pandas Series with the classification labels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">indices</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="DataSet.reduce_rows"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet.reduce_rows">[docs]</a>    <span class="k">def</span> <span class="nf">reduce_rows</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs a row-wise reduction of the data set.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">          function: </span>
+<span class="sd">            the function which will be applied to each row in the data set.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          a pandas Series object which is the one dimensional result of </span>
+<span class="sd">            reduction (one value corresponding to each row).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataframe</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="DataSet.reduce_features"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet.reduce_features">[docs]</a>    <span class="k">def</span> <span class="nf">reduce_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs a feature-wise (i.e. column-wise) reduction of the data set.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">          function:</span>
+<span class="sd">            The function which will be applied to each feature in the data set.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          A pandas Series object which is the one dimensional result of the </span>
+<span class="sd">          reduction (one value corresponding to each feature).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataframe</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="DataSet.drop_column"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet.drop_column">[docs]</a>    <span class="k">def</span> <span class="nf">drop_column</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a copy of the data set with a specified column removed.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">          index: </span>
+<span class="sd">            the index (0 based) of the column to drop.</span>
+<span class="sd">          </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          a new DataSet with the specified column removed.  The original </span>
+<span class="sd">          DataSet remains unaltered.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">DataSet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dataframe</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="DataSet.get_column"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet.get_column">[docs]</a>    <span class="k">def</span> <span class="nf">get_column</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Selects a column from the data set.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">          index: </span>
+<span class="sd">            The column index.  If the columns are named, this is the column </span>
+<span class="sd">            name.  Otherwise it is the 0-based index.</span>
+<span class="sd">          </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          the columns at the specified index as a pandas Series object.  This </span>
+<span class="sd">          series is a view on the original data set, not a copy.  That means </span>
+<span class="sd">          any changes to it will also be applied to the original data set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataframe</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="DataSet.set_column"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet.set_column">[docs]</a>    <span class="k">def</span> <span class="nf">set_column</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">new_column</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the new values for a column.  Can be used to create a new column.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">          index: </span>
+<span class="sd">            The column index.  If the columns are named, this is the column </span>
+<span class="sd">            name.  Otherwise it is the 0-based index.</span>
+<span class="sd">          new_column: pandas.Series or compatible object</span>
+<span class="sd">            The new column data to be placed at the specified index.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dataframe</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_column</span>
+</div>
+<div class="viewcode-block" id="DataSet.get_row"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet.get_row">[docs]</a>    <span class="k">def</span> <span class="nf">get_row</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Selects a single row from the dataset.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">          identifier:</span>
+<span class="sd">            The id of the row to select.  If the DataSet has special indices </span>
+<span class="sd">            set up (ex: through a call to load with has_ids=True) these can </span>
+<span class="sd">            be used.  The integer index (0 based) can also be used.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          A pandas Series object representing the desired row.  NOTE: this is </span>
+<span class="sd">          a view on the original dataset.  Changes made to this Series will </span>
+<span class="sd">          also be made to the DataSet.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataframe</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">identifier</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="DataSet.get_rows"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet.get_rows">[docs]</a>    <span class="k">def</span> <span class="nf">get_rows</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Selects specified rows from the dataset.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">          indices: list</span>
+<span class="sd">            The list of row indices (0 based) which should be selected.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          A new DataSet with the specified rows from the original.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_labelled</span><span class="p">()</span> <span class="k">else</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="n">DataSet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dataframe</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">indices</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="DataSet.split"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet.split">[docs]</a>    <span class="k">def</span> <span class="nf">split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">percent</span><span class="p">,</span> <span class="n">random</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Splits the dataset in two.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">          percent: float</span>
+<span class="sd">            The percentage of the original dataset samples which should be </span>
+<span class="sd">            placed in the first dataset returned.  The remainder are placed </span>
+<span class="sd">            in the second dataset.  This percentage must be specified as a </span>
+<span class="sd">            value between 0 and 1 inclusive.</span>
+<span class="sd">          random: boolean</span>
+<span class="sd">            Set to True if the samples selected for each new dataset should </span>
+<span class="sd">            be picked randomly.  Defaults to False, meaning the samples are </span>
+<span class="sd">            taken in their existing order.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          dataset1: DataSet object</span>
+<span class="sd">            A subset of the original dataset with &lt;percent&gt; samples.</span>
+<span class="sd">          dataset2: DataSet object</span>
+<span class="sd">            A subset of the original dataset with 1-&lt;percent&gt; samples.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">          ValueError if percent &lt; 0 or percent &gt; 1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">percent</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">percent</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Percentage value must be &gt;= 0 and &lt;= 1.&quot;</span><span class="p">)</span>
+        
+        <span class="n">num_set1_samples</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">percent</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="p">())</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">random</span><span class="p">:</span>
+            <span class="n">set1_rows</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_set1_samples</span><span class="p">)</span>
+            <span class="n">set2_rows</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_set1_samples</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">all_rows</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="p">())</span>
+            <span class="n">rand</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">all_rows</span><span class="p">)</span>
+            <span class="n">set1_rows</span> <span class="o">=</span> <span class="n">all_rows</span><span class="p">[:</span><span class="n">num_set1_samples</span><span class="p">]</span>
+            <span class="n">set2_rows</span> <span class="o">=</span> <span class="n">all_rows</span><span class="p">[</span><span class="n">num_set1_samples</span><span class="p">:]</span>
+    
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_rows</span><span class="p">(</span><span class="n">set1_rows</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_rows</span><span class="p">(</span><span class="n">set2_rows</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="DataSet.fill_missing"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet.fill_missing">[docs]</a>    <span class="k">def</span> <span class="nf">fill_missing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fill in missing data with a constant value.  Changes are made in-place.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">          fill_value:</span>
+<span class="sd">            The value to insert wherever data is missing.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">          Void.  The changes to the DataSet are made in-place.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataframe</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">fill_value</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="DataSet.combine_labels"><a class="viewcode-back" href="../../../model.html#pml.data.model.DataSet.combine_labels">[docs]</a>    <span class="k">def</span> <span class="nf">combine_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to_combine</span><span class="p">,</span> <span class="n">new_label</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Combines classification labels to have some new value.</span>
+<span class="sd">        </span>
+<span class="sd">        For example, consider a dataset with labels &quot;cat&quot;, &quot;crow&quot; and </span>
+<span class="sd">        &quot;pidgeon&quot;.  Maybe you are only really worried about whether something </span>
+<span class="sd">        is a cat or a bird, so you want to combine the &quot;crow&quot; and &quot;pidgeon&quot; </span>
+<span class="sd">        labels into a new one called &quot;bird&quot;.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">          to_combine: list</span>
+<span class="sd">            The list of labels which will be combined to form one new </span>
+<span class="sd">            classification label.</span>
+<span class="sd">          new_label: string</span>
+<span class="sd">            The new classification label for those which were combined.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># pd.Series.replace returns a new Series, leaves original unmodified</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">to_combine</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">new_label</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="as_dataset"><a class="viewcode-back" href="../../../model.html#pml.data.model.as_dataset">[docs]</a><span class="k">def</span> <span class="nf">as_dataset</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a DataSet from the provided data.  If data is already a DataSet, </span>
+<span class="sd">    return it directly.  Use this instead of the DataSet constructor if you </span>
+<span class="sd">    don&#39;t know whether your data is a DataSet already, but you don&#39;t want to </span>
+<span class="sd">    create a new one if it already is.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">      data: </span>
+<span class="sd">        Data of unknown type.  It may be a Python list or pandas DataFrame or </span>
+<span class="sd">        DataSet object.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">      A DataSet object.  If the data was already a DataSet then the input </span>
+<span class="sd">      object will be directly returned.</span>
+<span class="sd">          </span>
+<span class="sd">    Raises:</span>
+<span class="sd">      ValueError if the data is not of a supported type.    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">DataSet</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">data</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DataSet</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    </div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Python Machine Learning 0.0.1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, David Rusk.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

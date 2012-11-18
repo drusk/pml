@@ -1,6 +1,6 @@
 model Module
 ============
 
-.. automodule:: model
+.. automodule:: pml.data.model
     :members:
     :undoc-members:

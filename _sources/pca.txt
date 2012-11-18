@@ -1,6 +1,6 @@
 pca Module
 ==========
 
-.. automodule:: pca
+.. automodule:: pml.unsupervised.pca
     :members:
     :undoc-members:

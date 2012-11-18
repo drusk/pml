@@ -54,19 +54,19 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-clustering">
-<span id="clustering-module"></span><h1>clustering Module<a class="headerlink" href="#module-clustering" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pml.unsupervised.clustering">
+<span id="clustering-module"></span><h1>clustering Module<a class="headerlink" href="#module-pml.unsupervised.clustering" title="Permalink to this headline">¶</a></h1>
 <p>Clustering algorithms for unsupervised learning tasks.</p>
 <p>&#64;author: drusk</p>
 <dl class="class">
-<dt id="clustering.ClusteredDataSet">
-<em class="property">class </em><tt class="descclassname">clustering.</tt><tt class="descname">ClusteredDataSet</tt><big>(</big><em>dataset</em>, <em>cluster_assignments</em><big>)</big><a class="reference internal" href="_modules/clustering.html#ClusteredDataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clustering.ClusteredDataSet" title="Permalink to this definition">¶</a></dt>
+<dt id="pml.unsupervised.clustering.ClusteredDataSet">
+<em class="property">class </em><tt class="descclassname">pml.unsupervised.clustering.</tt><tt class="descname">ClusteredDataSet</tt><big>(</big><em>dataset</em>, <em>cluster_assignments</em><big>)</big><a class="reference internal" href="_modules/pml/unsupervised/clustering.html#ClusteredDataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pml.unsupervised.clustering.ClusteredDataSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>A collection of data which has been analysed by a clustering algorithm.  
 It contains both the original DataSet and the results of the clustering.  
 It provides methods for analysing these clustering results.</p>
 <dl class="method">
-<dt id="clustering.ClusteredDataSet.calculate_purity">
-<tt class="descname">calculate_purity</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/clustering.html#ClusteredDataSet.calculate_purity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clustering.ClusteredDataSet.calculate_purity" title="Permalink to this definition">¶</a></dt>
+<dt id="pml.unsupervised.clustering.ClusteredDataSet.calculate_purity">
+<tt class="descname">calculate_purity</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/pml/unsupervised/clustering.html#ClusteredDataSet.calculate_purity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pml.unsupervised.clustering.ClusteredDataSet.calculate_purity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the purity, a measurement of quality for the clustering 
 results.</p>
 <p>Each cluster is assigned to the class which is most frequent in the 
@@ -81,8 +81,8 @@ while a perfect clustering has a purity of 1.</dd>
 </dd></dl>
 
 <dl class="method">
-<dt id="clustering.ClusteredDataSet.calculate_rand_index">
-<tt class="descname">calculate_rand_index</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/clustering.html#ClusteredDataSet.calculate_rand_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clustering.ClusteredDataSet.calculate_rand_index" title="Permalink to this definition">¶</a></dt>
+<dt id="pml.unsupervised.clustering.ClusteredDataSet.calculate_rand_index">
+<tt class="descname">calculate_rand_index</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/pml/unsupervised/clustering.html#ClusteredDataSet.calculate_rand_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pml.unsupervised.clustering.ClusteredDataSet.calculate_rand_index" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the Rand index, a measurement of quality for the clustering 
 results.  It is essentially the percent accuracy of the clustering.</p>
 <p>The clustering is viewed as a series of decisions.  There are 
@@ -101,8 +101,8 @@ the clustering.</dd>
 </dd></dl>
 
 <dl class="method">
-<dt id="clustering.ClusteredDataSet.get_cluster_assignments">
-<tt class="descname">get_cluster_assignments</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/clustering.html#ClusteredDataSet.get_cluster_assignments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clustering.ClusteredDataSet.get_cluster_assignments" title="Permalink to this definition">¶</a></dt>
+<dt id="pml.unsupervised.clustering.ClusteredDataSet.get_cluster_assignments">
+<tt class="descname">get_cluster_assignments</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/pml/unsupervised/clustering.html#ClusteredDataSet.get_cluster_assignments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pml.unsupervised.clustering.ClusteredDataSet.get_cluster_assignments" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves the cluster assignments produced for this dataset by a 
 clustering algorithm.</p>
 <dl class="docutils">
@@ -115,8 +115,8 @@ with a numerical value representing the cluster it is a part of.</dd>
 </dd></dl>
 
 <dl class="function">
-<dt id="clustering.create_random_centroids">
-<tt class="descclassname">clustering.</tt><tt class="descname">create_random_centroids</tt><big>(</big><em>dataset</em>, <em>k</em><big>)</big><a class="reference internal" href="_modules/clustering.html#create_random_centroids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clustering.create_random_centroids" title="Permalink to this definition">¶</a></dt>
+<dt id="pml.unsupervised.clustering.create_random_centroids">
+<tt class="descclassname">pml.unsupervised.clustering.</tt><tt class="descname">create_random_centroids</tt><big>(</big><em>dataset</em>, <em>k</em><big>)</big><a class="reference internal" href="_modules/pml/unsupervised/clustering.html#create_random_centroids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pml.unsupervised.clustering.create_random_centroids" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes centroids at random positions.</p>
 <p>The random value chosen for each feature will always be limited to the 
 range of values found in the dataset.  For example, if a certain feature 
@@ -137,8 +137,8 @@ labels as the dataset&#8217;s headers.</dd>
 </dd></dl>
 
 <dl class="function">
-<dt id="clustering.kmeans">
-<tt class="descclassname">clustering.</tt><tt class="descname">kmeans</tt><big>(</big><em>dataset</em>, <em>k=2</em>, <em>create_centroids=&lt;function create_random_centroids at 0x3286c80&gt;</em><big>)</big><a class="reference internal" href="_modules/clustering.html#kmeans"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clustering.kmeans" title="Permalink to this definition">¶</a></dt>
+<dt id="pml.unsupervised.clustering.kmeans">
+<tt class="descclassname">pml.unsupervised.clustering.</tt><tt class="descname">kmeans</tt><big>(</big><em>dataset</em>, <em>k=2</em>, <em>create_centroids=&lt;function create_random_centroids at 0x2f338c0&gt;</em><big>)</big><a class="reference internal" href="_modules/pml/unsupervised/clustering.html#kmeans"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pml.unsupervised.clustering.kmeans" title="Permalink to this definition">¶</a></dt>
 <dd><p>K-means clustering algorithm.</p>
 <p>This algorithm partitions a dataset into k clusters in which each 
 observation (sample) belongs to the cluster with the nearest mean.</p>

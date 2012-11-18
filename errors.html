@@ -54,15 +54,22 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-errors">
-<span id="errors-module"></span><h1>errors Module<a class="headerlink" href="#module-errors" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pml.utils.errors">
+<span id="errors-module"></span><h1>errors Module<a class="headerlink" href="#module-pml.utils.errors" title="Permalink to this headline">¶</a></h1>
 <p>Custom errors which provide feedback to the user.</p>
 <p>&#64;author: drusk</p>
 <dl class="exception">
-<dt id="errors.UnlabelledDataSetError">
-<em class="property">exception </em><tt class="descclassname">errors.</tt><tt class="descname">UnlabelledDataSetError</tt><big>(</big><em>custom_message=None</em><big>)</big><a class="reference internal" href="_modules/errors.html#UnlabelledDataSetError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#errors.UnlabelledDataSetError" title="Permalink to this definition">¶</a></dt>
+<dt id="pml.utils.errors.UnlabelledDataSetError">
+<em class="property">exception </em><tt class="descclassname">pml.utils.errors.</tt><tt class="descname">UnlabelledDataSetError</tt><big>(</big><em>custom_message=None</em><big>)</big><a class="reference internal" href="_modules/pml/utils/errors.html#UnlabelledDataSetError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pml.utils.errors.UnlabelledDataSetError" title="Permalink to this definition">¶</a></dt>
 <dd><p>A custom exception to be thrown when trying to perform an operation that 
 requires a DataSet to be labelled when it is not.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="pml.utils.errors.UnsupportedPlotTypeError">
+<em class="property">exception </em><tt class="descclassname">pml.utils.errors.</tt><tt class="descname">UnsupportedPlotTypeError</tt><big>(</big><em>requested_type</em>, <em>supported_types</em><big>)</big><a class="reference internal" href="_modules/pml/utils/errors.html#UnsupportedPlotTypeError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pml.utils.errors.UnsupportedPlotTypeError" title="Permalink to this definition">¶</a></dt>
+<dd><p>A custom exception to be thrown when trying to select a plot type that is 
+not available.</p>
 </dd></dl>
 
 </div>

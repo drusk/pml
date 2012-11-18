@@ -1,6 +1,6 @@
 errors Module
 =============
 
-.. automodule:: errors
+.. automodule:: pml.utils.errors
     :members:
     :undoc-members:
