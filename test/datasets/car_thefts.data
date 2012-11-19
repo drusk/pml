@@ -1,0 +1,11 @@
+example_no,color,type,origin,stolen
+1,red,sports,domestic,yes
+2,red,sports,domestic,no
+3,red,sports,domestic,yes
+4,yellow,sports,domestic,no
+5,yellow,sports,imported,yes
+6,yellow,suv,imported,no
+7,yellow,suv,imported,yes
+8,yellow,suv,domestic,no
+9,red,suv,imported,no
+10,red,sports,imported,yes
