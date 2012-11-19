@@ -50,7 +50,8 @@ class NaiveBayesTest(base_tests.BaseFileLoadingTest):
     def test_count_examples_with_class_and_feature_val(self):
         training_set, sample = self.load_car_data()
         classifier = NaiveBayes(training_set)
-        count = classifier._count_examples_with_class_and_feature_val(True, "color", sample)
+        count = classifier._count_examples_with_class_and_feature_val(
+                    True, "color", sample)
         self.assertEquals(count, 3)
 
 

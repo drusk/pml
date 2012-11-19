@@ -37,7 +37,8 @@ class NaiveBayes(object):
         """
         self._training_set = training_set
     
-    def _count_examples_with_class_and_feature_val(self, clazz, feature, sample):
+    def _count_examples_with_class_and_feature_val(
+            self, clazz, feature, sample):
         """
         Counts the training set examples which have the specified class as 
         well as the same value for the specified feature as the provided 
@@ -62,12 +63,10 @@ class NaiveBayes(object):
         training_classes = self._training_set.get_labels()
         training_feature_vals = self._training_set.get_column(feature)
         
-        count = 0
-        for sample_id in self._training_set.get_sample_ids():
-            if (training_classes[sample_id] == clazz and 
-                training_feature_vals[sample_id] == sample[feature]):
-                count += 1
-                
-        return count
+        match_classes = training_classes == clazz
+        match_feature_vals = training_feature_vals == sample[feature]
+        
+        match_both = match_classes & match_feature_vals
+        return match_both.value_counts()[True]
     
     
