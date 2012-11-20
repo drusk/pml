@@ -37,6 +37,39 @@ class NaiveBayes(object):
         """
         self._training_set = training_set
     
+    def classify(self, sample):
+        """
+        Predicts a sample's classification based on the training set.
+        
+        Args:
+          sample: 
+            the sample or observation to be classified.
+          
+        Returns:
+          The sample's classification.
+          
+        Raises:
+          ValueError if sample doesn't have the same number of features as 
+          the data in the training set.
+        """
+        class_probabilities = {}
+        
+        for clazz in set(self._training_set.get_labels()):
+            prob_clazz = self._calc_prob_class(clazz)
+            
+            # TODO: refactor these names...
+            prod = 1
+            for feature in self._training_set.feature_list():
+                prod *= self._calc_prob_feature_given_class(clazz, feature, 
+                                                            sample[feature])
+            class_probabilities[clazz] = prob_clazz * prod
+
+        # TODO: refactor.  This is pretty similar to KNN vote counting.        
+        max_probability = max(class_probabilities.values())
+        for clazz, probability in class_probabilities.iteritems():
+            if probability == max_probability:
+                return clazz
+        
     def _calc_prob_class(self, clazz):
         """
         Calculate the probability of a training example belonging to the 
