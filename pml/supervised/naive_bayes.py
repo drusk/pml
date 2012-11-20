@@ -36,6 +36,36 @@ class NaiveBayes(object):
             The data used to train the classifier.
         """
         self._training_set = training_set
+    
+    def _calc_prob_feature_given_class(self, clazz, feature, feature_val):
+        """
+        Calculates the probability of a training example having a given class 
+        as well as the given value of the specified feature.
+
+        Args:
+          clazz:
+            A class from the training set.
+          feature:
+            The feature whose value must match the provided feature_val.
+          feature_val:
+            The value of feature which must be matched.
+            
+        Returns:
+          probability: float
+            The probability as a floating point number between 0.0 and 1.0. 
+        """
+        n = self._training_set.get_label_value_counts()[clazz]
+        n_c = self._count_examples(clazz, feature, feature_val)
+        
+        num_feature_vals = len(set(self._training_set.get_column(feature)))
+        p = float(1) / num_feature_vals
+        m = num_feature_vals
+        
+        # the use of m and p is called 'm-estimates' and is for the case 
+        # where n_c = 0 because otherwise that would make the product of the 
+        # probabilities.
+        
+        return float(n_c + m*p) / (n + m)
         
     def _count_examples(self, clazz, feature, feature_val):
         """

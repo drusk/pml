@@ -53,6 +53,12 @@ class NaiveBayesTest(base_tests.BaseFileLoadingTest):
         count = classifier._count_examples(True, "color", sample["color"])
         self.assertEquals(count, 3)
 
+    def test_calc_prob_feature_given_class(self):
+        training_set, sample = self.load_car_data()
+        classifier = NaiveBayes(training_set)
+        prob = classifier._calc_prob_feature_given_class(True, "color", sample["color"])
+        self.assertAlmostEqual(prob, 0.57, places=2)
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
