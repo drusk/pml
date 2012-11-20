@@ -37,6 +37,22 @@ class NaiveBayes(object):
         """
         self._training_set = training_set
     
+    def _calc_prob_class(self, clazz):
+        """
+        Calculate the probability of a training example belonging to the 
+        given class.
+        
+        Args:
+          clazz:
+            The class which examples must belong to.
+            
+        Returns:
+          probability: float
+            The probability as a floating point number between 0.0 and 1.0.
+        """
+        clazz_count = self._training_set.get_label_value_counts()[clazz]
+        return float(clazz_count) / self._training_set.num_samples()
+    
     def _calc_prob_feature_given_class(self, clazz, feature, feature_val):
         """
         Calculates the probability of a training example having a given class 

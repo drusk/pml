@@ -26,6 +26,7 @@ Unit tests for naive_bayes module.
 import unittest
 
 from pml.data import loader
+from pml.data.model import DataSet
 from pml.supervised.naive_bayes import NaiveBayes
 
 import base_tests
@@ -58,6 +59,13 @@ class NaiveBayesTest(base_tests.BaseFileLoadingTest):
         classifier = NaiveBayes(training_set)
         prob = classifier._calc_prob_feature_given_class(True, "color", sample["color"])
         self.assertAlmostEqual(prob, 0.57, places=2)
+        
+    def test_calc_prob_class(self):
+        training_set = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]],
+                                    labels=["cat", "dog", "cat", "cat"])
+        classifier = NaiveBayes(training_set)
+        prob = classifier._calc_prob_class("cat")
+        self.assertAlmostEqual(prob, 0.75, places=2)
 
 
 if __name__ == "__main__":
