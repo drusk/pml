@@ -36,23 +36,22 @@ class NaiveBayes(object):
             The data used to train the classifier.
         """
         self._training_set = training_set
-    
-    def _count_examples(self, clazz, feature, sample):
+        
+    def _count_examples(self, clazz, feature, feature_val):
         """
         Counts the training set examples which have the specified class as 
-        well as the same value for the specified feature as the provided 
-        sample.
+        well as the specified value of the given feature.
         
         Args:
           clazz:
             The class which training examples must belong to in order to be 
             counted.
           feature:
-            The feature for which the training examples must have the same 
-            value as the sample.
-          sample: dict or dict-like (ex: pandas.Series)
-            The sample whose value for the specified feature must be matched 
-            in order to count an example.
+            The feature for which the training examples must have the value 
+            feature_val.
+          feature_val: 
+            The value of feature which must be matched in order to count an 
+            example.
             
         Returns:
           count: int
@@ -63,7 +62,7 @@ class NaiveBayes(object):
         training_feature_vals = self._training_set.get_column(feature)
         
         match_classes = training_classes == clazz
-        match_feature_vals = training_feature_vals == sample[feature]
+        match_feature_vals = training_feature_vals == feature_val
         
         match_both = match_classes & match_feature_vals
         return match_both.value_counts()[True]
