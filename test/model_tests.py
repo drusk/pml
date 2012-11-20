@@ -96,6 +96,18 @@ class DataSetTest(unittest.TestCase):
         assert_that(selection, equals_dataset([[3, 4], [7, 8]]))
         assert_that(selection.get_labels(), equals_series({1: "a", 3: "b"}))
         
+    def test_get_label_value_counts(self):
+        dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12]], 
+                          labels=["a", "b", "b", "c", "a", "b"])
+        expected = {"a": 2, "b": 3, "c": 1}
+        value_counts = dataset.get_label_value_counts()
+        assert_that(value_counts, equals_series(expected))
+        assert_that(value_counts.index, contains("b", "a", "c"))
+        
+    def test_get_label_value_counts_no_labels(self):
+        dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12]])
+        assert_that(dataset.get_label_value_counts(), equals_series({}))
+        
     def test_split(self):
         dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]])
         first, second = dataset.split(0.5)

@@ -211,6 +211,23 @@ class DataSet(object):
         else:
             return self.labels.take(indices)
     
+    def get_label_value_counts(self):
+        """
+        Count the number of occurrences of each label.
+        
+        NOTE: If the data set is unlabelled an empty set of results will be 
+        returned.
+        
+        Returns:
+          value_counts: pandas.Series
+            A Series containing the counts of each label.  It is indexable by 
+            label.  The index is ordered from highest to lowest count.
+        """
+        if self.is_labelled():
+            return self.labels.value_counts()
+        else:
+            return pd.Series() # blank result
+    
     def reduce_rows(self, function):
         """
         Performs a row-wise reduction of the data set.
