@@ -42,7 +42,7 @@ class NaiveBayes(object):
         Predicts a sample's classification based on the training set.
         
         Args:
-          sample: 
+          sample: dict or pandas.Series
             the sample or observation to be classified.
           
         Returns:
@@ -52,8 +52,29 @@ class NaiveBayes(object):
           ValueError if sample doesn't have the same number of features as 
           the data in the training set.
         """
-        class_probabilities = {}
+        class_probabilities = self.get_classification_probabilities(sample)
+
+        # TODO: refactor.  This is pretty similar to KNN vote counting.        
+        max_probability = max(class_probabilities.values())
+        for clazz, probability in class_probabilities.iteritems():
+            if probability == max_probability:
+                return clazz
+    
+    def get_classification_probabilities(self, sample):
+        """
+        Determines the probability that a sample belongs to each class that 
+        was seen in the training set.
         
+        Args:
+          sample: dict or pandas.Series
+            The sample or observation to be classified.
+        
+        Returns:
+          probabilities: dict
+            A dictionary of classifications and their probabilities.
+        """
+        class_probabilities = {}
+
         for clazz in set(self._training_set.get_labels()):
             prob_clazz = self._calc_prob_class(clazz)
             
@@ -63,13 +84,9 @@ class NaiveBayes(object):
                 prod *= self._calc_prob_feature_given_class(clazz, feature, 
                                                             sample[feature])
             class_probabilities[clazz] = prob_clazz * prod
-
-        # TODO: refactor.  This is pretty similar to KNN vote counting.        
-        max_probability = max(class_probabilities.values())
-        for clazz, probability in class_probabilities.iteritems():
-            if probability == max_probability:
-                return clazz
-        
+            
+        return class_probabilities
+    
     def _calc_prob_class(self, clazz):
         """
         Calculate the probability of a training example belonging to the 

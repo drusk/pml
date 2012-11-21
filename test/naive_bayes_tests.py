@@ -74,7 +74,12 @@ class NaiveBayesTest(base_tests.BaseFileLoadingTest):
         classifier = NaiveBayes(training_set)
         self.assertFalse(classifier.classify(sample))
 
-    # TODO test actual probabilities generated
+    def test_get_classification_probabilities(self):
+        training_set, sample = self.load_car_data()
+        classifier = NaiveBayes(training_set)
+        probabilities = classifier.get_classification_probabilities(sample)
+        self.assertAlmostEqual(probabilities[True], 0.035, places=3)
+        self.assertAlmostEqual(probabilities[False], 0.070, places=3)
     
 
 if __name__ == "__main__":
