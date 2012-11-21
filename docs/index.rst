@@ -17,6 +17,7 @@ Contents:
    errors
    loader
    model
+   naive_bayes
    pandas_util
    pca
    plotting
