@@ -30,7 +30,7 @@ which have random elements.
 import unittest
 
 from pml.data.loader import load
-from pml.supervised.classifiers import Knn
+from pml.supervised.knn import Knn
 
 import base_tests
 

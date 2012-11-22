@@ -27,7 +27,7 @@ import unittest
 
 from hamcrest import assert_that, contains
 
-from pml.supervised import classifiers
+from pml.supervised.knn import Knn
 from pml.data.model import DataSet
 from pml.utils.errors import UnlabelledDataSetError
 
@@ -36,7 +36,7 @@ class KnnTest(unittest.TestCase):
     def test_two_classes_no_tie(self):
         training_set = DataSet([[8, 4], [8, 5], [8, 6], [9, 4], [9, 6]], 
                                labels=["b", "c", "c", "b", "c"])
-        classifier = classifiers.Knn(training_set, k=5)
+        classifier = Knn(training_set, k=5)
         result = classifier.classify([9, 5])
         self.assertEqual(result, "c")
     
@@ -44,7 +44,7 @@ class KnnTest(unittest.TestCase):
         training_set = DataSet([[1, 0.5], [1, 2], [1, 3], [2, 0.5], [2, 2.5], 
                                 [2, 3], [2.5, 1.5], [3, 1]], 
                                labels=["a", "a", "a", "a", "b", "a", "c", "a"])
-        classifier = classifiers.Knn(training_set, k=5)
+        classifier = Knn(training_set, k=5)
         result = classifier.classify([2, 1.5])
         self.assertEqual(result, "a")
     
@@ -52,33 +52,32 @@ class KnnTest(unittest.TestCase):
     def test_tie(self):
         training_set = DataSet([[1, 7], [1.5, 6.5], [1.5, 8], [2.5, 6.5], 
                                 [2.5, 8]], labels=["c", "b", "a", "b", "a"])
-        classifier = classifiers.Knn(training_set, k=5)
+        classifier = Knn(training_set, k=5)
         result = classifier.classify([2, 7])
         self.assertEqual(result, "b")
         
     def test_k_greater_than_num_samples(self):
         training_set = DataSet([[1, 1], [1, 3], [3, 2]], 
                                labels=["a", "a", "b"])
-        classifier = classifiers.Knn(training_set, k=7)
+        classifier = Knn(training_set, k=7)
         result = classifier.classify([2, 2])
         self.assertEqual(result, "a")
         
     def test_classify_all(self):
         training_set = DataSet([[1, 1], [2, 2], [11, 11], [12, 12]], 
                                labels=["a", "a", "b", "b"])
-        classifier = classifiers.Knn(training_set, k=3)
+        classifier = Knn(training_set, k=3)
         dataset = [[1.5, 1.3], [12.2, 12.9]]
         classes = classifier.classify_all(dataset).get_classifications()
         assert_that(classes, contains("a", "b"))
         
     def test_create_knn_unlabelled_raises_exception(self):
         training_set = DataSet([[1, 2], [3, 4]])
-        self.assertRaises(UnlabelledDataSetError, classifiers.Knn, 
-                          training_set)
+        self.assertRaises(UnlabelledDataSetError, Knn, training_set)
         
     def test_classify_incomplete_sample(self):
         training_set = DataSet([[1, 2, 3], [4, 5, 6]], labels=["a", "a"])
-        classifier = classifiers.Knn(training_set)
+        classifier = Knn(training_set)
         self.assertRaises(ValueError, classifier.classify, [1, 2])
 
 
