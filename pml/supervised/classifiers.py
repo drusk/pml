@@ -26,6 +26,30 @@ Classification algorithms for supervised learning tasks.
 from pml.data import model
 from pml.utils.errors import UnlabelledDataSetError
 
+class AbstractClassifier(object):
+    """
+    This is the base class which classification algorithms should extend.  It 
+    provides the common functionality for each classifier. 
+    """
+    
+    def __init__(self, training_set):
+        """
+        Constructs the classifier.  Subclasses may have additional parameters 
+        in their constructors.
+        
+        Args:
+          training_set:
+            A labelled DataSet object used to train the classifier.
+
+        Raises:
+          UnlabelledDataSetError if the training set is not labelled.
+        """
+        if not training_set.is_labelled():
+            raise UnlabelledDataSetError(custom_message=("Training set must "
+                                                         "be labelled."))
+        self.training_set = training_set
+
+
 class ClassifiedDataSet(model.DataSet):
     """
     A collection of data which has been analysed by a classification 

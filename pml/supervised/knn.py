@@ -26,11 +26,11 @@ K-nearest neighbours classification algorithm.
 import collections
 
 from pml.data import model
-from pml.supervised.classifiers import ClassifiedDataSet
+from pml.supervised.classifiers import AbstractClassifier, ClassifiedDataSet
 from pml.utils import distance_utils
 from pml.utils.errors import UnlabelledDataSetError
 
-class Knn(object):
+class Knn(AbstractClassifier):
     """
     K-Nearest Neighbours classifier.
     
@@ -61,11 +61,7 @@ class Knn(object):
         Raises:
           UnlabelledDataSetError if the training set is not labelled.
         """
-        if not training_set.is_labelled():
-            raise UnlabelledDataSetError(custom_message=("Training set must "
-                                                         "be labelled."))
-        
-        self.training_set = training_set
+        super(Knn, self).__init__(training_set)
         self.k = k
         
     def __str__(self):
@@ -76,7 +72,7 @@ class Knn(object):
         """
         return "<KNN Classifier: k=%d, trained on %d samples>" \
             % (self.k, self.training_set.num_samples())
-            
+
     def __repr__(self):
         """
         This gets called when the object's name is typed into IPython on its 
@@ -87,8 +83,8 @@ class Knn(object):
           This object's string representation, primarily for debugging 
           purposes.
         """
-        return self.__str__()  
-    
+        return self.__str__()
+
     def classify_all(self, dataset):
         """
         Predicts the classification of each sample in a dataset.
