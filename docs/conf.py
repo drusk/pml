@@ -306,11 +306,9 @@ class Mock(object):
         else:
             return Mock()
 
-
-# just need to specify base modules to mock
-MOCK_MODULES = ['pandas', 'matplotlib', 'numpy']
-
-for module in sys.modules:
-    if module.split(".")[0] in MOCK_MODULES:
-        sys.modules[module] = Mock()
-
+MOCK_MODULES = ['pandas', 'pandas.tools', 'pandas.tools.plotting', 
+                'matplotlib', 'matplotlib.pyplot', 
+                'numpy', 'numpy.linalg' 
+                ]
+for mod_name in MOCK_MODULES:
+    sys.modules[mod_name] = Mock()
