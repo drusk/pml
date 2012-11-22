@@ -23,7 +23,9 @@ Naive Bayes classification algorithm.
 @author: drusk
 """
 
-class NaiveBayes(object):
+from pml.supervised.classifiers import AbstractClassifier
+
+class NaiveBayes(AbstractClassifier):
     """
     """
     

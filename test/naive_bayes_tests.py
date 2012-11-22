@@ -26,12 +26,14 @@ Unit tests for naive_bayes module.
 import unittest
 
 import pandas as pd
+from hamcrest import assert_that
 
 from pml.data import loader
 from pml.data.model import DataSet
 from pml.supervised.naive_bayes import NaiveBayes
 
 import base_tests
+from matchers import equals_series
 
 class NaiveBayesTest(base_tests.BaseFileLoadingTest):
 
@@ -80,6 +82,16 @@ class NaiveBayesTest(base_tests.BaseFileLoadingTest):
         probabilities = classifier.get_classification_probabilities(sample)
         self.assertAlmostEqual(probabilities[True], 0.035, places=3)
         self.assertAlmostEqual(probabilities[False], 0.070, places=3)
+    
+    def test_classify_all(self):
+        training_set, sample_0 = self.load_car_data()
+        sample_1 = {"color": "yellow", "type": "sports", "origin": "domestic"}
+        dataset = DataSet(pd.DataFrame([sample_0, sample_1]), 
+                          labels=[False, True])
+        classifier = NaiveBayes(training_set)
+        results = classifier.classify_all(dataset)
+        assert_that(results.get_classifications(), equals_series({0: False, 1: False}))
+        self.assertEqual(results.compute_accuracy(), 0.5)
     
 
 if __name__ == "__main__":
