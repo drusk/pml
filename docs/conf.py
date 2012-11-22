@@ -285,6 +285,8 @@ epub_copyright = u'2012, David Rusk'
 # Allow duplicate toc entries.
 #epub_tocdup = True
 
+#############################################################################
+#
 # Mock out imports with C dependencies because ReadTheDocs can't build them.
 class Mock(object):
     def __init__(self, *args, **kwargs):
@@ -304,9 +306,11 @@ class Mock(object):
         else:
             return Mock()
 
-MOCK_MODULES = ['pandas', 'pandas.tools', 'pandas.tools.plotting', 
-                'matplotlib', 'matplotlib.pyplot', 
-                'numpy', 'numpy.linalg' 
-                ]
-for mod_name in MOCK_MODULES:
-    sys.modules[mod_name] = Mock()
+
+# just need to specify base modules to mock
+MOCK_MODULES = ['pandas', 'matplotlib', 'numpy']
+
+for module in sys.modules:
+    if module.split(".")[0] in MOCK_MODULES:
+        sys.modules[module] = Mock()
+
