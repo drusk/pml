@@ -15,6 +15,7 @@ Contents:
    clustering
    distance_utils
    errors
+   knn
    loader
    model
    naive_bayes
