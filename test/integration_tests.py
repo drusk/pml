@@ -21,9 +21,6 @@
 Integration tests which verify the different parts of the system work together 
 properly.  These tests should be in the form of a user workflow.
 
-Allows test workflows to be executed multiple times to average results 
-which have random elements.
-
 @author: drusk
 """
 
