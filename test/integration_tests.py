@@ -29,8 +29,7 @@ which have random elements.
 
 import unittest
 
-from pml.data.loader import load
-from pml.supervised.knn import Knn
+from pml.api import *
 
 import base_tests
 
