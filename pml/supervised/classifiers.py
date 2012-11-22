@@ -49,6 +49,56 @@ class AbstractClassifier(object):
                                                          "be labelled."))
         self.training_set = training_set
 
+    def __repr__(self):
+        """
+        This gets called when the object's name is typed into IPython on its 
+        own line, causing a string representation of the object to be 
+        displayed.
+        
+        NOTE: override __str__ in subclass to set this.
+        
+        Returns:
+          This object's string representation, primarily for debugging 
+          purposes.
+        """
+        return self.__str__()
+
+    def classify_all(self, dataset):
+        """
+        Predicts the classification of each sample in a dataset.
+        
+        Args:
+          dataset: DataSet compatible object (see DataSet constructor)
+            the dataset whose samples (observations) will be classified.
+            
+        Returns:
+          A ClassifiedDataSet which contains the classification results for 
+          each sample.  It also contains the original data.
+        """
+        dataset = model.as_dataset(dataset)
+        return ClassifiedDataSet(dataset, dataset.reduce_rows(self.classify))
+        
+    def classify(self, sample):
+        """
+        Predicts a sample's classification based on the training set.
+        
+        NOTE: classifiers which subclass this AbstractClassifier must 
+        implement this method.
+        
+        Args:
+          sample: 
+            the sample or observation to be classified.
+          
+        Returns:
+          The sample's classification.
+          
+        Raises:
+          ValueError if sample doesn't have the same number of features as 
+          the data in the training set.
+        """
+        raise NotImplementedError(("Classifiers must implement the "
+                                   "'classify' method."))
+        
 
 class ClassifiedDataSet(model.DataSet):
     """
