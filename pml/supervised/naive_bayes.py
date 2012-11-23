@@ -24,6 +24,7 @@ Naive Bayes classification algorithm.
 """
 
 from pml.supervised.classifiers import AbstractClassifier
+from pml.utils import collection_utils
 
 class NaiveBayes(AbstractClassifier):
     """
@@ -55,12 +56,7 @@ class NaiveBayes(AbstractClassifier):
           the data in the training set.
         """
         class_probabilities = self.get_classification_probabilities(sample)
-
-        # TODO: refactor.  This is pretty similar to KNN vote counting.        
-        max_probability = max(class_probabilities.values())
-        for clazz, probability in class_probabilities.iteritems():
-            if probability == max_probability:
-                return clazz
+        return collection_utils.get_key_with_highest_value(class_probabilities)
     
     def get_classification_probabilities(self, sample):
         """
