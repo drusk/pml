@@ -37,7 +37,7 @@ class NaiveBayes(AbstractClassifier):
           training_set: model.DataSet
             The data used to train the classifier.
         """
-        self._training_set = training_set
+        super(NaiveBayes, self).__init__(training_set)
     
     def classify(self, sample):
         """
@@ -77,12 +77,12 @@ class NaiveBayes(AbstractClassifier):
         """
         class_probabilities = {}
 
-        for clazz in set(self._training_set.get_labels()):
+        for clazz in set(self.training_set.get_labels()):
             prob_clazz = self._calc_prob_class(clazz)
             
             # TODO: refactor these names...
             prod = 1
-            for feature in self._training_set.feature_list():
+            for feature in self.training_set.feature_list():
                 prod *= self._calc_prob_feature_given_class(clazz, feature, 
                                                             sample[feature])
             class_probabilities[clazz] = prob_clazz * prod
@@ -102,8 +102,8 @@ class NaiveBayes(AbstractClassifier):
           probability: float
             The probability as a floating point number between 0.0 and 1.0.
         """
-        clazz_count = self._training_set.get_label_value_counts()[clazz]
-        return float(clazz_count) / self._training_set.num_samples()
+        clazz_count = self.training_set.get_label_value_counts()[clazz]
+        return float(clazz_count) / self.training_set.num_samples()
     
     def _calc_prob_feature_given_class(self, clazz, feature, feature_val):
         """
@@ -122,10 +122,10 @@ class NaiveBayes(AbstractClassifier):
           probability: float
             The probability as a floating point number between 0.0 and 1.0. 
         """
-        n = self._training_set.get_label_value_counts()[clazz]
+        n = self.training_set.get_label_value_counts()[clazz]
         n_c = self._count_examples(clazz, feature, feature_val)
         
-        num_feature_vals = len(set(self._training_set.get_column(feature)))
+        num_feature_vals = len(set(self.training_set.get_column(feature)))
         p = float(1) / num_feature_vals
         m = num_feature_vals
         
@@ -156,8 +156,8 @@ class NaiveBayes(AbstractClassifier):
             The number of training examples with the specified class and same 
             value as the sample for the specified feature.
         """
-        training_classes = self._training_set.get_labels()
-        training_feature_vals = self._training_set.get_column(feature)
+        training_classes = self.training_set.get_labels()
+        training_feature_vals = self.training_set.get_column(feature)
         
         match_classes = training_classes == clazz
         match_feature_vals = training_feature_vals == feature_val
