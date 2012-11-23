@@ -13,6 +13,7 @@ Contents:
 
    classifiers
    clustering
+   collection_utils
    distance_utils
    errors
    knn
