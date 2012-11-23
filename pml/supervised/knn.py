@@ -27,6 +27,7 @@ import collections
 
 from pml.supervised.classifiers import AbstractClassifier
 from pml.utils import distance_utils
+from pml.utils import collection_utils
 
 class Knn(AbstractClassifier):
     """
@@ -98,11 +99,8 @@ class Knn(AbstractClassifier):
         distances = self.training_set.reduce_rows(calc_dist)
         
         votes = self._tally_votes(self.training_set.get_labels(), distances)
-        most_voted = self._get_most_voted(votes)
         
-        # TODO tie breaking?
-        assert len(most_voted) >= 1
-        return most_voted[0]
+        return collection_utils.get_key_with_highest_value(votes)
 
     def _tally_votes(self, labels, distances):
         """
@@ -126,24 +124,3 @@ class Knn(AbstractClassifier):
                 break
         return votes
     
-    def _get_most_voted(self, votes):
-        """
-        Determines the labels which received the most votes.
-        
-        Args:
-          votes: 
-            a dictionary mapping labels to their number of votes.
-          
-        Returns:
-          a list of the labels which got the most votes.  It is a list because 
-          there may be ties.
-        """
-        max_votes = max(votes.values())
-        most_voted = []
-        
-        for label, num_votes in votes.iteritems():
-            if num_votes == max_votes:
-                most_voted.append(label)
-        
-        return most_voted
-
