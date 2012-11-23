@@ -28,6 +28,14 @@ from pml.utils import collection_utils
 
 class NaiveBayes(AbstractClassifier):
     """
+    Naive Bayes classifier.
+    
+    This algorithm classifies samples using probabilities calculated based 
+    on applying Bayes' theorem.
+    
+    The algorithm is said to be naive because it assumes all features are 
+    independent of each other.  While not generally true, the approach is 
+    still quite effective and allows the training set to be much smaller.
     """
     
     def __init__(self, training_set):
@@ -76,12 +84,11 @@ class NaiveBayes(AbstractClassifier):
         for clazz in set(self.training_set.get_labels()):
             prob_clazz = self._calc_prob_class(clazz)
             
-            # TODO: refactor these names...
-            prod = 1
+            likelihood = 1
             for feature in self.training_set.feature_list():
-                prod *= self._calc_prob_feature_given_class(clazz, feature, 
+                likelihood *= self._calc_prob_feature_given_class(clazz, feature, 
                                                             sample[feature])
-            class_probabilities[clazz] = prob_clazz * prod
+            class_probabilities[clazz] = prob_clazz * likelihood
             
         return class_probabilities
     
