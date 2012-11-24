@@ -33,7 +33,7 @@ from pml.data.model import DataSet
 from pml.utils.errors import UnlabelledDataSetError
 
 from test.matchers.general_matchers import in_range
-from test.matchers.pandas_matchers import equals_series
+from test.matchers.pandas_matchers import equals_series, equals_dataframe
 
 class ClusteringTest(unittest.TestCase):
 
@@ -94,14 +94,9 @@ class ClusteringTest(unittest.TestCase):
         centroids = [pd.Series([4, 5]), pd.Series([6, 2])]
         
         results = clustering._get_distances_to_centroids(dataset, centroids)
-        
-        self.assertEqual(results.shape, (3, 2))
-        # TODO: really need a DataFrame matcher...
-        expected = [[3, 5.83], [4.47, 4.12], [2, 3]]
-        for i, row in enumerate(expected):
-            for j, element in enumerate(row):
-                self.assertAlmostEqual(results.ix[i].tolist()[j], element, 
-                                       places=2)
+        assert_that(results, 
+                    equals_dataframe([[3, 5.83], [4.47, 4.12], [2, 3]], 
+                                     places=2))
     
     def test_compute_iteration(self):
         dataset = DataSet([[1, 5], [2, 1], [6, 5]])

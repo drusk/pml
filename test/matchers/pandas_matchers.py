@@ -74,6 +74,53 @@ class IsSeries(BaseMatcher):
         description.append_text("pandas Series with elements: ")
         description.append_text(self.as_dict.__str__())
         
+   
+class IsDataFrame(BaseMatcher):
+    """
+    Matches a pandas DataFrame data structure.
+    """
+    
+    def __init__(self, as_list, places):
+        """
+        Creates a new matcher given the expected input as a list of lists.
+        
+        Args:
+          as_list: list(list)
+            The expected data as a list of lists.
+          places: int
+            The number of decimal places to check when comparing data values.
+            Defaults to None, in which case full equality is checked (good for 
+            ints, but not for floats).
+        """
+        self.as_list = as_list
+        self.places = places
+    
+    def _matches(self, dataframe):
+        expected_num_rows = len(self.as_list)
+        if expected_num_rows != dataframe.shape[0]:
+            return False
+        
+        row_lengths = map(len, self.as_list)
+        if len(set(row_lengths)) != 1:
+            # row lengths are not all the same
+            return False
+        
+        expected_num_columns = row_lengths[0]
+        if expected_num_columns != dataframe.shape[1]:
+            return False
+        
+        for i, row in enumerate(self.as_list):
+            for j, element in enumerate(row):
+                if not equals(dataframe.ix[i].tolist()[j], element, 
+                              places=self.places):
+                    return False
+                
+        return True
+        
+    def describe_to(self, description):
+        description.append_text("pandas DataFrame with elements: ")
+        description.append_text(self.as_list.__str__())
+   
         
 def equals_series(as_dict, places=None):
     """
@@ -88,6 +135,14 @@ def equals_series(as_dict, places=None):
         ints, but not for floats).
     """
     return IsSeries(as_dict, places)
+
+def equals_dataframe(as_list, places=None):
+    """
+    Compares a pandas DataFrame object to the provided list representation.
+    Since DataFrames are two dimensional, the list should actually be a list 
+    of lists.
+    """
+    return IsDataFrame(as_list, places)
 
 def _is_numeric_type(data):
     """

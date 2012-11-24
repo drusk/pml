@@ -34,7 +34,7 @@ from pml.utils.errors import InconsistentSampleIdError
 
 from test import base_tests
 from test.matchers.pml_matchers import equals_dataset
-from test.matchers.pandas_matchers import equals_series
+from test.matchers.pandas_matchers import equals_series, equals_dataframe
 
 class DataSetTest(base_tests.BaseDataSetTest):
 
@@ -203,8 +203,8 @@ class DataSetTest(base_tests.BaseDataSetTest):
         dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]], 
                           labels=pd.Series(["b", "b", "b", "a"]))
         df = dataset.get_labelled_data_frame()
-        
-        # TODO: really need a DataFrame matcher...
+
+        # TODO: non-numeric values in DataFrame matcher
         expected = [[1, 2, "b"], [3, 4, "b"], [5, 6, "b"], [7, 8, "a"]]
         for i in range(len(expected)):
             self.assertTrue(df.ix[i].tolist(), expected[i])
@@ -212,21 +212,13 @@ class DataSetTest(base_tests.BaseDataSetTest):
     def test_get_labelled_data_frame_no_labels(self):
         dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]])
         df = dataset.get_labelled_data_frame()
-        
-        # TODO: really need a DataFrame matcher...
-        expected = [[1, 2], [3, 4], [5, 6], [7, 8]]
-        for i in range(len(expected)):
-            self.assertTrue(df.ix[i].tolist(), expected[i])
+        assert_that(df, equals_dataframe([[1, 2], [3, 4], [5, 6], [7, 8]]))
 
     def test_get_data_frame(self):
         dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]], 
                           labels=pd.Series(["b", "b", "b", "a"]))
         df = dataset.get_data_frame()
-        
-        # TODO: really need a DataFrame matcher...
-        expected = [[1, 2], [3, 4], [5, 6], [7, 8]]
-        for i in range(len(expected)):
-            self.assertTrue(df.ix[i].tolist(), expected[i])
+        assert_that(df, equals_dataframe([[1, 2], [3, 4], [5, 6], [7, 8]]))
 
     def test_combine_labels(self):
         dataset = DataSet([[1, 2], [3, 4], [5, 6]], 
