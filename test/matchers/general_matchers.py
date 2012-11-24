@@ -18,36 +18,37 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
 # IN THE SOFTWARE.
 """
-Unit tests for matcher module used for testing.
+Custom Hamcrest matchers for general purposes not related to pml or pandas 
+data structures.
 
 @author: drusk
 """
 
-import unittest
+from hamcrest.core.base_matcher import BaseMatcher
 
-import numpy as np
-
-from test.matchers import pml_matchers
-
-class MatchersTest(unittest.TestCase):
-
-    def test_equals_places_none(self):
-        list1 = [1.1, 2.2, 3.3]
-        list2 = [1.1, 2.2, 3.3]
-        self.assertTrue(pml_matchers.lists_match(list1, list2))
-
-    def test_equals_nan(self):
-        list1 = [1.1, np.NaN, 3.3]
-        list2 = [1.1, np.NaN, 3.3]
-        self.assertTrue(pml_matchers.lists_match(list1, list2))
-
-    def test_equals_places_2(self):
-        list1 = [1.101, 2.202, 3.303]
-        list2 = [1.102, 2.199, 3.301]
-        self.assertTrue(pml_matchers.lists_match(list1, list2, places=2))
-
-
-if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'Test.testName']
-    unittest.main()
+class InRange(BaseMatcher):
+    """
+    Matches values within a specified range (inclusive).
+    """
     
+    def __init__(self, minval, maxval):
+        """
+        Creates a new matcher given the expected minimum and maximum values.
+        """
+        self.minval = minval
+        self.maxval = maxval
+        
+    def _matches(self, val):
+        return val <= self.maxval and val >= self.minval
+        
+    def describe_to(self, description):
+        description.append_text("value between %s and %s" 
+                                %(self.minval, self.maxval))
+
+
+def in_range(minval, maxval):
+    """
+    Checks if a value is within the range specified by minval and maxval, 
+    inclusive.
+    """
+    return InRange(minval, maxval)

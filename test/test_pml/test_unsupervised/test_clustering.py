@@ -32,7 +32,7 @@ from pml.unsupervised import clustering
 from pml.data.model import DataSet
 from pml.utils.errors import UnlabelledDataSetError
 
-from test.matchers.matchers import in_range
+from test.matchers.general_matchers import in_range
 from test.matchers.pandas_matchers import equals_series
 
 class ClusteringTest(unittest.TestCase):

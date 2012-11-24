@@ -68,26 +68,6 @@ class IsDataSet(BaseMatcher):
         description.append_text(self.as_list.__str__())
     
 
-class InRange(BaseMatcher):
-    """
-    Matches values within a specified range (inclusive).
-    """
-    
-    def __init__(self, minval, maxval):
-        """
-        Creates a new matcher given the expected minimum and maximum values.
-        """
-        self.minval = minval
-        self.maxval = maxval
-        
-    def _matches(self, val):
-        return val <= self.maxval and val >= self.minval
-        
-    def describe_to(self, description):
-        description.append_text("value between %s and %s" 
-                                %(self.minval, self.maxval))
-
-    
 def lists_match(list1, list2, places=None):
     """
     Compares two lists and returns True if they are exactly the same, False 
@@ -116,10 +96,3 @@ def equals_dataset(as_list, places=None):
       
     """
     return IsDataSet(as_list, places=places)
-
-def in_range(minval, maxval):
-    """
-    Checks if a value is within the range specified by minval and maxval, 
-    inclusive.
-    """
-    return InRange(minval, maxval)
