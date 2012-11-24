@@ -33,26 +33,26 @@ from pml.utils.errors import UnlabelledDataSetError
 
 class MetricsTest(unittest.TestCase):
 
-    def create_dataset(self, labels):
+    def create_dataset(self, labels=None, sample_ids=None):
         """
-        Used to create a DataSet for testing purposes where you don't really 
-        care what the actual data is, just the labels.
+        Used to create a DataSet for testing purposes with optional labels 
+        and sample_ids.
         """
         raw_data = [[1, 2, 3] for _ in xrange(len(labels))]
-        return DataSet(raw_data, labels=labels)
+        df = pd.DataFrame(raw_data, index=sample_ids)
+        return DataSet(df, labels=labels)
 
     def test_accuracy_integer_index(self):
-        dataset = self.create_dataset(["a", "b", "c", "b"])
+        dataset = self.create_dataset(labels=["a", "b", "c", "b"])
         classified = ClassifiedDataSet(dataset, 
                                        pd.Series(["a", "b", "c", "a"]))
         self.assertAlmostEqual(classified.compute_accuracy(), 0.75, places=2)
     
     def test_accuracy_string_index(self):
-        results = pd.Series(["a", "b", "c", "a"], 
-                            index=["V01", "V02", "V03", "V04"])
-        labels = pd.Series(["a", "b", "c", "b"], 
-                           index=["V01", "V02", "V03", "V04"])
-        dataset = self.create_dataset(labels)
+        sample_ids = ["V01", "V02", "V03", "V04"]
+        results = pd.Series(["a", "b", "c", "a"], index=sample_ids)
+        labels = pd.Series(["a", "b", "c", "b"], index=sample_ids)
+        dataset = self.create_dataset(labels, sample_ids=sample_ids)
         classified = ClassifiedDataSet(dataset, results)
         self.assertAlmostEqual(classified.compute_accuracy(), 0.75, places=2)
     
@@ -63,7 +63,7 @@ class MetricsTest(unittest.TestCase):
                             index=["V01", "V02", "V03", "V04"])
         labels = pd.Series(["a", "b", "c"], 
                            index=["V01", "V02", "V03"])
-        dataset = self.create_dataset(labels)
+        dataset = self.create_dataset(labels=labels)
         classified = ClassifiedDataSet(dataset, results)
         self.assertRaises(ValueError, classified.compute_accuracy)
     
