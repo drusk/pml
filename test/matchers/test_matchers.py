@@ -31,17 +31,17 @@ from test.matchers import matchers
 
 class MatchersTest(unittest.TestCase):
 
-    def testEqualsPlacesNone(self):
+    def test_equals_places_none(self):
         list1 = [1.1, 2.2, 3.3]
         list2 = [1.1, 2.2, 3.3]
         self.assertTrue(matchers.lists_match(list1, list2))
 
-    def testEqualsNan(self):
+    def test_equals_nan(self):
         list1 = [1.1, np.NaN, 3.3]
         list2 = [1.1, np.NaN, 3.3]
         self.assertTrue(matchers.lists_match(list1, list2))
 
-    def testEqualsPlaces2(self):
+    def test_equals_places_2(self):
         list1 = [1.101, 2.202, 3.303]
         list2 = [1.102, 2.199, 3.301]
         self.assertTrue(matchers.lists_match(list1, list2, places=2))
