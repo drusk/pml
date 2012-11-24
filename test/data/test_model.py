@@ -32,7 +32,7 @@ from hamcrest import assert_that, contains
 from pml.data.model import DataSet, as_dataset
 from pml.utils.errors import InconsistentSampleIdError
 
-import base_tests
+from test import base_tests
 from matchers import equals_dataset, equals_series
 
 class DataSetTest(base_tests.BaseDataSetTest):

@@ -29,7 +29,7 @@ from hamcrest import assert_that
 
 from pml.data import loader
 
-import base_tests
+from test import base_tests
 from matchers import equals_series
 
 class LoaderTest(base_tests.BaseFileLoadingTest):
