@@ -30,10 +30,12 @@ import pandas as pd
 from hamcrest import assert_that, contains
 
 from pml.data.model import DataSet, as_dataset
+from pml.utils.errors import InconsistentSampleIdError
 
+import base_tests
 from matchers import equals_dataset, equals_series
 
-class DataSetTest(unittest.TestCase):
+class DataSetTest(base_tests.BaseDataSetTest):
 
     def test_reduce_rows(self):
         dataset = DataSet([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
@@ -269,7 +271,6 @@ class DataSetTest(unittest.TestCase):
                                        index=["a", "b", "c"]))
         assert_that(dataset.get_sample_ids(), contains("a", "b", "c"))
 
-
     def test_copy(self):
         dataset1 = DataSet([[1, 2], [3, 4]], labels=pd.Series(["a", "b"]))
         dataset2 = dataset1.copy()
@@ -289,6 +290,14 @@ class DataSetTest(unittest.TestCase):
         self.assertFalse(dataset2.is_labelled())
         assert_that(dataset1, equals_dataset([[1, 2], [3, 4]]))
         self.assertFalse(dataset1.is_labelled())
+        
+    def test_sample_id_mismatch(self):
+        labels = pd.Series(["cat", "dog", "bird"], index=[1, 2, 3])
+        try:
+            self.create_dataset(labels=labels, sample_ids=[0, 1, 2])
+            self.fail("Exception should have occured.")
+        except InconsistentSampleIdError:
+            pass
         
 
 if __name__ == "__main__":

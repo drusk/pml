@@ -62,7 +62,8 @@ class BaseDataSetTest(unittest.TestCase):
     def create_dataset(self, labels=None, sample_ids=None):
         """
         Used to create a DataSet for testing purposes with optional labels 
-        and sample_ids.
+        and sample_ids.  Sample ids apply to the data generated, not the 
+        labels.
         """
         raw_data = [[1, 2, 3] for _ in xrange(len(labels))]
         df = pd.DataFrame(raw_data, index=sample_ids)

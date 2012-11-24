@@ -23,6 +23,22 @@ Custom errors which provide feedback to the user.
 @author: drusk
 """
 
+class InconsistentSampleIdError(Exception):
+    """
+    Indicates that two data objects which should have contained data for the 
+    same list of samples had a mismatch in the sample ids they contained.
+    
+    Used when constructing a DataSet to make sure the labels are for 
+    the data provided.
+    """
+    
+    def __init__(self, message):
+        """
+        Constructs a new exception.
+        """
+        Exception.__init__(self, message)
+        
+
 class UnlabelledDataSetError(Exception):
     """
     A custom exception to be thrown when trying to perform an operation that 

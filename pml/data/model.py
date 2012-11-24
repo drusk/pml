@@ -27,6 +27,7 @@ import pandas as pd
 import random as rand
 
 from pml.utils import plotting
+from pml.utils.errors import InconsistentSampleIdError
 
 class DataSet(object):
     """
@@ -54,9 +55,10 @@ class DataSet(object):
             should be used.  Default value is None (unlabelled).
         
         Raises:
-          ValueError if the data is not of a supported type.  A ValueError is 
-          also raised if labels are supplied but there is a mismatch between 
-          the number of labels and samples.    
+          ValueError if the data or labels are not of a supported type.  
+          
+          InconsistentSampleIdError if labels were provided whose sample ids 
+          do not match those of the data.    
         """
         if isinstance(data, pd.DataFrame):
             self._dataframe = data
@@ -65,17 +67,17 @@ class DataSet(object):
         elif isinstance(data, DataSet):
             self._dataframe = data._dataframe.copy()
         else:
-            raise ValueError("Unsupported representation of data set")        
-        
-        if labels is not None and self.num_samples() != len(labels):
-            raise ValueError(("Number of labels doesn't match the number " 
-                              "of samples in the data."))
+            raise ValueError("Unsupported representation of data set")
 
         if isinstance(labels, list):
             self.labels = pd.Series(labels)
         else:
-            # will just be None if there are no labels
             self.labels = labels
+            
+        if (self.labels is not None and 
+            not (self.labels.index == self._dataframe.index).all()):
+            raise InconsistentSampleIdError(("The sample ids for the data "
+                                             "and the labels do not match."))
         
     def __str__(self):
         """
