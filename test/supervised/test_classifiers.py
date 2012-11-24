@@ -31,9 +31,9 @@ from pml.data.model import DataSet
 from pml.supervised.classifiers import ClassifiedDataSet
 from pml.utils.errors import UnlabelledDataSetError
 
-import base_tests
+from test import base_tests
 
-class MetricsTest(base_tests.BaseDataSetTest):
+class ClassifiersTest(base_tests.BaseDataSetTest):
 
     def test_accuracy_integer_index(self):
         dataset = self.create_dataset(labels=["a", "b", "c", "b"])
