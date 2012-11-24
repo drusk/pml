@@ -33,14 +33,16 @@ from pml.data.model import DataSet
 
 class BaseFileLoadingTest(unittest.TestCase):
     """
-    A test case class which has a method for loading files relative to the 
-    subclassing test case.
+    A test case class which has a method for loading files relative to this 
+    file.
     """
     
     def relative(self, path):
         """
         Marks a path as being relative, so that it will be converted to 
-        absolute.  A
+        absolute.
+        
+        Note that it is relative with respect to THIS file.
         
         Args:
           path: the relative path.
