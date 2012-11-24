@@ -23,6 +23,25 @@ Assorted utilities useful for testing.
 @author: drusk
 """
 
+import numpy as np
+
+def equals(val1, val2, places=None):
+    """
+    Special equals method to make NaN's considered equal to each other.
+    
+    places: int
+            The number of decimal places to check when comparing data values.
+            Defaults to None, in which case full equality is checked (good for 
+            ints, but not for floats).
+    """
+    if np.isnan(val1) and np.isnan(val2):
+        return True
+    
+    if places is None:
+        return val1 == val2
+    else:
+        return almost_equal(val1, val2, places)
+
 def almost_equal(val1, val2, places):
     """
     Checks if two values are equal to each other up to a certain number of 
