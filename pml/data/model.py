@@ -49,7 +49,7 @@ class DataSet(object):
                 1) pandas DataFrame
                 2) Python lists or pandas DataFrame
                 3) an existing DataSet object 
-          labels: pandas Series or Python list
+          labels: pandas Series, Python list or Python dictionary
             The classification labels for the samples in data.  If they are 
             not known (i.e. it is an unlabelled data set) the value None 
             should be used.  Default value is None (unlabelled).
@@ -69,10 +69,12 @@ class DataSet(object):
         else:
             raise ValueError("Unsupported representation of data set")
 
-        if isinstance(labels, list):
+        if isinstance(labels, list) or isinstance(labels, dict):
             self.labels = pd.Series(labels)
-        else:
+        elif isinstance(labels, pd.Series) or labels is None:
             self.labels = labels
+        else:
+            raise ValueError("Unsupported representation of labels")
             
         if (self.labels is not None and 
             not (self.labels.index == self._dataframe.index).all()):

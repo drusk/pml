@@ -299,6 +299,11 @@ class DataSetTest(base_tests.BaseDataSetTest):
         except InconsistentSampleIdError:
             pass
         
+    def test_labels_as_dict(self):
+        labels = {0: "cat", 1: "dog", 2: "bat"}
+        dataset = self.create_dataset(labels=labels)
+        assert_that(dataset.get_labels(), contains("cat", "dog", "bat"))
+        
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
