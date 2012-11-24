@@ -72,7 +72,7 @@ class Knn(AbstractClassifier):
         return "<KNN Classifier: k=%d, trained on %d samples>" \
             % (self.k, self.training_set.num_samples())
 
-    def classify(self, sample):
+    def _classify(self, sample):
         """
         Predicts a sample's classification based on the training set.
         
@@ -82,15 +82,7 @@ class Knn(AbstractClassifier):
           
         Returns:
           The sample's classification.
-          
-        Raises:
-          ValueError if sample doesn't have the same number of features as 
-          the data in the training set.
         """
-        if len(sample) != self.training_set.num_features():
-            raise ValueError(("Sample must have the same number of features " 
-                              "as the training set."))
-            
         # This function is used so that we can reduce each row with respect 
         # to the sample.
         def calc_dist(vector):

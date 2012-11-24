@@ -23,8 +23,10 @@ Classification algorithms for supervised learning tasks.
 @author: drusk
 """
 
+import pandas as pd
+
 from pml.data import model
-from pml.utils.errors import UnlabelledDataSetError
+from pml.utils.errors import UnlabelledDataSetError, InconsistentFeaturesError
 
 class AbstractClassifier(object):
     """
@@ -82,9 +84,6 @@ class AbstractClassifier(object):
         """
         Predicts a sample's classification based on the training set.
         
-        NOTE: classifiers which subclass this AbstractClassifier must 
-        implement this method.
-        
         Args:
           sample: 
             the sample or observation to be classified.
@@ -93,11 +92,32 @@ class AbstractClassifier(object):
           The sample's classification.
           
         Raises:
-          ValueError if sample doesn't have the same number of features as 
-          the data in the training set.
+          InconsistentFeaturesError if the sample doesn't have the same 
+          features as the training data.
+        """
+        sample = pd.Series(sample)
+        self._check_feature_list(sample)
+        return self._classify(sample)
+        
+    def _classify(self, sample):
+        """
+        Classifiers which subclass this AbstractClassifier must implement 
+        this method to provide the classification algorithm.
         """
         raise NotImplementedError(("Classifiers must implement the "
-                                   "'classify' method."))
+                                   "'_classify' method."))
+        
+    def _check_feature_list(self, sample):
+        """
+        Raises an InconsistentFeaturesError if the sample does not have 
+        the same features as the training data.
+        """
+        expected_features = self.training_set.feature_list()
+        actual_features = sample.index.tolist()
+        
+        if set(expected_features) != set(actual_features):
+            raise InconsistentFeaturesError(expected_features, 
+                                            actual_features)
         
 
 class ClassifiedDataSet(model.DataSet):

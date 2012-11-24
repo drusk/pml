@@ -23,6 +23,27 @@ Custom errors which provide feedback to the user.
 @author: drusk
 """
 
+class InconsistentFeaturesError(Exception):
+    """
+    Indicates that the features found were not those expected.
+    """
+    
+    def __init__(self, expected_features, actual_features):
+        """
+        Constructs a new exception.
+        
+        Args:
+          expected_features:
+            The features that should have been present.
+          actual_features:
+            The features which were actually there.
+        """
+        message = ("Expected features: %s\n"
+                   "Actual features:   %s") % (expected_features, 
+                                               actual_features)
+        Exception.__init__(self, message)
+        
+
 class InconsistentSampleIdError(Exception):
     """
     Indicates that two data objects which should have contained data for the 

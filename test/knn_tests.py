@@ -29,7 +29,7 @@ from hamcrest import assert_that, contains
 
 from pml.supervised.knn import Knn
 from pml.data.model import DataSet
-from pml.utils.errors import UnlabelledDataSetError
+from pml.utils.errors import UnlabelledDataSetError, InconsistentFeaturesError
 
 class KnnTest(unittest.TestCase):
 
@@ -78,7 +78,8 @@ class KnnTest(unittest.TestCase):
     def test_classify_incomplete_sample(self):
         training_set = DataSet([[1, 2, 3], [4, 5, 6]], labels=["a", "a"])
         classifier = Knn(training_set)
-        self.assertRaises(ValueError, classifier.classify, [1, 2])
+        self.assertRaises(InconsistentFeaturesError, 
+                          classifier.classify, [1, 2])
 
 
 if __name__ == "__main__":

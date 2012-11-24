@@ -31,6 +31,7 @@ from hamcrest import assert_that
 from pml.data import loader
 from pml.data.model import DataSet
 from pml.supervised.naive_bayes import NaiveBayes
+from pml.utils.errors import InconsistentFeaturesError
 
 import base_tests
 from matchers import equals_series
@@ -92,6 +93,12 @@ class NaiveBayesTest(base_tests.BaseFileLoadingTest):
         results = classifier.classify_all(dataset)
         assert_that(results.get_classifications(), equals_series({0: False, 1: False}))
         self.assertEqual(results.compute_accuracy(), 0.5)
+    
+    def test_classify_inconsistent_features(self):
+        training_set, __ = self.load_car_data()
+        sample = {"color": "yellow", "type": "sports", "year": 2012}
+        classifier = NaiveBayes(training_set)
+        self.assertRaises(InconsistentFeaturesError, classifier.classify, sample)
     
 
 if __name__ == "__main__":

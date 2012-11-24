@@ -48,7 +48,7 @@ class NaiveBayes(AbstractClassifier):
         """
         super(NaiveBayes, self).__init__(training_set)
     
-    def classify(self, sample):
+    def _classify(self, sample):
         """
         Predicts a sample's classification based on the training set.
         
@@ -58,10 +58,6 @@ class NaiveBayes(AbstractClassifier):
           
         Returns:
           The sample's classification.
-          
-        Raises:
-          ValueError if sample doesn't have the same number of features as 
-          the data in the training set.
         """
         class_probabilities = self.get_classification_probabilities(sample)
         return collection_utils.get_key_with_highest_value(class_probabilities)
