@@ -18,25 +18,33 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
 # IN THE SOFTWARE.
 """
-Unit tests for testing utils module.
+Unit tests for matcher module used for testing.
 
 @author: drusk
 """
 
 import unittest
 
-import util
+import numpy as np
 
-class UtilTest(unittest.TestCase):
+from test.matchers import matchers 
 
-    def test_almost_equal(self):
-        self.assertTrue(util.almost_equal(1.101, 1.102, 2))
+class MatchersTest(unittest.TestCase):
 
-    def test_almost_equal_2(self):
-        self.assertTrue(util.almost_equal(0.91, 0.89, 1))
-        
-    def test_almost_equal_neg(self):
-        self.assertTrue(util.almost_equal(-0.67, -0.667, 2))
+    def testEqualsPlacesNone(self):
+        list1 = [1.1, 2.2, 3.3]
+        list2 = [1.1, 2.2, 3.3]
+        self.assertTrue(matchers.lists_match(list1, list2))
+
+    def testEqualsNan(self):
+        list1 = [1.1, np.NaN, 3.3]
+        list2 = [1.1, np.NaN, 3.3]
+        self.assertTrue(matchers.lists_match(list1, list2))
+
+    def testEqualsPlaces2(self):
+        list1 = [1.101, 2.202, 3.303]
+        list2 = [1.102, 2.199, 3.301]
+        self.assertTrue(matchers.lists_match(list1, list2, places=2))
 
 
 if __name__ == "__main__":
