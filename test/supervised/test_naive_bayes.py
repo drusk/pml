@@ -34,7 +34,7 @@ from pml.supervised.naive_bayes import NaiveBayes
 from pml.utils.errors import InconsistentFeaturesError
 
 import base_tests
-from matchers import equals_series
+from test.matchers import equals_series
 
 class NaiveBayesTest(base_tests.BaseFileLoadingTest):
 

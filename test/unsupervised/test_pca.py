@@ -32,7 +32,7 @@ from pml.unsupervised import pca
 from pml.unsupervised.pca import ReducedDataSet
 from pml.data.model import DataSet
 
-from matchers import equals_dataset, equals_series
+from test.matchers import equals_dataset, equals_series
 
 class PCATest(unittest.TestCase):
 

@@ -33,7 +33,7 @@ from pml.data.model import DataSet, as_dataset
 from pml.utils.errors import InconsistentSampleIdError
 
 from test import base_tests
-from matchers import equals_dataset, equals_series
+from test.matchers import equals_dataset, equals_series
 
 class DataSetTest(base_tests.BaseDataSetTest):
 
