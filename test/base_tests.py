@@ -27,6 +27,10 @@ testing multiple modules.
 import unittest
 import os
 
+import pandas as pd
+
+from pml.data.model import DataSet
+
 class BaseFileLoadingTest(unittest.TestCase):
     """
     A test case class which has a method for loading files relative to the 
@@ -48,6 +52,21 @@ class BaseFileLoadingTest(unittest.TestCase):
             path = path[1:]
         path.replace("/", os.sep)
         return os.path.dirname(__file__) + os.sep + path
+
+
+class BaseDataSetTest(unittest.TestCase):
+    """
+    A test case class which has methods for creating test DataSets.
+    """
+    
+    def create_dataset(self, labels=None, sample_ids=None):
+        """
+        Used to create a DataSet for testing purposes with optional labels 
+        and sample_ids.
+        """
+        raw_data = [[1, 2, 3] for _ in xrange(len(labels))]
+        df = pd.DataFrame(raw_data, index=sample_ids)
+        return DataSet(df, labels=labels)
 
 
 if __name__ == "__main__":

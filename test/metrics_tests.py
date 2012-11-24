@@ -31,16 +31,9 @@ from pml.data.model import DataSet
 from pml.supervised.classifiers import ClassifiedDataSet
 from pml.utils.errors import UnlabelledDataSetError
 
-class MetricsTest(unittest.TestCase):
+import base_tests
 
-    def create_dataset(self, labels=None, sample_ids=None):
-        """
-        Used to create a DataSet for testing purposes with optional labels 
-        and sample_ids.
-        """
-        raw_data = [[1, 2, 3] for _ in xrange(len(labels))]
-        df = pd.DataFrame(raw_data, index=sample_ids)
-        return DataSet(df, labels=labels)
+class MetricsTest(base_tests.BaseDataSetTest):
 
     def test_accuracy_integer_index(self):
         dataset = self.create_dataset(labels=["a", "b", "c", "b"])
