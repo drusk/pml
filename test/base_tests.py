@@ -37,7 +37,7 @@ class BaseFileLoadingTest(unittest.TestCase):
     file.
     """
     
-    def relative(self, path):
+    def relative_to_base(self, path):
         """
         Marks a path as being relative, so that it will be converted to 
         absolute.

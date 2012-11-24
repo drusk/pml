@@ -43,7 +43,7 @@ class IntegrationTest(base_tests.BaseFileLoadingTest):
         iris_rearranged.data has 150 samples with 4 features.
         It has headers but no ids.  No missing data.
         """
-        data = load(self.relative("datasets/iris_rearranged.data"), 
+        data = load(self.relative_to_base("datasets/iris_rearranged.data"), 
                     has_ids=False)
         train, test = data.split(0.8)
         self.assertEqual(train.num_samples(), 120)

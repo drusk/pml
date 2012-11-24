@@ -45,7 +45,8 @@ class NaiveBayesTest(base_tests.BaseFileLoadingTest):
         NOTE: pandas automatically converts columns with just 'yes' and 'no' 
         values into booleans.
         """
-        training_set = loader.load(self.relative("datasets/car_thefts.data"))
+        training_set = loader.load(self.relative_to_base("datasets/"
+                                                         "car_thefts.data"))
         sample = {
                   "color": "red",
                   "type": "suv",
@@ -62,7 +63,8 @@ class NaiveBayesTest(base_tests.BaseFileLoadingTest):
     def test_calc_prob_feature_given_class(self):
         training_set, sample = self.load_car_data()
         classifier = NaiveBayes(training_set)
-        prob = classifier._calc_prob_feature_given_class(True, "color", sample["color"])
+        prob = classifier._calc_prob_feature_given_class(True, "color", 
+                                                         sample["color"])
         self.assertAlmostEqual(prob, 0.57, places=2)
         
     def test_calc_prob_class(self):

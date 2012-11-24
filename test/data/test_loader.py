@@ -27,7 +27,7 @@ import unittest
 
 from hamcrest import assert_that
 
-from pml.data import loader
+from pml.data.loader import load
 
 from test import base_tests
 from matchers import equals_series
@@ -35,38 +35,39 @@ from matchers import equals_series
 class LoaderTest(base_tests.BaseFileLoadingTest):
 
     def test_load_csv(self):
-        data_set = loader.load(self.relative("datasets/3f_header.csv"), 
-                               has_ids=False)
+        data_set = load(self.relative_to_base("datasets/3f_header.csv"), 
+                        has_ids=False)
         self.assertEqual(data_set.num_features(), 3)
         self.assertEqual(data_set.num_samples(), 4)
 
     def test_load_csv_no_header(self):
-        data_set = loader.load(self.relative("datasets/3f_no_header.csv"), 
-                               has_header=False, has_ids=False)
+        data_set = load(self.relative_to_base("datasets/3f_no_header.csv"), 
+                        has_header=False, has_ids=False)
         self.assertEqual(data_set.num_features(), 3)
         self.assertEqual(data_set.num_samples(), 4)
     
     def test_load_tsv(self):
-        data_set = loader.load(self.relative("datasets/3f_header.tsv"), 
-                               delimiter="\t", has_ids=False)
+        data_set = load(self.relative_to_base("datasets/3f_header.tsv"), 
+                        delimiter="\t", has_ids=False)
         self.assertEqual(data_set.num_features(), 3)
         self.assertEqual(data_set.num_samples(), 4)
     
     def test_load_has_ids(self):
-        dataset = loader.load(self.relative("datasets/3f_ids_header.csv"))
+        dataset = load(self.relative_to_base("datasets/3f_ids_header.csv"))
         self.assertEqual(dataset.num_features(), 3)
         self.assertEqual(dataset.num_samples(), 4)
         
     def test_load_labelled(self):
-        dataset = loader.load(self.relative("datasets/3f_ids_header.csv"))
+        dataset = load(self.relative_to_base("datasets/3f_ids_header.csv"))
         self.assertTrue(dataset.is_labelled())
         labels = dataset.get_labels()
         assert_that(labels, equals_series({"V01": "c", "V02": "b", "V03": "b", 
                                            "V04": "a"}))
         
     def test_load_unlabelled(self):
-        dataset = loader.load(self.relative("datasets/3f_ids_header_no_labels.csv"), 
-                              has_labels=False)
+        dataset = load(self.relative_to_base("datasets/"
+                                             "3f_ids_header_no_labels.csv"), 
+                       has_labels=False)
         self.assertFalse(dataset.is_labelled())
         self.assertEqual(dataset.num_features(), 3)
         self.assertTrue(dataset.get_labels() is None)
