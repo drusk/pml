@@ -25,29 +25,52 @@ Decision trees classification algorithm.
 
 import numpy as np
 
-def entropy(proportions):
+def info_gain(feature, dataset):
     """
-    Calculates the entropy of a data set given the proportion of samples in 
-    with each classification.
+    Calculates the information gain of a feature in a data set.
+    
+    The information gain of a feature is the expected reduction in entropy 
+    caused by knowing the value of that feature.
+    
+    Args:
+      feature: string
+        The name of a feature in the data set.
+      dataset: model.DataSet
+        The data set that the feature is a part of.
+        
+    Returns:
+      info_gain: float
+          The information gain of the feature.
+    """
+    pass
+    
+
+def entropy(dataset):
+    """
+    Calculates the entropy of a data set. 
     
     Entropy is the measure of impurity of the data set.  For example, if all 
     the samples have the same classification, the entropy will be 0.
     
     Args:
-      proportions: list(float)
-        The proportions of the data set which belong to each class.  It does 
-        not matter which class each proportion corresponds to, so they should 
-        just be passed as an arbitrarily ordered list.  Each proportion 
-        should be a float between 0.0 and 1.0.
+      dataset: model.DataSet
+        The data set whose entropy is to be calculated.
         
     Returns:
-      The entropy of the data with the provided proportions.  Higher values 
-      indicate less uniform or more disordered data.
+      The entropy of the data.  Higher values indicate less uniform or more 
+      disordered data.
     """
+    label_counts = dataset.get_label_value_counts()
+    
+    def calc_proportion(count):
+        return float(count) / np.sum(label_counts)
+    
+    label_proportions = map(calc_proportion, label_counts)
+    
     def entropy_val(proportion):
         """
         Calculates the entropy associated with a single proportion.
         """
         return -1 * proportion * np.log2(proportion) 
 
-    return np.sum(map(entropy_val, proportions))
+    return np.sum(map(entropy_val, label_proportions))
