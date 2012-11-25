@@ -110,9 +110,9 @@ class IsDataFrame(BaseMatcher):
             return False
         
         for i, row in enumerate(self.as_list):
-            for j, element in enumerate(row):
-                if not equals(dataframe.ix[i].tolist()[j], element, 
-                              places=self.places):
+            actual_row = dataframe.ix[i].tolist()
+            for j, expected in enumerate(row):
+                if not equals(actual_row[j], expected, places=self.places):
                     return False
                 
         return True
