@@ -215,6 +215,18 @@ class DataSet(object):
         else:
             return self.labels.take(indices)
     
+    def get_feature_value_counts(self, feature):
+        """
+        Count the number of occurrences of each value of a given feature in 
+        the data set.
+        
+        Returns:
+          value_counts: pandas.Series
+            A Series containing the counts of each label.  It is  indexable by 
+            label.  The index is ordered from highest to lowest count.
+        """
+        return self.get_column(feature).value_counts()
+    
     def get_label_value_counts(self):
         """
         Count the number of occurrences of each label.

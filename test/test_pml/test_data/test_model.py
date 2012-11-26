@@ -316,6 +316,19 @@ class DataSetTest(base_tests.BaseDataSetTest):
         filtered = dataset.value_filter("hair colour", "brown")
         assert_that(filtered.get_labels(), 
                     equals_series({0: "SENG", 2: "CENG"}))
+        
+    def test_get_feature_value_counts(self):
+        df = pd.DataFrame([["Jim", 19, 180], ["John", 18, 177], 
+                           ["Jack", 19, 185]], 
+                          columns=["name", "age", "height"])
+        dataset = DataSet(df)
+        
+        age_value_counts = dataset.get_feature_value_counts("age")
+        assert_that(age_value_counts, equals_series({19: 2, 18: 1}))
+        
+        name_value_counts = dataset.get_feature_value_counts("name")
+        assert_that(name_value_counts, 
+                    equals_series({"Jim": 1, "John": 1, "Jack": 1}))
     
 
 if __name__ == "__main__":
