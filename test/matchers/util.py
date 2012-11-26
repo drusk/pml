@@ -23,24 +23,32 @@ Assorted utilities useful for testing.
 @author: drusk
 """
 
+from numbers import Number
+
 import numpy as np
 
-def equals(val1, val2, places=None):
+def equals(expected, actual, places=None):
     """
     Special equals method to make NaN's considered equal to each other.
+    For convenience, can also handle comparing non-numeric values, in which 
+    case places is ignored.
     
     places: int
             The number of decimal places to check when comparing data values.
             Defaults to None, in which case full equality is checked (good for 
             ints, but not for floats).
     """
-    if np.isnan(val1) and np.isnan(val2):
+    if not isinstance(expected, Number):
+        # np.nan is counted as a number
+        return expected == actual
+    
+    if np.isnan(expected) and np.isnan(actual):
         return True
     
     if places is None:
-        return val1 == val2
+        return expected == actual
     else:
-        return almost_equal(val1, val2, places)
+        return almost_equal(expected, actual, places)
 
 def almost_equal(val1, val2, places):
     """
