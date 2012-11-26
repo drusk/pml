@@ -278,7 +278,9 @@ class DataSet(object):
         """
         column = self.get_column(feature)
         samples_to_keep = column.index[column == value]
-        return DataSet(self._dataframe.ix[samples_to_keep], self.labels)
+        filtered_labels = (self.labels[samples_to_keep] if self.is_labelled() 
+                           else None)
+        return DataSet(self._dataframe.ix[samples_to_keep], filtered_labels)
 
     def drop_column(self, index):
         """
