@@ -42,7 +42,15 @@ def info_gain(feature, dataset):
       info_gain: float
           The information gain of the feature.
     """
-    pass
+    feature_value_counts = dataset.get_feature_value_counts(feature)
+
+    value_entropies = 0
+    for value, count in feature_value_counts.iteritems():
+        weight = float(count) / dataset.num_samples()
+        value_entropies += (weight * 
+                            entropy(dataset.value_filter(feature, value)))
+    
+    return entropy(dataset) - value_entropies
 
 def entropy(dataset):
     """

@@ -59,7 +59,6 @@ class DecisionTreesTest(base_tests.BaseFileLoadingTest):
         dataset = self.create_example_dataset().value_filter("A", "v1")
         self.assertEqual(entropy(dataset), 0)
 
-    @unittest.skip("TODO: implement")
     def test_info_gain(self):
         dataset = self.create_example_dataset()
         self.assertAlmostEqual(info_gain("A", dataset), 0.311, places=3)
