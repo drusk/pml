@@ -43,7 +43,6 @@ def info_gain(feature, dataset):
           The information gain of the feature.
     """
     pass
-    
 
 def entropy(dataset):
     """
@@ -71,6 +70,9 @@ def entropy(dataset):
         """
         Calculates the entropy associated with a single proportion.
         """
+        if proportion == 0:
+            return 0
+        
         return -1 * proportion * np.log2(proportion) 
 
     return np.sum(map(entropy_val, label_proportions))
