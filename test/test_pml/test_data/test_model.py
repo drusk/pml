@@ -288,7 +288,7 @@ class DataSetTest(base_tests.BaseDataSetTest):
         labels = pd.Series(["cat", "dog", "bird"], index=[1, 2, 3])
         try:
             self.create_dataset(labels=labels, sample_ids=[0, 1, 2])
-            self.fail("Exception should have occured.")
+            self.fail("Exception should have occurred.")
         except InconsistentSampleIdError:
             pass
         
@@ -297,6 +297,17 @@ class DataSetTest(base_tests.BaseDataSetTest):
         dataset = self.create_dataset(labels=labels)
         assert_that(dataset.get_labels(), contains("cat", "dog", "bat"))
         
+    def test_filter_by_feature_value(self):
+        features = ["name", "hair colour"]
+        df = pd.DataFrame([["Bill", "brown"], ["Bob", "black"], 
+                           ["Jim", "brown"]], columns=features)
+        dataset = DataSet(df)
+        filtered = dataset.value_filter("hair colour", "brown")
+        self.assertEqual(filtered.feature_list(), features)
+        assert_that(filtered.get_sample_ids(), contains(0, 2))
+        assert_that(filtered, equals_dataset([["Bill", "brown"], 
+                                              ["Jim", "brown"]]))
+    
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

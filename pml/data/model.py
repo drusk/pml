@@ -260,6 +260,26 @@ class DataSet(object):
         """
         return self._dataframe.apply(function, axis=0)
 
+    def value_filter(self, feature, value):
+        """
+        Filters the data set based on its values for a given feature.
+        
+        Args:
+            feature: string
+              The name of the feature whose value will be examined for each 
+              sample.
+            value:
+              The value which all samples passing through the filter should 
+              have for the specified feature.
+        
+        Returns:
+          filtered: model.DataSet
+            The filtered data set.
+        """
+        column = self.get_column(feature)
+        samples_to_keep = column.index[column == value]
+        return DataSet(self._dataframe.ix[samples_to_keep], self.labels)
+
     def drop_column(self, index):
         """
         Creates a copy of the data set with a specified column removed.
