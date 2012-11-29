@@ -31,6 +31,7 @@ from hamcrest import assert_that, contains
 
 from pml.data.model import DataSet, as_dataset
 from pml.utils.errors import InconsistentSampleIdError
+from pml.utils.errors import UnlabelledDataSetError
 
 from test import base_tests
 from test.matchers.pml_matchers import equals_dataset
@@ -316,6 +317,24 @@ class DataSetTest(base_tests.BaseDataSetTest):
         filtered = dataset.value_filter("hair colour", "brown")
         assert_that(filtered.get_labels(), 
                     equals_series({0: "SENG", 2: "CENG"}))
+        
+    def test_filter_by_label(self):
+        features = ["name", "hair colour"]
+        df = pd.DataFrame([["Bill", "brown"], ["Bob", "black"], 
+                           ["Jim", "brown"]], columns=features)
+        dataset = DataSet(df, labels=["SENG", "SENG", "CENG"])
+        filtered = dataset.label_filter("SENG")
+        assert_that(filtered, equals_dataset([["Bill", "brown"], 
+                                              ["Bob", "black"]]))
+        assert_that(filtered.get_labels(), 
+                    equals_series({0: "SENG", 1: "SENG"}))
+        
+    def test_filter_unlabelled_data_by_label(self):
+        features = ["name", "hair colour"]
+        df = pd.DataFrame([["Bill", "brown"], ["Bob", "black"], 
+                           ["Jim", "brown"]], columns=features)
+        dataset = DataSet(df)
+        self.assertRaises(UnlabelledDataSetError, dataset.label_filter, "SENG")
         
     def test_get_feature_value_counts(self):
         df = pd.DataFrame([["Jim", 19, 180], ["John", 18, 177], 

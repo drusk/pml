@@ -28,6 +28,7 @@ import random as rand
 
 from pml.utils import plotting
 from pml.utils.errors import InconsistentSampleIdError
+from pml.utils.errors import UnlabelledDataSetError
 
 class DataSet(object):
     """
@@ -290,6 +291,30 @@ class DataSet(object):
         """
         column = self.get_column(feature)
         samples_to_keep = column.index[column == value]
+        filtered_labels = (self.labels[samples_to_keep] if self.is_labelled() 
+                           else None)
+        return DataSet(self._dataframe.ix[samples_to_keep], filtered_labels)
+
+    def label_filter(self, label):
+        """
+        Filters the data set based on its labels.
+        
+        Args:
+          label:
+            Samples with this label value will remain in the filtered data 
+            set.  All others will be removed.
+        
+        Returns:
+          filtered: model.DataSet
+            The filtered data set.
+        
+        Raises:
+          UnlabelledDataSetError if the data set is not labeled.
+        """
+        if not self.is_labelled():
+            raise UnlabelledDataSetError()
+        
+        samples_to_keep = self.labels.index[self.labels == label]
         filtered_labels = (self.labels[samples_to_keep] if self.is_labelled() 
                            else None)
         return DataSet(self._dataframe.ix[samples_to_keep], filtered_labels)
