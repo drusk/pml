@@ -27,6 +27,7 @@ testing multiple modules.
 import unittest
 import os
 
+import numpy as np
 import pandas as pd
 
 from pml.data.model import DataSet
@@ -67,7 +68,21 @@ class BaseDataSetTest(unittest.TestCase):
         and sample_ids.  Sample ids apply to the data generated, not the 
         labels.
         """
-        raw_data = [[1, 2, 3] for _ in xrange(len(labels))]
+        if (labels is not None and sample_ids is not None and 
+            len(labels) != len(sample_ids)):
+            raise ValueError("Labels and sample ids have inconsistent length.")
+
+        # default size if optional parameters not provided
+        num_features = 3
+        num_samples = 3
+        
+        if labels is not None:
+            num_samples = len(labels)
+            
+        if sample_ids is not None:
+            num_samples = len(sample_ids)
+        
+        raw_data = [np.arange(num_features) for _ in xrange(num_samples)]
         df = pd.DataFrame(raw_data, index=sample_ids)
         return DataSet(df, labels=labels)
 
