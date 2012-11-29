@@ -336,6 +336,11 @@ class DataSetTest(base_tests.BaseDataSetTest):
         dataset = DataSet(df)
         self.assertRaises(UnlabelledDataSetError, dataset.label_filter, "SENG")
         
+    def test_filter_by_sample_id(self):
+        dataset = self.create_dataset(sample_ids=["V01", "V02", "V03", "V04"])
+        filtered = dataset.sample_filter(["V02", "V03"])
+        assert_that(filtered.get_sample_ids(), contains("V02", "V03"))
+        
     def test_get_feature_value_counts(self):
         df = pd.DataFrame([["Jim", 19, 180], ["John", 18, 177], 
                            ["Jack", 19, 185]], 

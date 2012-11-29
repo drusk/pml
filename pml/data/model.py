@@ -29,6 +29,7 @@ import random as rand
 from pml.utils import plotting
 from pml.utils.errors import InconsistentSampleIdError
 from pml.utils.errors import UnlabelledDataSetError
+from pml.utils.pandas_util import get_indices_with_value
 
 class DataSet(object):
     """
@@ -273,6 +274,38 @@ class DataSet(object):
         """
         return self._dataframe.apply(function, axis=0)
 
+    def _get_filtered_labels_if_exist(self, indices):
+        """
+        Internal method used to filter the data set's labels if there are any.
+        
+        Args:
+          indices:
+            The indices of the labels to keep.
+            
+        Returns:
+          labels:
+            If the data set is labelled, this will be the labels at the 
+            specified indices.  If the data set is unlabelled, None will 
+            be returned.
+        """
+        return self.labels[indices] if self.is_labelled() else None
+
+    def sample_filter(self, samples_to_keep):
+        """
+        Filters the data set based on its sample ids.
+        
+        Args:
+          samples_to_keep:
+            The sample ids of the samples which should be kept.  All others 
+            will be removed.
+            
+        Returns:
+          filtered: model.DataSet
+            The filtered data set.
+        """
+        return DataSet(self._dataframe.ix[samples_to_keep], 
+                       self._get_filtered_labels_if_exist(samples_to_keep))
+
     def value_filter(self, feature, value):
         """
         Filters the data set based on its values for a given feature.
@@ -290,10 +323,9 @@ class DataSet(object):
             The filtered data set.
         """
         column = self.get_column(feature)
-        samples_to_keep = column.index[column == value]
-        filtered_labels = (self.labels[samples_to_keep] if self.is_labelled() 
-                           else None)
-        return DataSet(self._dataframe.ix[samples_to_keep], filtered_labels)
+        samples_to_keep = get_indices_with_value(column, value)
+        return DataSet(self._dataframe.ix[samples_to_keep], 
+                       self._get_filtered_labels_if_exist(samples_to_keep))
 
     def label_filter(self, label):
         """
@@ -314,10 +346,9 @@ class DataSet(object):
         if not self.is_labelled():
             raise UnlabelledDataSetError()
         
-        samples_to_keep = self.labels.index[self.labels == label]
-        filtered_labels = (self.labels[samples_to_keep] if self.is_labelled() 
-                           else None)
-        return DataSet(self._dataframe.ix[samples_to_keep], filtered_labels)
+        samples_to_keep = get_indices_with_value(self.labels, label)
+        return DataSet(self._dataframe.ix[samples_to_keep],
+                       self._get_filtered_labels_if_exist(samples_to_keep))
 
     def drop_column(self, index):
         """
