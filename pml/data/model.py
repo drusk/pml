@@ -322,10 +322,8 @@ class DataSet(object):
           filtered: model.DataSet
             The filtered data set.
         """
-        column = self.get_column(feature)
-        samples_to_keep = get_indices_with_value(column, value)
-        return DataSet(self._dataframe.ix[samples_to_keep], 
-                       self._get_filtered_labels_if_exist(samples_to_keep))
+        samples = get_indices_with_value(self.get_column(feature), value)
+        return self.sample_filter(samples)
 
     def label_filter(self, label):
         """
@@ -346,9 +344,7 @@ class DataSet(object):
         if not self.is_labelled():
             raise UnlabelledDataSetError()
         
-        samples_to_keep = get_indices_with_value(self.labels, label)
-        return DataSet(self._dataframe.ix[samples_to_keep],
-                       self._get_filtered_labels_if_exist(samples_to_keep))
+        return self.sample_filter(get_indices_with_value(self.labels, label))                
 
     def drop_column(self, index):
         """
