@@ -26,6 +26,7 @@ Unit tests for pandas_util module.
 import unittest
 
 import pandas as pd
+from hamcrest import assert_that, contains
 
 from pml.utils import pandas_util
 
@@ -45,6 +46,13 @@ class PandasUtilTest(unittest.TestCase):
         df1 = pd.DataFrame([[1, 2, 3], [4, 5, 6]])
         df2 = pd.DataFrame([[1, 2], [3, 4], [5, 6]])
         self.assertFalse(pandas_util.are_dataframes_equal(df1, df2))
+
+    def test_get_indices_with_values(self):
+        series = pd.Series(["friendly", "friendly", "not_friendly"], 
+                           index=["cat", "dog", "mouse"])
+        indices = pandas_util.get_indices_with_value(series, "friendly")
+        print indices
+        assert_that(indices, contains("cat", "dog"))
 
 
 if __name__ == "__main__":

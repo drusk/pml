@@ -24,6 +24,22 @@ Series.
 @author: drusk
 """
 
+def get_indices_with_value(series, value):
+    """
+    Retrieves the indices of a pandas Series which have the specified value.
+    
+    Args:
+      series: pandas.Series
+        The series to search and retrieve indices from.
+      value:
+        The value to search for.
+        
+    Returns:
+      indices: pandas.Index
+        The indices which held the specified value.
+    """
+    return series.index[series == value]
+
 def are_dataframes_equal(dataframe1, dataframe2):
     """
     Compares two pandas DataFrame objects to see if they are equal.
