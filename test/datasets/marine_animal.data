@@ -1,0 +1,6 @@
+sample_id,surface_breather,has_flippers,is_fish
+1,yes,yes,yes
+2,yes,yes,yes
+3,yes,no,no
+4,no,yes,no
+5,no,yes,no
