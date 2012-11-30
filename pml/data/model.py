@@ -23,8 +23,9 @@ Models for the data being analysed and manipulated.
 @author: drusk
 """
 
-import pandas as pd
 import random as rand
+
+import pandas as pd
 
 from pml.utils import plotting
 from pml.utils.errors import InconsistentSampleIdError

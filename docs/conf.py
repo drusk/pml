@@ -287,6 +287,19 @@ epub_copyright = u'2012, David Rusk'
 
 #############################################################################
 #
+# Include constructors in all the docs
+# Got this method from:
+# http://stackoverflow.com/questions/5599254/how-to-use-sphinxs-autodoc-to-document-a-classs-init-self-method
+def skip(app, what, name, obj, skip, options):
+    if name == "__init__":
+        return False
+    return skip
+
+def setup(app):
+    app.connect("autodoc-skip-member", skip)
+
+#############################################################################
+#
 # Mock out imports with C dependencies because ReadTheDocs can't build them.
 class Mock(object):
     def __init__(self, *args, **kwargs):
