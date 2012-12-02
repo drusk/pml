@@ -45,7 +45,7 @@ def magic_docs(self, arg):
     this instance.
     """
     with no_stdout():
-        webbrowser.open("http://drusk.github.com/pml/")
+        webbrowser.open("http://pml.readthedocs.org/en/latest/index.html")
 
 def setup_shell():
     banner = "+-----------------------------------------------------------+\n"
