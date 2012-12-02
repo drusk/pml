@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # Copyright (C) 2012 David Rusk
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy 
@@ -31,10 +29,12 @@ https://github.com/ingenuitas/SimpleCV/blob/develop/SimpleCV/Shell/Shell.py
 import sys
 import webbrowser
 
-from os.path import dirname
-
 from IPython.config.loader import Config
 from IPython.frontend.terminal.embed import InteractiveShellEmbed
+
+# Import pml library.  These imports will be available in the shell that 
+# is created.
+from pml.api import *
 
 def magic_docs(self, arg):
     """
@@ -65,13 +65,10 @@ def setup_shell():
     shell.define_magic("docs", magic_docs)
     return shell
 
-if __name__ == "__main__":
-    # calling dirname twice gets the parent of the directory
-    sys.path.append(dirname(dirname(__file__)))
-    
-    # Import pml library.  These imports will be available in the shell that 
-    # is created.
-    from pml.api import *
-    
+def run():
     shell = setup_shell()
     sys.exit(shell())
+
+if __name__ == "__main__":
+    run()
+    
