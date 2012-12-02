@@ -2,9 +2,9 @@
 pml
 ===
 
-Simple interface to Python machine learning algorithms.
+*Simple interface to Python machine learning algorithms.*
 
-Still in early development.
+Status: still in early development.
 
 Documentation
 =============
