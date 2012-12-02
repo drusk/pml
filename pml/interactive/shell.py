@@ -32,6 +32,8 @@ import webbrowser
 from IPython.config.loader import Config
 from IPython.frontend.terminal.embed import InteractiveShellEmbed
 
+from pml.interactive.util import no_stdout
+
 # Import pml library.  These imports will be available in the shell that 
 # is created.
 from pml.api import *
@@ -42,7 +44,8 @@ def magic_docs(self, arg):
     this function to accept two parameters, even though they are not used in 
     this instance.
     """
-    webbrowser.open("http://drusk.github.com/pml/")
+    with no_stdout():
+        webbrowser.open("http://drusk.github.com/pml/")
 
 def setup_shell():
     banner = "+-----------------------------------------------------------+\n"
