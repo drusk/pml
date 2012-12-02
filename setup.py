@@ -36,7 +36,7 @@ setup(
       url="http://github.com/drusk/pml",
       license="LICENSE",
       description="Simple interface to Python machine learning algorithms.",
-      long_description=open("README").read(),
+      long_description=open("README.rst").read(),
       install_requires=[
                         "numpy >= 1.6.1",
                         "matplotlib",

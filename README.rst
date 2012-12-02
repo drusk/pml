@@ -1,3 +1,4 @@
+===
 pml
 ===
 
@@ -5,11 +6,13 @@ Simple interface to Python machine learning algorithms.
 
 Still in early development.
 
-## Documentation
+Documentation
+=============
 Online documentation can be found at:
 http://pml.readthedocs.org/en/latest/index.html
 
-## Installation
+Installation
+============
 The following dependencies must first be installed:
 
 *  NumPy: http://docs.scipy.org/doc/numpy/user/install.html
