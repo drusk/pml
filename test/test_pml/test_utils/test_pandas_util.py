@@ -51,7 +51,6 @@ class PandasUtilTest(unittest.TestCase):
         series = pd.Series(["friendly", "friendly", "not_friendly"], 
                            index=["cat", "dog", "mouse"])
         indices = pandas_util.get_indices_with_value(series, "friendly")
-        print indices
         assert_that(indices, contains("cat", "dog"))
 
 
