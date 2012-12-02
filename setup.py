@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # Copyright (C) 2012 David Rusk
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy 
@@ -20,12 +18,24 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
 # IN THE SOFTWARE.
 """
-Starts up pml's interactive mode.
+Project setup.
 
 @author: drusk
 """
 
-from pml.interactive import shell
+from distutils.core import setup
 
-shell.run()
-    
+setup(
+      name="pml",
+      version="0.1",
+      author="David Rusk",
+      author_email="drusk@uvic.ca",
+      packages=["pml", "pml.interactive", "pml.data", "pml.supervised", 
+                "pml.unsupervised", "pml.utils"],
+      scripts=["scripts/pml"],
+      url="http://github.com/drusk/pml",
+      license="LICENSE",
+      description="Simple interface to Python machine learning algorithms.",
+      long_description=open("README.md").read(),
+      # TODO install_requires
+      )
