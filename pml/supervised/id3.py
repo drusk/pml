@@ -27,20 +27,31 @@ from pml.supervised.decision_trees import info_gain
 
 from pml.utils.collection_utils import get_key_with_highest_value
 
-def choose_root(dataset):
+class ID3TreeBuilder(object):
     """
-    Choose the root to be the feature which has the highest information gain.
+    """
     
-    Args:
-      dataset: model.DataSet
-        The data set being used to build the decision tree.
+    def __init__(self, training_set):
+        """
+        """
+        self.training_set = training_set
         
-    Returns:
-      feature: string
-        The feature which should be the root.
-    """
-    gains = {}
-    for feature in dataset.feature_list():
-        gains[feature] = info_gain(feature, dataset)
+    def choose_root(self):
+        """
+        Choose the root to be the feature which has the highest information 
+        gain.
     
-    return get_key_with_highest_value(gains)
+        Args:
+          dataset: model.DataSet
+            The data set being used to build the decision tree.
+        
+        Returns:
+          feature: string
+            The feature which should be the root.
+        """
+        gains = {}
+        for feature in self.training_set.feature_list():
+            gains[feature] = info_gain(feature, self.training_set)
+    
+        return get_key_with_highest_value(gains)
+

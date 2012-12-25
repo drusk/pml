@@ -31,7 +31,7 @@ import unittest
 import pandas as pd
 
 from pml.supervised.decision_trees import entropy, info_gain
-from pml.supervised import id3
+from pml.supervised.id3 import ID3TreeBuilder
 from pml.data.model import DataSet
 from pml.data.loader import load
 
@@ -67,7 +67,8 @@ class DecisionTreesTest(base_tests.BaseFileLoadingTest):
     
     def test_id3_choose_root(self):
         data = load(self.relative_to_base("/datasets/weekends.data"))
-        root = id3.choose_root(data)
+        tree_builder = ID3TreeBuilder(data)
+        root = tree_builder.choose_root()
         self.assertEqual(root, "weather")
     
 
