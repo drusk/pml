@@ -31,7 +31,9 @@ import unittest
 import pandas as pd
 
 from pml.supervised.decision_trees import entropy, info_gain
+from pml.supervised import id3
 from pml.data.model import DataSet
+from pml.data.loader import load
 
 from test import base_tests
 
@@ -62,6 +64,11 @@ class DecisionTreesTest(base_tests.BaseFileLoadingTest):
     def test_info_gain(self):
         dataset = self.create_example_dataset()
         self.assertAlmostEqual(info_gain("A", dataset), 0.311, places=3)
+    
+    def test_id3_choose_root(self):
+        data = load(self.relative_to_base("/datasets/weekends.data"))
+        root = id3.choose_root(data)
+        self.assertEqual(root, "weather")
     
 
 if __name__ == "__main__":
