@@ -39,6 +39,27 @@ class CollectionUtilsTest(unittest.TestCase):
         key = collection_utils.get_key_with_highest_value(dictionary)
         self.assertEqual(key, 2)
         
+    def test_are_all_equal_empty(self):
+        iterable = []
+        self.assertTrue(collection_utils.are_all_equal(iterable))
+    
+    def test_are_all_equal_one_element(self):
+        iterable = ['a']
+        self.assertTrue(collection_utils.are_all_equal(iterable))
+    
+    def test_are_all_equal(self):
+        iterable1 = ['a', 'b']
+        self.assertFalse(collection_utils.are_all_equal(iterable1))
+        
+        iterable2 = ['a', 'b', 'b']
+        self.assertFalse(collection_utils.are_all_equal(iterable2))
+        
+        iterable3 = ['b', 'b']
+        self.assertTrue(collection_utils.are_all_equal(iterable3))
+
+        iterable4 = ['b', 'b', 'b']
+        self.assertTrue(collection_utils.are_all_equal(iterable4))
+    
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

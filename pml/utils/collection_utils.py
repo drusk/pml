@@ -38,3 +38,18 @@ def get_key_with_highest_value(dictionary):
         The key with the highest value.
     """
     return max(dictionary.iteritems(), key=operator.itemgetter(1))[0]
+
+def are_all_equal(iterable):
+    """
+    Checks if all elements of a collection are equal.
+    
+    Args:
+      iterable: iterator
+        A collection of values such as a list.
+        
+    Returns:
+      equal: boolean
+        True if all elements of iterable are equal.  Will also return true if 
+        iterable is empty.
+    """
+    return len(set(iterable)) <= 1
