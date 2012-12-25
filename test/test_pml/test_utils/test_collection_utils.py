@@ -38,6 +38,11 @@ class CollectionUtilsTest(unittest.TestCase):
         dictionary = {0: 0.10, 1: 0.0567, 2: 0.72}
         key = collection_utils.get_key_with_highest_value(dictionary)
         self.assertEqual(key, 2)
+       
+    def test_get_key_with_highest_value_empty(self):
+        dictionary = {}
+        self.assertIsNone(
+                collection_utils.get_key_with_highest_value(dictionary))
         
     def test_are_all_equal_empty(self):
         iterable = []
@@ -59,6 +64,14 @@ class CollectionUtilsTest(unittest.TestCase):
 
         iterable4 = ['b', 'b', 'b']
         self.assertTrue(collection_utils.are_all_equal(iterable4))
+    
+    def test_get_most_common(self):
+        collection = ["a", "b", "a", "a", "b"]
+        self.assertEqual(collection_utils.get_most_common(collection), "a")
+    
+    def test_get_most_common_empty(self):
+        collection = []
+        self.assertIsNone(collection_utils.get_most_common(collection))
     
 
 if __name__ == "__main__":

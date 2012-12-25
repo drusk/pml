@@ -23,6 +23,7 @@ Utilities for working with collections.
 @author: drusk
 """
 
+import collections
 import operator
 
 def get_key_with_highest_value(dictionary):
@@ -35,8 +36,12 @@ def get_key_with_highest_value(dictionary):
         
     Returns:
       key:
-        The key with the highest value.
+        The key with the highest value.  Returns None if the dictionary 
+        is empty.
     """
+    if len(dictionary) == 0:
+        return None
+    
     return max(dictionary.iteritems(), key=operator.itemgetter(1))[0]
 
 def are_all_equal(iterable):
@@ -53,3 +58,21 @@ def are_all_equal(iterable):
         iterable is empty.
     """
     return len(set(iterable)) <= 1
+
+def get_most_common(iterable):
+    """
+    Finds the item which occurs most often in a collection of values.
+    
+    Args:
+      iterable: iterator
+        The items which will be searched to find the most common.
+        
+    Returns:
+      most_common: 
+        The most common item in the collection.  Ties are broken arbitrarily.
+    """
+    counts = collections.defaultdict(int)
+    for item in iterable:
+        counts[item] += 1
+    
+    return get_key_with_highest_value(counts)
