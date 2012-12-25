@@ -354,6 +354,22 @@ class DataSetTest(base_tests.BaseDataSetTest):
         assert_that(name_value_counts, 
                     equals_series({"Jim": 1, "John": 1, "Jack": 1}))
     
+    def test_get_values(self):
+        df = pd.DataFrame([["Jim", 19, 180], ["John", 18, 177], 
+                           ["Jack", 19, 185]], 
+                          columns=["name", "age", "height"])
+        dataset = DataSet(df)
+        
+        age_values = dataset.get_feature_values("age")
+        self.assertEqual(len(age_values), 2)
+        self.assertTrue(19 in age_values)
+        self.assertTrue(18 in age_values)
+        
+        height_values = dataset.get_feature_values("height")
+        self.assertTrue(180 in height_values)
+        self.assertTrue(185 in height_values)
+        self.assertTrue(177 in height_values)
+        
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

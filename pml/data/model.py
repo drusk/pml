@@ -218,10 +218,28 @@ class DataSet(object):
         else:
             return self.labels.take(indices)
     
+    def get_feature_values(self, feature):
+        """
+        Retrieves the set of values for a given feature.
+        
+        Args:
+          feature: string
+            The feature whose unique values will be retrieved.
+            
+        Returns:
+          value_set: set
+            The set of unique values for a feature.
+        """
+        return set(self.get_feature_value_counts(feature).index)
+    
     def get_feature_value_counts(self, feature):
         """
         Count the number of occurrences of each value of a given feature in 
         the data set.
+        
+        Args:
+          feature: string
+            The feature whose values will be counted.
         
         Returns:
           value_counts: pandas.Series
