@@ -24,34 +24,71 @@ Implements the ID3 decision tree algorithm.
 """
 
 from pml.supervised.decision_trees import info_gain
+from pml.utils.collection_utils import (get_key_with_highest_value, 
+                                        get_most_common)
 
-from pml.utils.collection_utils import get_key_with_highest_value
+def build_tree(dataset):
+    """
+    Builds the decision tree for a data set using the ID3 algorithm.
+    
+    Args:
+      dataset: model.DataSet
+        The data for which the decision tree will be built.
+    
+    Return:
+      tree: dictionary
+        The decision tree stored as a dictionary of dictionaries.
+        
+        For example, a data set with dogs, cats and birds and features 
+        "num_legs" and "barks" might have a tree like follows:
+        
+        {
+          "num_legs": {
+            4: {
+              "barks": {
+                True: "dog",
+                False: "cat"
+              }
+            2: "bird"
+        }
+    """
+    label_set = set(dataset.get_labels())
+    if len(label_set) == 1:
+        # All remaining samples have the same label, no need to split further
+        return label_set.pop()
+    
+    if len(dataset.feature_list()) == 0:
+        # No more features to split on
+        return get_most_common(dataset.get_labels())
 
-class ID3TreeBuilder(object):
+    # We can still split further
+    split_feature = choose_feature_to_split(dataset)
+    
+    tree = {split_feature: {}}
+    
+    for value in dataset.get_feature_values(split_feature):
+        subset = dataset.value_filter(
+                            split_feature, value).drop_column(split_feature)
+        tree[split_feature][value] = build_tree(subset)
+    
+    return tree
+
+def choose_feature_to_split(dataset):
     """
+    Choose the root to be the feature which has the highest information 
+    gain.
+    
+    Args:
+      dataset: model.DataSet
+        The data set being used to build the decision tree.
+        
+    Returns:
+      feature: string
+        The feature which should be the root.
     """
+    gains = {}
+    for feature in dataset.feature_list():
+        gains[feature] = info_gain(feature, dataset)
     
-    def __init__(self, training_set):
-        """
-        """
-        self.training_set = training_set
-        
-    def choose_root(self):
-        """
-        Choose the root to be the feature which has the highest information 
-        gain.
-    
-        Args:
-          dataset: model.DataSet
-            The data set being used to build the decision tree.
-        
-        Returns:
-          feature: string
-            The feature which should be the root.
-        """
-        gains = {}
-        for feature in self.training_set.feature_list():
-            gains[feature] = info_gain(feature, self.training_set)
-    
-        return get_key_with_highest_value(gains)
+    return get_key_with_highest_value(gains)
 

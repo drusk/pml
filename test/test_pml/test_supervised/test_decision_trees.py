@@ -31,7 +31,7 @@ import unittest
 import pandas as pd
 
 from pml.supervised.decision_trees import entropy, info_gain
-from pml.supervised.id3 import ID3TreeBuilder
+from pml.supervised import id3
 from pml.data.model import DataSet
 from pml.data.loader import load
 
@@ -65,11 +65,28 @@ class DecisionTreesTest(base_tests.BaseFileLoadingTest):
         dataset = self.create_example_dataset()
         self.assertAlmostEqual(info_gain("A", dataset), 0.311, places=3)
     
-    def test_id3_choose_root(self):
+    def test_id3_choose_feature_to_split(self):
         data = load(self.relative_to_base("/datasets/weekends.data"))
-        tree_builder = ID3TreeBuilder(data)
-        root = tree_builder.choose_root()
+        root = id3.choose_feature_to_split(data)
         self.assertEqual(root, "weather")
+    
+    def test_id3_build_tree_marine_animals(self):
+        dataset = load(self.relative_to_base("/datasets/marine_animal.data"))
+        tree = id3.build_tree(dataset)
+        
+        self.assertDictEqual(
+                tree,
+                {"no_surfacing": {
+                    False: False,
+                    True: {
+                        "has_flippers": {
+                            False: False, 
+                            True: True           
+                        }
+                    }
+                 }
+                }
+        )
     
 
 if __name__ == "__main__":
