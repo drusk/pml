@@ -60,6 +60,12 @@ class DataSetTest(base_tests.BaseDataSetTest):
         assert_that(original, equals_dataset([[1, 2, 3], [4, 5, 6], 
                                               [7, 8, 9]]))
         
+    def test_drop_column_keeps_labels(self):
+        original = self.create_dataset(labels=["cat", "dog", "bird"],
+                                       num_features=3)
+        filtered = original.drop_column(1)
+        assert_that(filtered.get_labels(), contains("cat", "dog", "bird"))
+        
     def test_get_column(self):
         dataset = DataSet([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
         column1 = dataset.get_column(1)

@@ -377,7 +377,8 @@ class DataSet(object):
           a new DataSet with the specified column removed.  The original 
           DataSet remains unaltered.
         """
-        return DataSet(self._dataframe.drop(index, axis=1))
+        return DataSet(self._dataframe.drop(index, axis=1), 
+                       labels=self.labels)
 
     def get_column(self, index):
         """

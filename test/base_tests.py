@@ -62,7 +62,7 @@ class BaseDataSetTest(unittest.TestCase):
     A test case class which has methods for creating test DataSets.
     """
     
-    def create_dataset(self, labels=None, sample_ids=None):
+    def create_dataset(self, labels=None, sample_ids=None, num_features=3):
         """
         Used to create a DataSet for testing purposes with optional labels 
         and sample_ids.  Sample ids apply to the data generated, not the 
@@ -73,7 +73,6 @@ class BaseDataSetTest(unittest.TestCase):
             raise ValueError("Labels and sample ids have inconsistent length.")
 
         # default size if optional parameters not provided
-        num_features = 3
         num_samples = 3
         
         if labels is not None:
