@@ -22,6 +22,8 @@ Unit tests for decision_trees module.
 
 Examples from:
 http://www.doc.ic.ac.uk/~sgc/teaching/pre2012/v231/lecture11.html
+and
+http://www.cs.cmu.edu/afs/cs.cmu.edu/project/theo-20/www/mlbook/ch3.pdf
 
 NOTE: weekends.data has been modified slightly: w5 parents switched to 'yes'
 in order to make money unambiguously the best choice for splitting after 
@@ -120,6 +122,30 @@ class DecisionTreesTest(base_tests.BaseFileLoadingTest):
                         "money": {
                             "poor": "cinema",
                             "rich": "stay in"
+                        }
+                    }
+                }}
+        )
+        
+    def test_id3_build_tree_play_tennis(self):
+        dataset = load(self.relative_to_base("/datasets/play_tennis.data"),
+                       delimiter=" ")
+        tree = id3.build_tree(dataset)
+        
+        self.assertDictEqual(
+                tree,
+                {"Outlook": {
+                    "Sunny": {
+                        "Humidity": {
+                            "High": False,
+                            "Normal": True
+                        }
+                    },
+                    "Overcast": True,
+                    "Rain": {
+                        "Wind": {
+                            "Strong": False,
+                            "Weak": True
                         }
                     }
                 }}
