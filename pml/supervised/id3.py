@@ -23,7 +23,7 @@ Implements the ID3 decision tree algorithm.
 @author: drusk
 """
 
-from pml.supervised.decision_trees import info_gain
+from pml.tools.info_theory import info_gain
 from pml.utils.collection_utils import (get_key_with_highest_value, 
                                         get_most_common)
 
