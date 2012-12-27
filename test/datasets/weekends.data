@@ -3,7 +3,7 @@ w1,sunny,yes,rich,cinema
 w2,sunny,no,rich,tennis
 w3,windy,yes,rich,cinema
 w4,rainy,yes,poor,cinema
-w5,rainy,no,rich,stay in
+w5,rainy,yes,rich,stay in
 w6,rainy,yes,poor,cinema
 w7,windy,no,poor,cinema
 w8,windy,no,rich,shopping

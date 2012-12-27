@@ -23,6 +23,10 @@ Unit tests for decision_trees module.
 Examples from:
 http://www.doc.ic.ac.uk/~sgc/teaching/pre2012/v231/lecture11.html
 
+NOTE: weekends.data has been modified slightly: w5 parents switched to 'yes'
+in order to make money unambiguously the best choice for splitting after 
+weather on the rainy branch.
+
 @author: drusk
 """
 
@@ -86,6 +90,39 @@ class DecisionTreesTest(base_tests.BaseFileLoadingTest):
                     }
                  }
                 }
+        )
+        
+    def test_id3_build_tree_weekends(self):
+        dataset = load(self.relative_to_base("/datasets/weekends.data"))
+        tree = id3.build_tree(dataset)
+        
+        self.assertDictEqual(
+                tree, 
+                {"weather": {
+                    "sunny": {
+                        "parents": {
+                            True: "cinema",
+                            False: "tennis"
+                        }
+                    },
+                    "windy": {
+                        "parents": {
+                            True: "cinema",
+                            False: {
+                                "money": {
+                                    "rich": "shopping",
+                                    "poor": "cinema"
+                                }
+                            }
+                        }
+                    },
+                    "rainy": {
+                        "money": {
+                            "poor": "cinema",
+                            "rich": "stay in"
+                        }
+                    }
+                }}
         )
     
 
