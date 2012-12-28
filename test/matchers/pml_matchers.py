@@ -70,20 +70,27 @@ class IsDataSet(BaseMatcher):
 
 class IsTree(BaseMatcher):
     """
+    Used for asserting that a tree data structure has the expected contents.
     """
     
     def __init__(self, expected_dict):
         """
+        Creates a new matcher given an expected input.
+        
+        Args:
+          expected_dict: dictionary
+            The tree stored as a dictionary of dictionaries.
         """
         self.expected_dict = expected_dict
     
     def _matches(self, actual_tree):
-        """
-        """
-        return self._match_recursively(actual_tree.get_root_node(), self.expected_dict)
+        return self._match_recursively(actual_tree.get_root_node(), 
+                                       self.expected_dict)
     
     def _match_recursively(self, actual_node, expected):
         """
+        Performs the actual checks that the tree contents are as expected.  
+        It is called recursively for each node in the tree.
         """
         if not isinstance(expected, dict) and actual_node.is_leaf():
             # Matched down this branch
@@ -111,7 +118,7 @@ class IsTree(BaseMatcher):
             if not self._match_recursively(child_node, expected_subtree):
                 return False
         
-        # All branches matched
+        # All branches from the current node matched
         return True
         
     def describe_to(self, description):
@@ -150,5 +157,25 @@ def equals_dataset(as_list, places=None):
 
 def equals_tree(expected_dict):
     """
+    Compares a Tree object to the given expected dictionary representation.
+    
+    Args:
+      expected_dict: dictionary
+        The tree stored as a dictionary of dictionaries.
+            
+        For example, a data set with dogs, cats and birds and features 
+        "num_legs" and "barks" might have a tree like follows:
+        
+        {
+          "num_legs": {
+            4: {
+              "barks": {
+                True: "dog",
+                False: "cat"
+              }
+            },
+            2: "bird"
+          }
+        }
     """
     return IsTree(expected_dict)
