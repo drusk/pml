@@ -28,16 +28,38 @@ from pml.supervised import id3
 
 class DecisionTree(AbstractClassifier):
     """
+    Decision tree classifier.
+    
+    Builds a tree which is like a flow chart.  It allows a decision to be 
+    reached by checking the values for various features and following the 
+    appropriate branches until a destination is reached.
+        
+    In addition to being useful as a classifier, the structure of the 
+    decision tree can lend insight into the data. 
     """
     
     def __init__(self, training_set):
         """
+        Constructs a new decision tree.
+        
+        Args:
+          training_set: model.DataSet
+            The training data to use when building the decision tree.
         """
         self.training_set = training_set
         self._tree = id3.build_tree(training_set)
     
     def _classify(self, sample):
         """
+        Predicts a sample's classification based on the decision tree that 
+        was built from the training data.
+        
+        Args:
+          sample: 
+            The sample or observation to be classified.
+          
+        Returns:
+          The sample's classification.
         """
         node = self._tree.get_root_node()
         while not node.is_leaf():
