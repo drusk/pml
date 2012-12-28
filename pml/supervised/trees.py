@@ -39,6 +39,9 @@ class Tree(object):
         """
         self._root_node = root_node
         
+        self._all_nodes = root_node.get_all_descendants()
+        self._all_nodes.append(root_node)
+        
     def get_root_node(self):
         """
         Retrieves the root node of the tree.  This node will have only 
@@ -49,6 +52,33 @@ class Tree(object):
             The root node.
         """
         return self._root_node
+    
+    def get_leaves(self):
+        """
+        Retrieves all leaf nodes from the tree.
+        
+        Returns:
+          leaves: list(Node)
+        """
+        return [node for node in self._all_nodes if node.is_leaf()]
+    
+    def get_num_leaves(self):
+        """
+        Counts the number of leaves in the tree.
+        
+        Returns:
+          num_leaves: int
+        """
+        return len(self.get_leaves())
+    
+    def get_depth(self):
+        """
+        Calculates the number of nodes on the longest path from root to leaf.
+        
+        Returns:
+          depth: int
+        """
+        return self._root_node.get_height() + 1
     
 
 class Node(object):
@@ -133,5 +163,40 @@ class Node(object):
             True if this node has no children.
         """
         return len(self._children) == 0
+    
+    def get_height(self):
+        """
+        Determines the node's height, i.e. the maximum number of edges 
+        between it and a leaf node.
+        
+        Returns:
+          height: int
+        """
+        max_distance = 0
+        
+        for branch in self.get_branches():
+            distance = self.get_child(branch).get_height() + 1
+            if distance > max_distance:
+                max_distance = distance
+        
+        return max_distance
+    
+    def get_all_descendants(self):
+        """
+        Retrieves all descendants of the current node, i.e. nodes which can 
+        eventually be reached by following outgoing branches from the current 
+        node.
+        
+        Returns:
+          descendants: list(Node)
+        """
+        descendants = []
+        
+        for branch in self.get_branches():
+            child_node = self.get_child(branch)
+            descendants.append(child_node)
+            descendants.extend(child_node.get_all_descendants())
+        
+        return descendants
     
     
