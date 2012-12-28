@@ -23,6 +23,7 @@ Implements the ID3 decision tree algorithm.
 @author: drusk
 """
 
+from pml.supervised.trees import Node, Tree
 from pml.tools.info_theory import info_gain
 from pml.utils.collection_utils import (get_key_with_highest_value, 
                                         get_most_common)
@@ -37,9 +38,15 @@ def build_tree(dataset):
     
     Return:
       tree: dictionary
-        The decision tree stored as a dictionary of dictionaries.
+        The decision tget_most_common(dataset.get_labels())ree stored as a dictionary of dictionaries.
+        
+        For example, a daree stored as a dictionary of dictionaries.
         
         For example, a data set with dogs, cats and birds and features 
+        "num_legs" and "barks" might have a tree like follows:
+        
+        {
+          "num_legs": {ta set with dogs, cats and birds and features 
         "num_legs" and "barks" might have a tree like follows:
         
         {
@@ -52,26 +59,35 @@ def build_tree(dataset):
             2: "bird"
         }
     """
+    return Tree(_build_tree_recursively(dataset))
+
+def _build_tree_recursively(dataset):
+    """
+    """
     label_set = set(dataset.get_labels())
     if len(label_set) == 1:
         # All remaining samples have the same label, no need to split further
-        return label_set.pop()
+#        return label_set.pop()
+        return Node(label_set.pop())
     
     if len(dataset.feature_list()) == 0:
         # No more features to split on
-        return get_most_common(dataset.get_labels())
+#        return get_most_common(dataset.get_labels())
+        return Node(get_most_common(dataset.get_labels()))
 
     # We can still split further
     split_feature = choose_feature_to_split(dataset)
     
-    tree = {split_feature: {}}
+#    tree = {split_feature: {}}
+    node = Node(split_feature)
     
     for value in dataset.get_feature_values(split_feature):
         subset = dataset.value_filter(
                             split_feature, value).drop_column(split_feature)
-        tree[split_feature][value] = build_tree(subset)
+        node.add_child(value, _build_tree_recursively(subset))
+#        tree[split_feature][value] = build_tree(subset)
     
-    return tree
+    return node
 
 def choose_feature_to_split(dataset):
     """

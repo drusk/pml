@@ -34,10 +34,13 @@ weather on the rainy branch.
 
 import unittest
 
+from hamcrest import assert_that
+
 from pml.supervised import id3
 from pml.data.loader import load
 
 from test import base_tests
+from test.matchers.pml_matchers import equals_tree
 
 class DecisionTreesTest(base_tests.BaseFileLoadingTest):
 
@@ -50,8 +53,8 @@ class DecisionTreesTest(base_tests.BaseFileLoadingTest):
         dataset = load(self.relative_to_base("/datasets/marine_animal.data"))
         tree = id3.build_tree(dataset)
         
-        self.assertDictEqual(
-                tree,
+        assert_that(tree,
+            equals_tree(
                 {"no_surfacing": {
                     False: False,
                     True: {
@@ -62,14 +65,15 @@ class DecisionTreesTest(base_tests.BaseFileLoadingTest):
                     }
                  }
                 }
+            )
         )
         
     def test_id3_build_tree_weekends(self):
         dataset = load(self.relative_to_base("/datasets/weekends.data"))
         tree = id3.build_tree(dataset)
         
-        self.assertDictEqual(
-                tree, 
+        assert_that(tree,
+            equals_tree( 
                 {"weather": {
                     "sunny": {
                         "parents": {
@@ -95,6 +99,7 @@ class DecisionTreesTest(base_tests.BaseFileLoadingTest):
                         }
                     }
                 }}
+            )
         )
         
     def test_id3_build_tree_play_tennis(self):
@@ -102,8 +107,8 @@ class DecisionTreesTest(base_tests.BaseFileLoadingTest):
                        delimiter=" ")
         tree = id3.build_tree(dataset)
         
-        self.assertDictEqual(
-                tree,
+        assert_that(tree,
+            equals_tree(
                 {"Outlook": {
                     "Sunny": {
                         "Humidity": {
@@ -119,8 +124,9 @@ class DecisionTreesTest(base_tests.BaseFileLoadingTest):
                         }
                     }
                 }}
+            )
         )
-    
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
