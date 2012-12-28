@@ -40,9 +40,11 @@ from hamcrest import assert_that
 from pml.supervised import id3
 from pml.supervised.decision_trees import DecisionTree
 from pml.data.loader import load
+from pml.data.model import DataSet
 
 from test import base_tests
 from test.matchers.pml_matchers import equals_tree
+from test.matchers.pandas_matchers import equals_series
 
 class DecisionTreesTest(base_tests.BaseFileLoadingTest):
 
@@ -144,6 +146,17 @@ class DecisionTreesTest(base_tests.BaseFileLoadingTest):
         sample = pd.Series(["windy", False, "rich"], 
                            index=['weather', 'parents', 'money'])
         self.assertEqual(classifier.classify(sample), "shopping")
+
+    def test_classify_all_weekends(self):
+        training = load(self.relative_to_base("/datasets/weekends.data"))
+        classifier = DecisionTree(training)
+        index = ['weather', 'parents', 'money']
+        sample_0 = pd.Series(["windy", False, "rich"], index=index)
+        sample_1 = pd.Series(["sunny", True, "rich"], index=index)
+        results = classifier.classify_all(
+                        DataSet(pd.DataFrame([sample_0, sample_1])))
+        assert_that(results.get_classifications(), 
+                    equals_series({0: "shopping", 1: "cinema"}))
 
 
 if __name__ == "__main__":
