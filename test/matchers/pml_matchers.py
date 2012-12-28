@@ -68,6 +68,57 @@ class IsDataSet(BaseMatcher):
         description.append_text(self.as_list.__str__())
     
 
+class IsTree(BaseMatcher):
+    """
+    """
+    
+    def __init__(self, expected_dict):
+        """
+        """
+        self.expected_dict = expected_dict
+    
+    def _matches(self, actual_tree):
+        """
+        """
+        return self._match_recursively(actual_tree.get_root_node(), self.expected_dict)
+    
+    def _match_recursively(self, actual_node, expected):
+        """
+        """
+        if not isinstance(expected, dict) and actual_node.is_leaf():
+            # Matched down this branch
+            return actual_node.get_value() == expected
+        
+        node_val = actual_node.get_value()
+        # Check current root's value
+        if (len(expected) != 1 or 
+            node_val != expected.keys()[0]):
+            return False
+
+        # Check there are the right number of children
+        if (len(expected[node_val]) != 
+            len(actual_node.get_branches())):
+            return False
+        
+        # Recursively check each branch
+        for branch in actual_node.get_branches():
+            child_node = actual_node.get_child(branch)
+            try:
+                expected_subtree = expected[node_val][branch]
+            except KeyError:
+                return False
+
+            if not self._match_recursively(child_node, expected_subtree):
+                return False
+        
+        # All branches matched
+        return True
+        
+    def describe_to(self, description):
+        description.append_text("Tree with form:")
+        description.append_text(self.expected_dict)
+    
+
 def lists_match(list1, list2, places=None):
     """
     Compares two lists and returns True if they are exactly the same, False 
@@ -96,3 +147,8 @@ def equals_dataset(as_list, places=None):
       
     """
     return IsDataSet(as_list, places=places)
+
+def equals_tree(expected_dict):
+    """
+    """
+    return IsTree(expected_dict)

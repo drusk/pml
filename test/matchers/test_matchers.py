@@ -26,8 +26,11 @@ Unit tests for matcher module used for testing.
 import unittest
 
 import numpy as np
+from hamcrest import assert_that
 
 from test.matchers import pml_matchers
+from test.matchers.pml_matchers import equals_tree
+from pml.supervised.trees import Node, Tree
 
 class MatchersTest(unittest.TestCase):
 
@@ -45,6 +48,98 @@ class MatchersTest(unittest.TestCase):
         list1 = [1.101, 2.202, 3.303]
         list2 = [1.102, 2.199, 3.301]
         self.assertTrue(pml_matchers.lists_match(list1, list2, places=2))
+
+    def create_tree_tennis(self):
+        """
+        Creates a tree matching the play_tennis.data data's decision tree.
+        """
+        root_node = Node("Outlook")
+        
+        humidity_node = Node("Humidity")
+        high_humidity_node = Node("No")
+        normal_humidity_node = Node("Yes")
+        humidity_node.add_child("High", high_humidity_node)
+        humidity_node.add_child("Normal", normal_humidity_node)
+        root_node.add_child("Sunny", humidity_node)
+        
+        overcast_node = Node("Yes")
+        root_node.add_child("Overcast", overcast_node)
+        
+        wind_node = Node("Wind")
+        strong_wind_node = Node("No")
+        weak_wind_node = Node("Yes")
+        wind_node.add_child("Strong", strong_wind_node)
+        wind_node.add_child("Weak", weak_wind_node)
+        root_node.add_child("Rain", wind_node)
+        
+        return Tree(root_node)
+
+    def test_equals_tree(self):
+        assert_that(self.create_tree_tennis(), 
+            equals_tree(
+                {"Outlook": {
+                    "Sunny": {
+                        "Humidity": {
+                            "High": "No",
+                            "Normal": "Yes"
+                        }
+                    },
+                    "Overcast": "Yes",
+                    "Rain": {
+                        "Wind": {
+                            "Strong": "No",
+                            "Weak": "Yes"
+                        }
+                    }
+                }}
+            )
+        )
+
+    def test_equals_tree_wrong_leaf_val(self):
+        """
+        Test that the matcher picks up on the expected value not being right.
+        """
+        matcher = pml_matchers.IsTree(
+            {"Outlook": {
+                    "Sunny": {
+                        "Humidity": {
+                            "High": "No",
+                            "Normal": "Yes"
+                        }
+                    },
+                    "Overcast": "Yes",
+                    "Rain": {
+                        "Wind": {
+                            "Strong": "Yes", # Changed
+                            "Weak": "Yes"
+                        }
+                    }
+                }}
+        )
+        self.assertFalse(matcher.matches(self.create_tree_tennis()))
+        
+    def test_equals_tree_wrong_branch_val(self):
+        """
+        Test that the matcher picks up on the expected value not being right.
+        """
+        matcher = pml_matchers.IsTree(
+            {"Outlook": {
+                    "Sunny": {
+                        "Humidity": {
+                            "High": "No",
+                            "Normal": "Yes"
+                        }
+                    },
+                    "Overcastt": "Yes", # Changed
+                    "Rain": {
+                        "Wind": {
+                            "Strong": "No",
+                            "Weak": "Yes"
+                        }
+                    }
+                }}
+        )
+        self.assertFalse(matcher.matches(self.create_tree_tennis()))
 
 
 if __name__ == "__main__":
