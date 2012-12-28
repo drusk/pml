@@ -34,9 +34,11 @@ weather on the rainy branch.
 
 import unittest
 
+import pandas as pd
 from hamcrest import assert_that
 
 from pml.supervised import id3
+from pml.supervised.decision_trees import DecisionTree
 from pml.data.loader import load
 
 from test import base_tests
@@ -126,6 +128,22 @@ class DecisionTreesTest(base_tests.BaseFileLoadingTest):
                 }}
             )
         )
+        
+    def test_classify_play_tennis(self):
+        training = load(self.relative_to_base("/datasets/play_tennis.data"),
+                        delimiter=" ")
+        classifier = DecisionTree(training)
+        sample = pd.Series(["Rain", "Cool", "High", "Strong"], 
+                           index=['Outlook', 'Temperature', 'Humidity', 
+                                  'Wind'])
+        self.assertEqual(classifier.classify(sample), False)
+        
+    def test_classify_weekends(self):
+        training = load(self.relative_to_base("/datasets/weekends.data"))
+        classifier = DecisionTree(training)
+        sample = pd.Series(["windy", False, "rich"], 
+                           index=['weather', 'parents', 'money'])
+        self.assertEqual(classifier.classify(sample), "shopping")
 
 
 if __name__ == "__main__":

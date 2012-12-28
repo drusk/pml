@@ -23,4 +23,27 @@ Decision trees classification algorithm.
 @author: drusk
 """
 
+from pml.supervised.classifiers import AbstractClassifier
+from pml.supervised import id3
+
+class DecisionTree(AbstractClassifier):
+    """
+    """
+    
+    def __init__(self, training_set):
+        """
+        """
+        self.training_set = training_set
+        self._tree = id3.build_tree(training_set)
+    
+    def _classify(self, sample):
+        """
+        """
+        node = self._tree.get_root_node()
+        while not node.is_leaf():
+            feature = node.get_value()
+            branch = sample[feature]
+            node = node.get_child(branch)
+        
+        return node.get_value()
 
