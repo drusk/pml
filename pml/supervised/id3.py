@@ -37,55 +37,45 @@ def build_tree(dataset):
         The data for which the decision tree will be built.
     
     Return:
-      tree: dictionary
-        The decision tget_most_common(dataset.get_labels())ree stored as a dictionary of dictionaries.
-        
-        For example, a daree stored as a dictionary of dictionaries.
-        
-        For example, a data set with dogs, cats and birds and features 
-        "num_legs" and "barks" might have a tree like follows:
-        
-        {
-          "num_legs": {ta set with dogs, cats and birds and features 
-        "num_legs" and "barks" might have a tree like follows:
-        
-        {
-          "num_legs": {
-            4: {
-              "barks": {
-                True: "dog",
-                False: "cat"
-              }
-            2: "bird"
-        }
+      tree: Tree
+        The decision tree that was built.
     """
     return Tree(_build_tree_recursively(dataset))
 
 def _build_tree_recursively(dataset):
     """
+    Private function used to build the decision tree in a recursive fashion.
+    
+    Args:
+      dataset: model.DataSet
+        The data at the current level of the tree.  Lower levels of the tree 
+        have filtered subsets of the original data set.
+    
+    Returns:
+      current_root: Node
+        The node which is the root of the level being processed.  For 
+        example, on the first/outermost call to this function the root 
+        node will be returned.  Subsequent calls will return the various 
+        child nodes.
     """
     label_set = set(dataset.get_labels())
     if len(label_set) == 1:
         # All remaining samples have the same label, no need to split further
-#        return label_set.pop()
         return Node(label_set.pop())
     
     if len(dataset.feature_list()) == 0:
         # No more features to split on
-#        return get_most_common(dataset.get_labels())
         return Node(get_most_common(dataset.get_labels()))
 
     # We can still split further
     split_feature = choose_feature_to_split(dataset)
     
-#    tree = {split_feature: {}}
     node = Node(split_feature)
     
     for value in dataset.get_feature_values(split_feature):
         subset = dataset.value_filter(
                             split_feature, value).drop_column(split_feature)
         node.add_child(value, _build_tree_recursively(subset))
-#        tree[split_feature][value] = build_tree(subset)
     
     return node
 
