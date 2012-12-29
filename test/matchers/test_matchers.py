@@ -30,7 +30,7 @@ from hamcrest import assert_that
 
 from test.matchers import pml_matchers
 from test.matchers.pml_matchers import equals_tree
-from pml.supervised.trees import Node, Tree
+from pml.supervised.decision_trees.trees import Node, Tree
 
 class MatchersTest(unittest.TestCase):
 

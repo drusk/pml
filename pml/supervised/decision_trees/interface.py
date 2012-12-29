@@ -24,8 +24,8 @@ Decision trees classification algorithm.
 """
 
 from pml.supervised.classifiers import AbstractClassifier
-from pml.supervised import id3
-from pml.supervised.tree_plotting import MatplotlibAnnotationTreePlotter
+from pml.supervised.decision_trees import id3
+from pml.supervised.decision_trees.tree_plotting import MatplotlibAnnotationTreePlotter
 
 class DecisionTree(AbstractClassifier):
     """

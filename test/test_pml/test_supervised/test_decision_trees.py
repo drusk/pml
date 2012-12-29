@@ -37,7 +37,7 @@ import unittest
 import pandas as pd
 from hamcrest import assert_that
 
-from pml.supervised import id3
+from pml.supervised.decision_trees import id3
 from pml.supervised.decision_trees import DecisionTree
 from pml.data.loader import load
 from pml.data.model import DataSet

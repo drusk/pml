@@ -25,7 +25,7 @@ Plots decision trees.
 
 import matplotlib.pyplot as plt
 
-from pml.supervised.trees import Tree
+from pml.supervised.decision_trees.trees import Tree
 
 class MatplotlibAnnotationTreePlotter(object):
     """

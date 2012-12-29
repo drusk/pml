@@ -27,7 +27,7 @@ import unittest
 
 from hamcrest import assert_that, contains_inanyorder
 
-from pml.supervised.trees import Tree, Node
+from pml.supervised.decision_trees.trees import Tree, Node
 
 class TreesTest(unittest.TestCase):
 
