@@ -33,10 +33,19 @@ from IPython.config.loader import Config
 from IPython.frontend.terminal.embed import InteractiveShellEmbed
 
 from pml.interactive.util import no_stdout
+from pml.interactive.tutorial import begin_tutorial
 
 # Import pml library.  These imports will be available in the shell that 
 # is created.
 from pml.api import *
+
+def magic_tutorial(self, arg):
+    """
+    The function called when the 'tutorial' magic is executed.  IPython 
+    requires this function to accept two parameters, even though they are 
+    not used in this instance.
+    """
+    begin_tutorial()
 
 def magic_docs(self, arg):
     """
@@ -48,13 +57,13 @@ def magic_docs(self, arg):
         webbrowser.open("http://pml.readthedocs.org/en/latest/index.html")
 
 def setup_shell():
-    banner = "+-----------------------------------------------------------+\n"
+    banner  = "+----------------------------------------------------------------------+\n"
     banner += " PML Shell - built on IPython.\n"
-    banner += "+-----------------------------------------------------------+\n"
+    banner += "+----------------------------------------------------------------------+\n"
     banner += "Commands: \n"
+    banner += "\t'tutorial' will begin the interactive tutorial.\n"
+    banner += "\t'docs' will open up the online documentation in a web browser.\n"
     banner += "\t'exit', 'quit' or press 'CTRL + D' to exit the shell.\n"
-    banner += "\t'docs' will open up the online documentation in a web \n"
-    banner += "\tbrowser\n"
 
     exit_message = "\nExiting PML shell, good bye!"
     
@@ -65,7 +74,10 @@ def setup_shell():
     
     shell = InteractiveShellEmbed(config=config, banner1=banner, 
                                   exit_msg=exit_message)
+    
+    shell.define_magic("tutorial", magic_tutorial)
     shell.define_magic("docs", magic_docs)
+    
     return shell
 
 def run():
