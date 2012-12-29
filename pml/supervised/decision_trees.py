@@ -25,6 +25,7 @@ Decision trees classification algorithm.
 
 from pml.supervised.classifiers import AbstractClassifier
 from pml.supervised import id3
+from pml.supervised.tree_plotting import MatplotlibAnnotationTreePlotter
 
 class DecisionTree(AbstractClassifier):
     """
@@ -48,6 +49,7 @@ class DecisionTree(AbstractClassifier):
         """
         self.training_set = training_set
         self._tree = id3.build_tree(training_set)
+        self._plotter = MatplotlibAnnotationTreePlotter(self._tree)
     
     def _classify(self, sample):
         """
@@ -68,4 +70,13 @@ class DecisionTree(AbstractClassifier):
             node = node.get_child(branch)
         
         return node.get_value()
+
+    def plot(self):
+        """
+        Generates a plot of the decision tree to visualize its structure.
+        
+        Returns:
+          void
+        """
+        self._plotter.plot()
 
