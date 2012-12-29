@@ -31,7 +31,7 @@ setup(
       author="David Rusk",
       author_email="drusk@uvic.ca",
       packages=["pml", "pml.interactive", "pml.data", "pml.supervised", 
-                "pml.unsupervised", "pml.utils"],
+                "pml.unsupervised", "pml.tools", "pml.utils"],
       scripts=["scripts/pml"],
       url="http://github.com/drusk/pml",
       license="LICENSE",

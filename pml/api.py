@@ -29,6 +29,7 @@ from pml.data.loader import load
 from pml.data.model import DataSet, as_dataset
 from pml.supervised.knn import Knn
 from pml.supervised.naive_bayes import NaiveBayes
+from pml.supervised.decision_trees import DecisionTree
 from pml.unsupervised.clustering import kmeans
 from pml.unsupervised.pca import pca, remove_means, recommend_num_components, \
     get_pct_variance_per_principal_component, \
