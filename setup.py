@@ -27,7 +27,7 @@ from distutils.core import setup
 
 setup(
       name="pml",
-      version="0.1",
+      version="0.0.1",
       author="David Rusk",
       author_email="drusk@uvic.ca",
       packages=["pml", "pml.interactive", "pml.data", "pml.supervised", 
