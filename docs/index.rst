@@ -14,8 +14,11 @@ Contents:
    classifiers
    clustering
    collection_utils
+   decision_trees
    distance_utils
    errors
+   id3
+   info_theory
    knn
    loader
    model
@@ -23,6 +26,8 @@ Contents:
    pandas_util
    pca
    plotting
+   tree_plotting
+   trees
 
 
 Indices and tables
