@@ -23,10 +23,25 @@ An interactive tutorial of pml's basic functionality.
 @author: drusk
 """
 
+import platform
+from subprocess import call
+
+def clear_shell():
+    """
+    Clears the shell's screen.
+    """
+    if platform.system() == "Windows":
+        # shell=True for reason in this stackoverflow answer
+        # http://stackoverflow.com/questions/3022013/windows-cant-find-the-file-on-subprocess-call
+        call("cls", shell=True)
+    else:
+        call("clear")
+
 def begin_tutorial():
     """
     Begin the tutorial.
     """
+    clear_shell()
     print "+----------------------------+"
     print " Welcome to the PML tutorial."
     print "+----------------------------+"
@@ -37,7 +52,15 @@ def begin_tutorial():
     
     raw_input("[Press enter to continue]")
     
+    tutorial_load()
+    
     end_tutorial()
+
+def tutorial_load():
+    """
+    Tutorial for loading data.
+    """
+    
 
 def end_tutorial():
     """
