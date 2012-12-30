@@ -23,9 +23,12 @@ Utilities for loading data sets.
 @author: drusk
 """
 
+import os.path
+
 import pandas as pd
 
 from pml.data import model
+from pml.interactive import util as shell_util
 
 def load(path, has_ids=True, has_header=True, has_labels=True, delimiter=","):
     """
@@ -61,3 +64,35 @@ def load(path, has_ids=True, has_header=True, has_labels=True, delimiter=","):
     labels = dataframe.pop(dataframe.columns[-1]) if has_labels else None
 
     return model.DataSet(dataframe, labels=labels)
+
+def shell_load(path, has_ids=True, has_header=True, has_labels=True, delimiter=","):
+    """
+    Loads a data set from a delimited text file.  Will search through sample 
+    data sets.
+    
+    Args:
+      path: 
+        the path to the file containing the data set.
+      has_ids: boolean
+        set to False if the first column in the loaded dataset should not be 
+        interpreted as a feature instead of sample identifiers.  Defaults to 
+        True, i.e. first column are interpreted as sample identifiers.
+      has_header: boolean
+        set to False if the data being loaded does not have column headers on 
+        the first line.  Defaults to true.
+      has_labels: boolean
+        set to False if the data being loaded does not have classification 
+        labels for each sample.  Defaults to True.  The labels should be the 
+        last column in the dataset being loaded.
+      delimiter: string
+        the symbol used to separate columns in the file.  Default value is 
+        ','.  Hint: delimiter for tab-delimited files is '\t'.
+      
+    Returns:
+      A DataSet object.
+    """
+    if path in shell_util.list_samples():
+        path = os.path.join(shell_util.get_samples_basepath(), path)
+    
+    return load(path, has_ids=has_ids, has_header=has_header, 
+                has_labels=has_labels, delimiter=delimiter)

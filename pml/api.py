@@ -25,7 +25,7 @@ Defines pml's top-level namespace as intended for interactive use.
 
 # TODO automate this somehow?
 
-from pml.data.loader import load
+from pml.data.loader import shell_load as load
 from pml.data.model import DataSet, as_dataset
 from pml.supervised.knn import Knn
 from pml.supervised.naive_bayes import NaiveBayes
