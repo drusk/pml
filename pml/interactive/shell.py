@@ -72,17 +72,17 @@ def setup_shell():
     config.PromptManager.in_template = "pml:\\#> "
     config.PromptManager.out_template = "pml:\\#: "
     
-    shell = InteractiveShellEmbed(config=config, banner1=banner, 
-                                  exit_msg=exit_message)
+    pml_shell = InteractiveShellEmbed(config=config, banner1=banner, 
+                                      exit_msg=exit_message)
     
-    shell.define_magic("tutorial", magic_tutorial)
-    shell.define_magic("docs", magic_docs)
+    pml_shell.define_magic("tutorial", magic_tutorial)
+    pml_shell.define_magic("docs", magic_docs)
     
-    return shell
+    return pml_shell
 
 def run():
-    shell = setup_shell()
-    sys.exit(shell())
+    pml_shell = setup_shell()
+    sys.exit(pml_shell())
 
 if __name__ == "__main__":
     run()
