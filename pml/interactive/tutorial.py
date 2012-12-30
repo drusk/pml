@@ -17,6 +17,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
 # IN THE SOFTWARE.
+from tornado.autoreload import wait
 """
 An interactive tutorial of pml's basic functionality.
 
@@ -115,6 +116,136 @@ def lesson_dataset_intro():
     print "\n"
     print "That completes the introductory lesson on DataSets."
     print "The next lesson will cover using classifiers."
+    
+    if not should_quit():
+        lesson_classifiers()
+
+def lesson_classifiers():
+    """
+    Lesson on using classifiers.
+    """
+    clear_shell()
+    print "Classifiers Lesson"
+    print "------------------"
+    print "This lesson teaches you how to create and use a classifier to predict"
+    print "information about samples."
+    
+    print ""
+    wait_for_enter_to_continue()
+     
+    print "\n"
+    print "Classifiers are an example of 'supervised learning'.  They need to be "
+    print "trained on example data before they can make predictions."
+    print "Therefore, lets start by loading a data set:"
+    
+    let_user_try("data = load(\"iris.csv\")")
+    
+    print "Type the data set's name to see summary information about it:"
+    
+    let_user_try("data")
+    
+    print "We can see that this data set has 150 samples."
+    print "We will use part of the data set as training examples, and part as test "
+    print "data to evaluate the effectiveness of the classifier:"
+    
+    let_user_try("training, test = data.split(0.7, random=True)")
+    
+    print "We have just split 70% of the samples into a 'training' data set and the "
+    print "remaining 30% into the 'test' data set.  Setting 'random=True' means the "
+    print "samples in the training and test set can come from anywhere in the original"
+    print "data set; they are not split sequentially.  This can give a better sampling "
+    print "of training data if the original data set had some order to it."
+    
+    print ""
+    wait_for_enter_to_continue()
+    
+    print "\n"
+    print "We can verify the splitting has occurred correctly by checking the summary "
+    print "information for each of the new data sets:"
+    
+    let_user_try("training")
+    
+    print "105 / 150 = 70% of the samples as expected."
+    
+    print "Now try:"
+    let_user_try("test")
+    
+    print "45 / 150 = 30%, accounting for the rest of the samples."
+    
+    print ""
+    wait_for_enter_to_continue()
+    print "\n"
+    
+    print "Additionally, the original data set had 3 classifications of samples in it."
+    print "The classifications were the species of the flower within the 'iris' genus."
+    print "We can see the breakdown of species within the training set by using:"
+    
+    let_user_try("training.get_label_value_counts()")
+    
+    print "Note that since the original data was split randomly, the number of samples "
+    print "in each class is also random.  The original data had a sequential 50-50-50 "
+    print "split."
+
+    print ""
+    wait_for_enter_to_continue()
+
+    print "\n"
+    print "Now that we have our data, we can build a classifier."
+    print "Selecting an appropriate classifier requires some knowledge about your data."
+    print "Our data is all numerical measurements related to features of flowers."
+    
+    print "For numerical data, the K-Nearest Neighbours classifier (Knn for short) is a"
+    print "good place to start.  It classifies new data by finding the 'k' most similar"
+    print "samples in the training data and checking their classifications."
+    
+    print "\n"
+    print "Lets create a Knn classifier with a k of 3."
+    
+    let_user_try("classifier = Knn(training, k=3)")
+    
+    print "Like with data sets, you can get some summary information about the "
+    print "classifier by simply typing its name at the prompt."
+    
+    let_user_try("classifier")
+    
+    print "We will start by classifying a single sample.  Select the sample with id 1"
+    print "from the original data set as follows:"
+    
+    let_user_try("sample = data.get_row(1)")
+    
+    print "Like with most objects in PML, you can see its properties by typing its "
+    print "name at the prompt:"
+    
+    let_user_try("sample")
+    
+    print "Use the Knn classifier to predict this sample's species:"
+    
+    let_user_try("classifier.classify(sample)")
+    
+    print "The correct answer is 'Iris-setosa'"
+    
+    wait_for_enter_to_continue()
+    
+    print "\n"
+    print "Next lets classify all of the samples in the 'test' data set."
+    
+    let_user_try("results = classifier.classify_all(test)")
+    
+    print "We can then check how well the classifier performed:"
+    
+    let_user_try("results.compute_accuracy()")
+    
+    print "\n"
+    print "This represents the percentage of samples which were assigned the same"
+    print "classification by the classifier as they were originally labelled with."
+    print "We can only compute this accuracy if the actual labels are known.  You "
+    print "will get a warning if you try it on an unlabelled data set."
+
+    print ""
+    wait_for_enter_to_continue()
+    
+    print "\n"
+    print "That completes the lesson on classifiers."
     
     wait_for_enter_to_continue()
 
