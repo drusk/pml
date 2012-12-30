@@ -27,6 +27,7 @@ silent-the-stdout-of-a-function-in-python-without-trashing-sys-stdout-and-restor
 @author: drusk
 """
 
+import os.path
 import sys
 import contextlib
 
@@ -49,4 +50,21 @@ def no_stdout():
     sys.stdout = FakeFile()
     yield
     sys.stdout = saved_stdout
+
+def get_samples_basepath():
+    """
+    Determines the absolute path to the directory containing sample data.
     
+    Returns:
+      basepath: string
+    """
+    return os.path.join(os.path.dirname(__file__), "sample_data")
+
+def list_samples():
+    """
+    Gets a list of the filenames of sample data sets.
+    
+    Returns:
+      sample_names: list
+    """
+    return os.listdir(get_samples_basepath())

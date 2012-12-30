@@ -28,15 +28,24 @@ from distutils.core import setup
 setup(
       name="pml",
       version="0.0.1",
+      
       author="David Rusk",
       author_email="drusk@uvic.ca",
+      
       packages=["pml", "pml.interactive", "pml.data", "pml.supervised", 
                 "pml.unsupervised", "pml.tools", "pml.utils"],
+      
+      # Allows sample data to be loaded in shell
+      package_data={"pml.interactive": ["sample_data/*"]},
+      
       scripts=["scripts/pml"],
+      
       url="http://github.com/drusk/pml",
       license="LICENSE",
+      
       description="Simple interface to Python machine learning algorithms.",
       long_description=open("README.rst").read(),
+      
       install_requires=[
                         "numpy >= 1.6.1",
                         "matplotlib",
