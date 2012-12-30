@@ -46,37 +46,85 @@ def begin_tutorial():
     print "of using PML for data analysis and machine learning tasks."
     print "\n"
     
-    raw_input("[Press enter to continue]")
+    wait_for_enter_to_continue()
     
-    lesson_load()
+    lesson_dataset_intro()
     
     end_tutorial()
 
-def lesson_load():
+def lesson_dataset_intro():
     """
-    Lesson on loading data.
+    Introductory lesson on loading and examining data.
     """
     clear_shell()
-    print "PML Data Loading Lesson"
-    print "-----------------------"
-    print "PML allows you to load data from a file on disk using the 'load' function."
+    print "PML DataSet Introduction"
+    print "------------------------"
+    print "This lesson introduces the basics of PML's core data structure, the DataSet."
+    print "A DataSet consists of a collection of samples which have values for a set of"
+    print " features.  An example might be specific course grades for a set of students."
+    print "\n"
+    print "DataSets can be conveniently created by loading data from a file on disk using" 
+    print "the 'load' function."
     print "\n"
     print "Try loading one of the tutorial data sets using the following command:"
     
-    let_user_try("data = load(\"iris.data\")")
+    let_user_try("data = load(\"iris.csv\")")
     
     print "Correct.  The iris data set has now been loaded into memory."
+    print "\n"
+    print "By default the data is assumed to be in comma separated value format."
+    print "Other formats can be loaded by specifying the \"delimiter\" option."
+    print "For example, "
+    print "    'data = load(\"iris.tsv\", delimiter=\"\\t\")'"
+    print "would load a tab separated file."
     
     print "\n"
-    print "That completes the lesson on loading data sets."
+    wait_for_enter_to_continue()
+    print "\n"
+    
+    print "Once a data set has been loaded, many operations can be performed on it."
+    print "One of the simplest is listing its features.  Try it out:"
+    
+    let_user_try("data.feature_list()")
+    
+    print "Good.  You can also check the number of samples in the data set:"
+    
+    let_user_try("data.num_samples()")
+    
+    print "In this case we see there are 150 samples."
+    print "\n"
+    
+    print "The iris data set that we loaded is labelled.  This means the actual "
+    print "classifications of the samples are known.  You can check if a DataSet "
+    print "is labelled like this:"
+    
+    let_user_try("data.is_labelled()")
+    
+    print "If you want a quick summary of the DataSet without calling all of these methods "
+    print "individually, simply enter the name of the DataSet at the prompt:"
+    
+    let_user_try("data")
+    
+    print "To wrap up this lesson, lets try plotting our DataSet to see if there are "
+    print "any visual patterns.  Since our DataSets can be more than two dimensional, "
+    print "we need a visualization method such as 'Radviz' to fit it on a 2D plot."
+    print "Try creating a plot (once it is created, close it to continue):"
+    
+    let_user_try("data.plot_radviz()")
+    
+    print "\n"
+    print "That completes the introductory lesson on DataSets."
+    print "The next lesson will cover using classifiers."
+    
+    wait_for_enter_to_continue()
 
 def end_tutorial():
     """
     Exit the tutorial.
     """
-    print "\n"
+    clear_shell()
     print "-" * 70
-    print "That concludes PML's tutorial."
+    print "You have reached the end of the PML tutorial, congratulations!"
     print "You may also find the module documentation useful.  It can "
     print "be accessed from the PML shell by typing 'docs'."
     print "-" * 70
@@ -92,6 +140,8 @@ def let_user_try(command):
       command: string
         The command the user should enter.
     """
+    print "\n"
+    
     while True:
         print command
         print "\n"
@@ -100,6 +150,7 @@ def let_user_try(command):
         
         if commands_match(user_command, command):
             tutorial_interpreter.runsource(user_command)
+            print "\n"
             return
         
         print "\n"
@@ -118,6 +169,12 @@ def commands_match(user_command, expected_command):
         return command.replace(" ", "").replace("'", "\"")
     
     return normalize(user_command) == normalize(expected_command)
+
+def wait_for_enter_to_continue():
+    """
+    Prompt the user to press enter before continuing.
+    """
+    raw_input("[Press enter to continue]")
 
 def pml_prompt():
     """
