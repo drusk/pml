@@ -65,7 +65,7 @@ def setup_shell():
     banner += "\t'docs' will open up the online documentation in a web browser.\n"
     banner += "\t'exit', 'quit' or press 'CTRL + D' to exit the shell.\n"
 
-    exit_message = "\nExiting PML shell, good bye!"
+    exit_message = "\n* Exiting PML shell, good bye! *\n"
     
     # XXX: this currently only supports IPython version 0.11 or higher!
     config = Config()
