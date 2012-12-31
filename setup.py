@@ -47,9 +47,9 @@ setup(
       long_description=open("README.rst").read(),
       
       install_requires=[
-                        "numpy >= 1.6.1",
+                        "pandas >= 0.8.1"
+                        "numpy",
                         "matplotlib",
                         "ipython >= 0.11",
-                        "pandas >= 0.8.1"
                         ]
       )
