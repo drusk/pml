@@ -33,7 +33,8 @@ setup(
       author_email="drusk@uvic.ca",
       
       packages=["pml", "pml.interactive", "pml.data", "pml.supervised", 
-                "pml.unsupervised", "pml.tools", "pml.utils"],
+                "pml.supervised.decision_trees", "pml.unsupervised", 
+                "pml.tools", "pml.utils"],
       
       # Allows sample data to be loaded in shell
       package_data={"pml.interactive": ["sample_data/*"]},
@@ -47,9 +48,9 @@ setup(
       long_description=open("README.rst").read(),
       
       install_requires=[
-                        "numpy >= 1.6.1",
-                        "matplotlib",
-                        "pandas >= 0.8.1",
                         "ipython >= 0.11",
+                        "pandas >= 0.8.1",
+                        "matplotlib",
+                        "numpy >= 1.6.1",
                         ]
       )
