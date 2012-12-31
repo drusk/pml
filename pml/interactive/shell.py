@@ -33,7 +33,7 @@ from IPython.config.loader import Config
 from IPython.frontend.terminal.embed import InteractiveShellEmbed
 
 from pml.interactive.util import no_stdout
-from pml.interactive.tutorial import begin_tutorial
+from pml.interactive.tutorial import begin_tutorial, get_tutorial_lessons
 
 # Import pml library.  These imports will be available in the shell that 
 # is created.
@@ -41,11 +41,18 @@ from pml.api import *
 
 def magic_tutorial(self, arg):
     """
-    The function called when the 'tutorial' magic is executed.  IPython 
-    requires this function to accept two parameters, even though they are 
-    not used in this instance.
+    The function called when the 'tutorial' magic is executed.  
+    Arg can be used to start up a specific lesson by name instead of the 
+    full tutorial from the beginning.
     """
-    begin_tutorial()
+    if arg == "":
+        begin_tutorial()
+    else:
+        lessons = get_tutorial_lessons()
+        if arg in lessons:
+            lessons[arg]()
+        else:
+            print "Unrecognized lesson name: %s" % arg
 
 def magic_docs(self, arg):
     """

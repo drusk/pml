@@ -34,6 +34,16 @@ from pml.api import *
 # above.
 tutorial_interpreter = InteractiveInterpreter(globals())
 
+def get_tutorial_lessons():
+    """
+    Returns:
+      lessons: dict
+        Keys are the names of lessons, the value is the function which will 
+        start the lesson.
+    """
+    return {"datasets": lesson_dataset_intro,
+            "classifiers": lesson_classifiers}
+
 def begin_tutorial():
     """
     Begin the tutorial.
