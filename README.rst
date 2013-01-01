@@ -9,15 +9,17 @@ be stable.
 
 Installation
 ============
-The easiest way to install is using pip:
-
-    sudo pip install git+https://github.com/drusk/pml.git
-
-This will cause the following dependencies to be installed:
+An installation script for Ubuntu is provided in the scripts/install 
+directory.  This script sets up the required dependencies for you:
 
 *  NumPy: http://docs.scipy.org/doc/numpy/user/install.html
-*  pandas: http://matplotlib.org/users/installing.html
+*  matplotlib: http://matplotlib.org/users/installing.html
+*  pandas: http://pandas.pydata.org/pandas-docs/stable/install.html
 *  IPython: http://ipython.org/ipython-doc/stable/install/install.html
+
+If you already have these dependencies, you can simply install PML using pip:
+
+    sudo pip install git+https://github.com/drusk/pml.git
 
 If you don't have pip but have easy_install, do
 
