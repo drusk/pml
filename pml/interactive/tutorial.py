@@ -42,7 +42,8 @@ def get_tutorial_lessons():
     """
     return {"datasets": lesson_dataset_intro,
             "classifiers": lesson_classifiers,
-            "decision_trees": lesson_decision_trees}
+            "decision_trees": lesson_decision_trees,
+            "pca": lesson_pca}
 
 def begin_tutorial():
     """
@@ -339,6 +340,86 @@ def lesson_decision_trees():
     
     print "\n"
     print "That completes the lesson on decision trees."
+    print "The next lesson covers principal component analysis."
+    
+    wait_for_enter_to_continue()
+    
+    if not should_quit():
+        lesson_pca()
+    
+def lesson_pca():
+    """
+    Lesson on principal component analysis.
+    """
+    clear_shell()
+    print "PCA Lesson"
+    print "----------"
+    print "PCA stands for Principal Component Analysis."
+    print "It is a means of reducing the size of your data while minimizing loss" 
+    print "of useful information.  If you consider each feature to be a dimension"
+    print "or axis, it does this by shifting to a new set of axes where the variance"
+    print "in the first few axes is maximized, and the remainder become insignificant."
+    
+    print ""
+    wait_for_enter_to_continue()
+    print ""
+    
+    print "Lets load the iris data set and see how it can be reduced."
+    
+    let_user_try("data = load(\"iris.csv\")")
+    
+    print "We can see how much variance would be in each principal component of this"
+    print "data set as follows:"
+    
+    let_user_try("get_pct_variance_per_principal_component(data)")
+    
+    print "In this case the first principal component has over 92% of the total "
+    print "variance."
+    
+    print ""
+    wait_for_enter_to_continue()
+    print ""
+    
+    print "We can get a visual representation of this information using:"
+    
+    let_user_try("plot_pct_variance_per_principal_component(data)")
+    
+    print "If we know how much of the variance we want to keep, we can also have PML"
+    print "recommend to us how many principal components should be kept.  Lets say "
+    print "we want to keep 97%:"
+    
+    let_user_try("recommend_num_components(data, 0.97)")
+    
+    print "It tells us we only need 2 components, so by using PCA we can reduce this "
+    print "data to 2 features instead of 4."
+    
+    let_user_try("reduced_data = pca(data, 2)")
+    
+    print "Lets check the summary information for this reduced data set:"
+    
+    let_user_try("reduced_data")
+    
+    print "You can see the original features are replaced with new ones named 0 and 1"
+    print "which actually combine information from the previous features since the axes"
+    print "have been shifted."
+    
+    print ""
+    wait_for_enter_to_continue()
+    print ""
+    
+    print "You can check the exact percent variance in this new data (with respect "
+    print "to the original data):"
+    
+    let_user_try("reduced_data.percent_variance()")
+    
+    print "This reduced_data can then be used with classifiers like Knn with improved"
+    print "performance since the number of features involved has been reduced."
+    
+    print ""
+    wait_for_enter_to_continue()
+    
+    print "\n"
+    print "That completes the lesson on PCA."
     
     wait_for_enter_to_continue()
     
