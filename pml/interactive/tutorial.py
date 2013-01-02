@@ -41,7 +41,8 @@ def get_tutorial_lessons():
         start the lesson.
     """
     return {"datasets": lesson_dataset_intro,
-            "classifiers": lesson_classifiers}
+            "classifiers": lesson_classifiers,
+            "decision_trees": lesson_decision_trees}
 
 def begin_tutorial():
     """
@@ -254,9 +255,94 @@ def lesson_classifiers():
     wait_for_enter_to_continue()
     
     print "\n"
-    print "That completes the lesson on classifiers."
+    print "That completes the introductory lesson on classifiers."
+    print "The next lesson will cover decision trees."
     
     wait_for_enter_to_continue()
+        
+    if not should_quit():
+        lesson_decision_trees()
+    
+def lesson_decision_trees():
+    """
+    Lesson on using decision trees.
+    """
+    clear_shell()
+    print "Decision Trees Lesson"
+    print "---------------------"
+    print "Decision trees are another type of classifier which have the extra "
+    print "advantage that their decision making model can be visualized to gain "
+    print "further insight."
+    
+    print ""
+    wait_for_enter_to_continue()
+     
+    print "\n"
+    print "Decision trees are best used on data with discrete values.  Let's load a "
+    print "sample data set:"
+    
+    let_user_try("data = load(\"play_tennis.csv\")")
+    
+    print "Check what features the data has:"
+    
+    let_user_try("data.feature_list()")
+    
+    print "The values for each of these values are discrete.  For example, possible "
+    print "values for 'Temperature' are 'Hot', 'Mild' and 'Cool', while Outlook can "
+    print "have values 'Sunny', 'Overcast' or 'Rain'."
+    
+    print ""
+    wait_for_enter_to_continue()
+    
+    print "\n"
+    print "You can check this information for yourself as follows:"
+    
+    let_user_try("data.get_feature_values(\"Temperature\")")
+    
+    print "We can build a decision tree as follows:"
+    
+    let_user_try("tree = DecisionTree(data)")
+    
+    print "To visualize the tree, use the plot method:"
+    
+    let_user_try("tree.plot()")
+    
+    print "We could see that 'Outlook' was at the root of the tree.  It is the most"
+    print "important feature for the decision tree when it is classifying a sample."
+    print "We can also see that temperature is never used as one of the decision nodes"
+    print "so it doesn't seem to be as big a factor in whether tennis is played or not."
+    
+    print ""
+    wait_for_enter_to_continue()
+    
+    print "The 'leaf' nodes at the bottom of the tree have values 'True' or 'False'"
+    print "indicating whether or not the conditions are appropriate for playing tennis."
+    
+    print "\n"
+    print "Let's try creating our own sample and then classifying it.  We can create a"
+    print "new sample by hand as follows:"
+    
+    let_user_try("sample = {\"Outlook\": \"Sunny\", \"Temperature\": \"Cool\", \"Humidity\": \"Normal\", \"Wind\": \"High\"}")
+    
+    print "We can then classify the sample using our decision tree in the same way as"
+    print "we used Knn in the previous lesson:"
+    
+    let_user_try("tree.classify(sample)")
+    
+    print "It looks like the conditions are suitable for tennis.  We can plot the tree"
+    print "again and easily trace through it ourselves to see how this decision was "
+    print "determined."
+    
+    let_user_try("tree.plot()")
+    
+    wait_for_enter_to_continue()
+    
+    print "\n"
+    print "That completes the lesson on decision trees."
+    
+    wait_for_enter_to_continue()
+    
+    end_tutorial()
 
 def end_tutorial():
     """
