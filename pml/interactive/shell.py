@@ -43,10 +43,17 @@ def magic_tutorial(self, arg):
     """
     The function called when the 'tutorial' magic is executed.  
     Arg can be used to start up a specific lesson by name instead of the 
-    full tutorial from the beginning.
+    full tutorial from the beginning.  If arg is 'list', a list of tutorial
+    lessons is displayed.
     """
     if arg == "":
         begin_tutorial()
+    elif arg == "list":
+        print "Lessons in the tutorial:"
+        print get_tutorial_lessons().keys()
+        print ""
+        print "To begin at a specific lesson instead of the beginning, "
+        print "type 'tutorial <name>' (ex: 'tutorial datasets')"
     else:
         lessons = get_tutorial_lessons()
         if arg in lessons:
@@ -69,6 +76,7 @@ def setup_shell():
     banner += "+----------------------------------------------------------------------+\n"
     banner += "Commands: \n"
     banner += "\t'tutorial' will begin the interactive tutorial.\n"
+    banner += "\t'tutorial list' will display individual lessons in the tutorial.\n"
     banner += "\t'docs' will open up the online documentation in a web browser.\n"
     banner += "\t'exit', 'quit' or press 'CTRL + D' to exit the shell.\n"
 
