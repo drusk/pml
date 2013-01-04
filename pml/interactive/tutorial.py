@@ -43,7 +43,8 @@ def get_tutorial_lessons():
     return {"datasets": lesson_dataset_intro,
             "classifiers": lesson_classifiers,
             "decision_trees": lesson_decision_trees,
-            "pca": lesson_pca}
+            "pca": lesson_pca,
+            "clustering": lesson_clustering}
 
 def begin_tutorial():
     """
@@ -420,7 +421,74 @@ def lesson_pca():
     
     print "\n"
     print "That completes the lesson on PCA."
+    print "The next lesson is on clustering."
     
+    wait_for_enter_to_continue()
+    
+    if not should_quit():
+        lesson_clustering()
+    
+def lesson_clustering():
+    """
+    Lesson on using clustering algorithms.
+    """
+    clear_shell()
+    print "Clustering Lesson"
+    print "-----------------"
+    print "Clustering is a form of unsupervised learning.  This means the algorithm"
+    print "doesn't need to be trained before-hand like with classifiers."
+    
+    print ""
+    wait_for_enter_to_continue()
+    print ""
+    
+    print "Lets start by loading a data set:"
+    
+    let_user_try("data = load(\"iris.csv\")")
+    
+    print "This data set is already labelled.  We can see the labels and the number of "
+    print "samples in each class like this:"
+    
+    let_user_try("data.get_label_value_counts()")
+    
+    print "We can perform clustering with an algorithm called K-means as follows:"
+    
+    let_user_try("clustered = kmeans(data, 3)")
+    
+    print "This will try to split the samples into 3 clusters."
+    
+    print ""
+    print "We can easily view the cluster assignments for each sample:"
+    
+    let_user_try("assignments = clustered.get_cluster_assignments()")
+    let_user_try("assignments")
+    
+    wait_for_enter_to_continue()
+    print ""
+    
+    print "Note that the clusters are represented by a number in the range 0 to k-1."
+    print "We can also get the cluster of a specific sample (in this case sample 100):"
+    
+    let_user_try("assignments[100]")
+    
+    wait_for_enter_to_continue()
+    
+    print "Also note that often your data won't already be labelled, but you can still"
+    print "perform clustering.  However, if your data is labelled, you can then"
+    print "calculate some metrics to see how well the clusters match up with the real"
+    print "classifications."
+
+    print ""
+
+    print "Two common metrics are purity and rand index.  They can be calculated as"
+    print "follows:"
+    
+    let_user_try("clustered.calculate_purity()")
+    let_user_try("clustered.calculate_rand_index()")
+    
+    print "That concludes the lesson on clustering."
+
+    print ""
     wait_for_enter_to_continue()
     
     end_tutorial()
