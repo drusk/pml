@@ -324,7 +324,7 @@ def lesson_decision_trees():
     print "Let's try creating our own sample and then classifying it.  We can create a"
     print "new sample by hand as follows:"
     
-    let_user_try("sample = {\"Outlook\": \"Sunny\", \"Temperature\": \"Cool\", \"Humidity\": \"Normal\", \"Wind\": \"High\"}")
+    let_user_try("sample = {\"Outlook\": \"Sunny\", \"Temperature\": \"Cool\", \"Humidity\": \"Normal\", \"Wind\": \"Strong\"}")
     
     print "We can then classify the sample using our decision tree in the same way as"
     print "we used Knn in the previous lesson:"
