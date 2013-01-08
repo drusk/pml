@@ -53,6 +53,16 @@ class IntegrationTest(base_tests.BaseFileLoadingTest):
         results = knn.classify_all(test)
         self.assertAlmostEqual(results.compute_accuracy(), 0.97, 2)
     
+    def test_naive_bayes_classify_iris(self):
+        data = load(self.relative_to_base("datasets/iris_rearranged.data"),
+                    has_ids=False)
+        train, test = data.split(0.7)
+        
+        classifier = NaiveBayes(train)
+        results = classifier.classify_all(test)
+#        self.assertAlmostEqual(results.compute_accuracy())
+        self.assertGreater(results.compute_accuracy(), 0.9)
+    
     
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

@@ -162,6 +162,10 @@ class NaiveBayes(AbstractClassifier):
         match_feature_vals = training_feature_vals == feature_val
         
         match_both = match_classes & match_feature_vals
+        
+        if not match_both.any():
+            return 0
+        
         return match_both.value_counts()[True]
     
     
