@@ -60,8 +60,7 @@ class IntegrationTest(base_tests.BaseFileLoadingTest):
         
         classifier = NaiveBayes(train)
         results = classifier.classify_all(test)
-#        self.assertAlmostEqual(results.compute_accuracy())
-        self.assertGreater(results.compute_accuracy(), 0.9)
+        self.assertAlmostEqual(results.compute_accuracy(), 0.93, 2)
     
     
 if __name__ == "__main__":
