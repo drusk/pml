@@ -53,6 +53,18 @@ class PandasUtilTest(unittest.TestCase):
         indices = pandas_util.get_indices_with_value(series, "friendly")
         assert_that(indices, contains("cat", "dog"))
 
+    def test_is_series_numeric_actual_is_int(self):
+        series = pd.Series([0, 1, 2])
+        self.assertTrue(pandas_util.is_series_numeric(series))
+    
+    def test_is_series_numeric_actual_is_float(self):
+        series = pd.Series([0.1, 1.2, 2.3])
+        self.assertTrue(pandas_util.is_series_numeric(series))
+    
+    def test_is_series_numeric_actual_is_string(self):
+        series = pd.Series(["low", "mid", "high"])
+        self.assertFalse(pandas_util.is_series_numeric(series))
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

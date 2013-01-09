@@ -59,4 +59,18 @@ def are_dataframes_equal(dataframe1, dataframe2):
         # pandas throws:
         # "Exception: Can only compare identically-labeled DataFrame objects"
         return False
+
+def is_series_numeric(series):
+    """
+    Checks if the series data type is numeric.
     
+    Args:
+      series: pd.Series
+        The series whose data type will be checked.
+        
+    Returns:
+      True if the series is numeric, i.e. values are some form of int or 
+      float.
+    """
+    dtype_name = series.dtype.name
+    return dtype_name.startswith("int") or dtype_name.startswith("float")
