@@ -494,6 +494,18 @@ class DataSet(object):
         """
         return self._dataframe.fillna(fill_value, inplace=True)
     
+    def fill_missing_with_feature_means(self):
+        """
+        Fill in missing data points for all features with the mean (average) 
+        value of the feature.
+        
+        Returns:
+          void; change made in place.
+        """
+        for feature in self.feature_list():
+            feature_vals = self.get_column(feature)
+            self.set_column(feature, feature_vals.fillna(feature_vals.mean()))
+    
     def combine_labels(self, to_combine, new_label):
         """
         Combines classification labels to have some new value.
