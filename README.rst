@@ -46,3 +46,7 @@ http://pml.readthedocs.org/en/latest/index.html
 
 Additionally, try out the tutorials by starting the PML shell and typing 
 "tutorial".
+
+Examples
+========
+See https://github.com/drusk/pml-applications for some examples of using PML.
