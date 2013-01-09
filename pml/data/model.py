@@ -544,6 +544,7 @@ class DataSet(object):
           ValueError if feature values are not numerical.
           ValueError if number of bin_names does not match 
             number of bins.
+          ValueError if there isn't at least one boundary.
           
         Example:
           Assume a data set has a feature MATH100 with values from 0 to 9.
@@ -553,6 +554,9 @@ class DataSet(object):
           This examines values of the MATH100 feature, replacing 0, 1, 2, 3 
           with "low", 4, 5, 6 with "mid" and 7, 8, 9 with "high".
         """
+        if len(boundaries) < 1:
+            raise ValueError("Must specify at least one boundary to bin on.")
+        
         feature_vals = self.get_column(feature)
         
         if not pandas_util.is_series_numeric(feature_vals):
