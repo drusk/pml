@@ -525,6 +525,7 @@ class DataSet(object):
         Args:
           feature: string
             The feature whose values should be binned.
+            Use '*' to bin all features.
           boundaries: list(int)
             The boundary values to bin on.  Each boundary value marks the 
             beginning value in a new bin.  
@@ -554,6 +555,11 @@ class DataSet(object):
           This examines values of the MATH100 feature, replacing 0, 1, 2, 3 
           with "low", 4, 5, 6 with "mid" and 7, 8, 9 with "high".
         """
+        if feature == "*":
+            for current_feature in self.feature_list():
+                self.bin(current_feature, boundaries, bin_names=bin_names)
+            return
+
         if len(boundaries) < 1:
             raise ValueError("Must specify at least one boundary to bin on.")
         
