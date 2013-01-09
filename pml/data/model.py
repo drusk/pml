@@ -515,6 +515,71 @@ class DataSet(object):
         # pd.Series.replace returns a new Series, leaves original unmodified
         self.labels = self.labels.replace(to_combine, value=new_label)
         
+    def bin(self, feature, boundaries, bin_names=None):
+        """
+        Bins the values of a feature.
+        
+        NOTE: the feature's values must be numerical.
+        
+        Args:
+          feature: string
+            The feature whose values should be binned.
+          boundaries: list(int)
+            The boundary values to bin on.  Each boundary value marks the 
+            beginning value in a new bin.  
+            For example, [4, 7] will put n < 4 in the first bin, 4 <= n < 7 
+            in the second, and n >= 7 in the third. 
+          bin_names (optional): list
+            The values to substitute for each bin.  The number of bin_names
+            must match the number of bin values, 
+            i.e. number of boundary points + 1.
+            Defaults to None, in which case the bin values range from 0 to 
+            the number of boundaries.
+            
+        Returns:
+          void; changes made in place.
+          
+        Raises:
+          ValueError if feature values are not numerical.
+          InconsistentBinningError if number of bin_names does not match 
+            number of bins.
+          
+        Example:
+          Assume a data set has a feature MATH100 with values from 0 to 9.
+          
+          dataset.bin("MATH100", [4, 7], bin_names=["low", "mid", "high"])
+          
+          This examines values of the MATH100 feature, replacing 0, 1, 2, 3 
+          with "low", 4, 5, 6 with "mid" and 7, 8, 9 with "high".
+        """
+        if bin_names is None:
+            bin_names = range(len(boundaries) + 1)
+        
+        feature_vals = self.get_column(feature)
+        print "Feature vals"
+        print feature_vals
+        already_binned = pd.Series([False] * len(feature_vals), 
+                                   index=feature_vals.index)
+
+        for i, boundary in enumerate(boundaries):
+            print "=" * 10
+            print "Already Binned"
+            print already_binned
+            print "=" * 10
+            print "Less than boundary"
+            print feature_vals < boundary
+            in_bin = (feature_vals < boundary) & (already_binned == False)
+            feature_vals[in_bin] = bin_names[i]
+            already_binned[in_bin] = True
+            
+        # Handle values higher than the last boundary
+        print "*" * 10
+        print "Before last"
+        print feature_vals            
+        feature_vals[feature_vals >= boundaries[-1]] = bin_names[-1]
+        print feature_vals
+        print "After last"
+        
     def plot_radviz(self):
         """
         Generates a RadViz plot of the data set.  Radviz is useful for 

@@ -376,6 +376,15 @@ class DataSetTest(base_tests.BaseDataSetTest):
         self.assertTrue(185 in height_values)
         self.assertTrue(177 in height_values)
         
+    def test_bin_feature(self):
+        df = pd.DataFrame([[0, 1], [7, 2], [6, 3]], 
+                          columns=["MATH100", "PHYS125"])
+        dataset = DataSet(df)
+        
+        dataset.bin("MATH100", [4, 7])
+        print dataset._dataframe
+        assert_that(dataset, equals_dataset([[0, 1], [2, 2], [1, 3]]))
+        
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
