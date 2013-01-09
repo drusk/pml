@@ -25,9 +25,10 @@ Models for the data being analysed and manipulated.
 
 import random as rand
 
+import numpy as np
 import pandas as pd
 
-from pml.utils import plotting
+from pml.utils import plotting, pandas_util
 from pml.utils.errors import InconsistentSampleIdError
 from pml.utils.errors import UnlabelledDataSetError
 from pml.utils.pandas_util import get_indices_with_value
@@ -541,7 +542,7 @@ class DataSet(object):
           
         Raises:
           ValueError if feature values are not numerical.
-          InconsistentBinningError if number of bin_names does not match 
+          ValueError if number of bin_names does not match 
             number of bins.
           
         Example:
@@ -552,33 +553,42 @@ class DataSet(object):
           This examines values of the MATH100 feature, replacing 0, 1, 2, 3 
           with "low", 4, 5, 6 with "mid" and 7, 8, 9 with "high".
         """
-        if bin_names is None:
-            bin_names = range(len(boundaries) + 1)
-        
         feature_vals = self.get_column(feature)
-        print "Feature vals"
-        print feature_vals
+        
+        if not pandas_util.is_series_numeric(feature_vals):
+            raise ValueError("Feature must have numerical values.")
+
+        num_bins = len(boundaries) + 1
+        if bin_names is None:
+            bin_names = range(num_bins)
+            
+        num_bin_names = len(bin_names)
+        if num_bin_names != num_bins:
+            raise ValueError(("Number of bin names (%d) doesn't match number"
+                              " of bins (%d)") % (num_bin_names, num_bins))
+
+        # This is to avoid the errors you get if you try to insert string 
+        # values into a numeric Series
+        if isinstance(bin_names[0], str):
+            dtype = np.dtype("object")
+        else:
+            dtype = None
+            
+        binned_vals = pd.Series(feature_vals.copy(), index=feature_vals.index,
+                                dtype=dtype)
+        
         already_binned = pd.Series([False] * len(feature_vals), 
                                    index=feature_vals.index)
 
         for i, boundary in enumerate(boundaries):
-            print "=" * 10
-            print "Already Binned"
-            print already_binned
-            print "=" * 10
-            print "Less than boundary"
-            print feature_vals < boundary
             in_bin = (feature_vals < boundary) & (already_binned == False)
-            feature_vals[in_bin] = bin_names[i]
+            binned_vals[in_bin] = bin_names[i]
             already_binned[in_bin] = True
             
         # Handle values higher than the last boundary
-        print "*" * 10
-        print "Before last"
-        print feature_vals            
-        feature_vals[feature_vals >= boundaries[-1]] = bin_names[-1]
-        print feature_vals
-        print "After last"
+        binned_vals[feature_vals >= boundaries[-1]] = bin_names[-1]
+
+        self.set_column(feature, binned_vals)
         
     def plot_radviz(self):
         """

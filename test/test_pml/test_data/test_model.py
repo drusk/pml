@@ -382,9 +382,19 @@ class DataSetTest(base_tests.BaseDataSetTest):
         dataset = DataSet(df)
         
         dataset.bin("MATH100", [4, 7])
-        print dataset._dataframe
-        assert_that(dataset, equals_dataset([[0, 1], [2, 2], [1, 3]]))
         
+        assert_that(dataset, equals_dataset([[0, 1], [2, 2], [1, 3]]))
+    
+    def test_bin_feature_bin_names(self):
+        df = pd.DataFrame([[0, 1], [9, 2], [6, 3]], 
+                          columns=["MATH100", "PHYS125"])
+        dataset = DataSet(df)
+        
+        dataset.bin("MATH100", [4, 7], bin_names=["low", "mid", "high"])
+        
+        assert_that(dataset, equals_dataset([["low", 1], ["high", 2], 
+                                             ["mid", 3]]))    
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
