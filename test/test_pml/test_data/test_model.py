@@ -166,6 +166,13 @@ class DataSetTest(base_tests.BaseDataSetTest):
         assert_that(dataset, equals_dataset([[2, 5, 10], [3.5, 6, 10], 
                                              [5, 4, 10]]))
     
+    def test_fill_missing_with_feature_means_feature_all_empty(self):
+        dataset = DataSet([[2, np.NaN, np.NaN], [7, np.NaN, 10], 
+                           [5, np.NaN, np.NaN]])
+        dataset.fill_missing_with_feature_means()
+        assert_that(dataset, equals_dataset([[2, 0, 10], [7, 0, 10], 
+                                             [5, 0, 10]]))
+        
     def test_split_labelled(self):
         dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]], 
                           labels=["b", "b", "b", "a"])

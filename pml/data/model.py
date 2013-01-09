@@ -499,12 +499,21 @@ class DataSet(object):
         Fill in missing data points for all features with the mean (average) 
         value of the feature.
         
+        Note: if all values for a feature are missing then 0 will be 
+        considered the mean.
+        
         Returns:
           void; change made in place.
         """
         for feature in self.feature_list():
             feature_vals = self.get_column(feature)
-            self.set_column(feature, feature_vals.fillna(feature_vals.mean()))
+            
+            if feature_vals.count() == 0:
+                # All values missing, fill with value 0
+                self.set_column(feature, feature_vals.fillna(0))
+            else:
+                self.set_column(feature, 
+                                feature_vals.fillna(feature_vals.mean()))
     
     def combine_labels(self, to_combine, new_label):
         """
