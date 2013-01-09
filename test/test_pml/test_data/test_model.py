@@ -393,7 +393,29 @@ class DataSetTest(base_tests.BaseDataSetTest):
         dataset.bin("MATH100", [4, 7], bin_names=["low", "mid", "high"])
         
         assert_that(dataset, equals_dataset([["low", 1], ["high", 2], 
-                                             ["mid", 3]]))    
+                                             ["mid", 3]]))   
+        
+    def test_bin_feature_wrong_num_bin_names(self):
+        df = pd.DataFrame([[0, 1], [9, 2], [6, 3]], 
+                          columns=["MATH100", "PHYS125"])
+        dataset = DataSet(df)
+        
+        self.assertRaises(
+            ValueError, 
+            dataset.bin, 
+            "MATH100", [4, 7], bin_names=["low", "mid"]
+        )
+    
+    def test_bin_feature_not_numeric(self):
+        df = pd.DataFrame([["F", 1], ["A+", 2], ["B+", 3]], 
+                          columns=["MATH100", "PHYS125"])
+        dataset = DataSet(df)
+        
+        self.assertRaises(
+            ValueError, 
+            dataset.bin, 
+            "MATH100", [4, 7]
+        )
 
 
 if __name__ == "__main__":
