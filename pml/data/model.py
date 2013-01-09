@@ -508,6 +508,9 @@ class DataSet(object):
             classification label.
           new_label: string
             The new classification label for those which were combined.
+            
+        Returns:
+          void; change made in place.
         """
         # pd.Series.replace returns a new Series, leaves original unmodified
         self.labels = self.labels.replace(to_combine, value=new_label)
