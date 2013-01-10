@@ -26,6 +26,7 @@ Decision trees classification algorithm.
 from pml.supervised.classifiers import AbstractClassifier
 from pml.supervised.decision_trees import id3
 from pml.supervised.decision_trees.tree_plotting import MatplotlibAnnotationTreePlotter
+from pml.utils import collection_utils
 
 class DecisionTree(AbstractClassifier):
     """
@@ -67,9 +68,30 @@ class DecisionTree(AbstractClassifier):
         while not node.is_leaf():
             feature = node.get_value()
             branch = sample[feature]
-            node = node.get_child(branch)
+            try:
+                node = node.get_child(branch)
+            except KeyError:
+                return self._handle_value_not_trained_for()
         
         return node.get_value()
+
+    def _handle_value_not_trained_for(self):
+        """
+        Handles the case where a sample has a value for a feature which was 
+        not seen in the training set and therefore is not accounted for in 
+        the tree.
+        
+        Current strategy is to just return the most common label in the 
+        training data set.  It might be better to narrow this down to the 
+        most common among samples that would reach the node at which the 
+        unrecognized value was found.
+        
+        Returns:
+          label:
+            The best guess at the label.
+        """
+        return collection_utils.get_most_common(
+                                    self.training_set.get_labels())
 
     def plot(self):
         """

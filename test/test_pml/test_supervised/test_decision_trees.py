@@ -35,7 +35,7 @@ weather on the rainy branch.
 import unittest
 
 import pandas as pd
-from hamcrest import assert_that
+from hamcrest import assert_that, equal_to
 
 from pml.supervised.decision_trees import id3
 from pml.supervised.decision_trees import DecisionTree
@@ -157,6 +157,17 @@ class DecisionTreesTest(base_tests.BaseFileLoadingTest):
                         DataSet(pd.DataFrame([sample_0, sample_1])))
         assert_that(results.get_classifications(), 
                     equals_series({0: "shopping", 1: "cinema"}))
+
+    def test_data_has_value_not_in_training(self):
+        training = load(self.relative_to_base("/datasets/play_tennis.data"), 
+                        delimiter=" ")
+        classifier = DecisionTree(training)
+        
+        # NOTE: Snowing is not a value of Outlook seen in the training set
+        sample = pd.Series({"Outlook": "Snowing", "Temperature": "Cool", 
+                            "Humidity": "Normal", "Wind": "Strong"})
+        
+        assert_that(classifier.classify(sample), equal_to(True))
 
 
 if __name__ == "__main__":
