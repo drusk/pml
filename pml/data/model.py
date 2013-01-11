@@ -445,8 +445,8 @@ class DataSet(object):
         Returns:
           A new DataSet with the specified rows from the original.
         """
-        labels = self.labels.take(indices) if self.is_labelled() else None
-        return DataSet(self._dataframe.take(indices), labels=labels)
+        labels = self.labels.ix[indices] if self.is_labelled() else None
+        return DataSet(self._dataframe.ix[indices], labels=labels)
 
     def split(self, percent, random=False, using_labels=False):
         """
@@ -522,7 +522,7 @@ class DataSet(object):
             rand.shuffle(all_rows)
             set1_indices = all_rows[:num_set1_samples]
             set2_indices = all_rows[num_set1_samples:]
-        
+
         sample_ids = self._get_sample_ids_index()
         return sample_ids[set1_indices], sample_ids[set2_indices]
     

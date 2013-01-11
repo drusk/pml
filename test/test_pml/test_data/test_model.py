@@ -214,6 +214,16 @@ class DataSetTest(base_tests.BaseDataSetTest):
                 0.5, using_labels=True
         )
         
+    def test_split_missing_indices(self):
+        labels = pd.Series(["a", "b", "c", "d"], index=[1, 2, 3, 5])
+        dataset = self.create_dataset(sample_ids=[1, 2, 3, 5], labels=labels)
+        first, second = dataset.split(0.5)
+        
+        assert_that(first.get_sample_ids(), contains(1, 2))
+        assert_that(first.get_labels(), contains("a", "b"))
+        assert_that(second.get_sample_ids(), contains(3, 5))
+        assert_that(second.get_labels(), contains("c", "d"))
+        
     def test_get_row(self):
         dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]])
         row = dataset.get_row(1)
