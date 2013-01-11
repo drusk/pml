@@ -199,7 +199,14 @@ class DataSet(object):
         Returns:
           A Python list of the ids of the samples in the dataset.
         """
-        return self.get_data_frame().index.tolist()
+        return self._get_sample_ids_index().tolist()
+    
+    def _get_sample_ids_index(self):
+        """
+        Returns:
+          A pandas Index object containing the sample ids of the data set.
+        """
+        return self.get_data_frame().index
     
     def get_labels(self, indices=None):
         """
@@ -441,7 +448,7 @@ class DataSet(object):
         labels = self.labels.take(indices) if self.is_labelled() else None
         return DataSet(self._dataframe.take(indices), labels=labels)
 
-    def split(self, percent, random=False):
+    def split(self, percent, random=False, using_labels=False):
         """
         Splits the dataset in two.
         
@@ -455,6 +462,10 @@ class DataSet(object):
             Set to True if the samples selected for each new dataset should 
             be picked randomly.  Defaults to False, meaning the samples are 
             taken in their existing order.
+          using_labels: boolean
+            Set to True to split the samples such that there is an equal 
+            representation of each known label in the resulting data sets.  
+            Defaults to False.
         
         Returns:
           dataset1: DataSet object
@@ -464,22 +475,89 @@ class DataSet(object):
             
         Raises:
           ValueError if percent < 0 or percent > 1.
+          UnlabelledDataSetError if using_labels set to True but the data set
+            is unlabelled.
         """
         if percent < 0 or percent > 1:
             raise ValueError("Percentage value must be >= 0 and <= 1.")
         
+        if using_labels:
+            if not self.is_labelled():
+                raise UnlabelledDataSetError()
+            indices_1, indices_2 = self._split_using_labels(percent, random)
+        else:
+            indices_1, indices_2 = self._get_indices_for_split(percent, random)
+            
+        return self.get_rows(indices_1), self.get_rows(indices_2)
+    
+    def _get_indices_for_split(self, percent, random):
+        """
+        Internal method.  Finds the indices to use when splitting the 
+        data set.
+        
+        Args:
+          percent: float
+            The percentage of the original dataset samples which should be 
+            placed in the first dataset returned.  The remainder are placed 
+            in the second dataset.  This percentage must be specified as a 
+            value between 0 and 1 inclusive.
+          random: boolean
+            Set to True if the samples selected for each new dataset should 
+            be picked randomly.  If False, the samples are taken in their 
+            existing order.
+            
+        Returns:
+          set1_indices: list(int)
+          set2_indices: list(int)
+            Each contains the ids for the samples that should be in the split 
+            data sets.
+        """
         num_set1_samples = int(percent * self.num_samples())
         
         if not random:
-            set1_rows = range(num_set1_samples)
-            set2_rows = range(num_set1_samples, self.num_samples())
+            set1_indices = range(num_set1_samples)
+            set2_indices = range(num_set1_samples, self.num_samples())
         else:
             all_rows = range(self.num_samples())
             rand.shuffle(all_rows)
-            set1_rows = all_rows[:num_set1_samples]
-            set2_rows = all_rows[num_set1_samples:]
+            set1_indices = all_rows[:num_set1_samples]
+            set2_indices = all_rows[num_set1_samples:]
+        
+        sample_ids = self._get_sample_ids_index()
+        return sample_ids[set1_indices], sample_ids[set2_indices]
     
-        return self.get_rows(set1_rows), self.get_rows(set2_rows)
+    def _split_using_labels(self, percent, random):
+        """
+        Internal method.  Finds the indices to use when splitting the 
+        data set such that there is an equal representation of each known
+        label.
+        
+        Args:
+          percent: float
+            The percentage of the original dataset samples which should be 
+            placed in the first dataset returned.  The remainder are placed 
+            in the second dataset.  This percentage must be specified as a 
+            value between 0 and 1 inclusive.
+          random: boolean
+            Set to True if the samples selected for each new dataset should 
+            be picked randomly.  If False, the samples are taken in their 
+            existing order.
+            
+        Returns:
+          set1_indices: list(int)
+          set2_indices: list(int)
+            Each contains the ids for the samples that should be in the split 
+            data sets.
+        """
+        set1_indices = []
+        set2_indices = []
+        for label in set(self.get_labels()):
+            data = self.label_filter(label)
+            indices_1, indices_2 = data._get_indices_for_split(percent, random)
+            set1_indices.extend(indices_1)
+            set2_indices.extend(indices_2)
+        
+        return set1_indices, set2_indices
     
     def fill_missing(self, fill_value):
         """

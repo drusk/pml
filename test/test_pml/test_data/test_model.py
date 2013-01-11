@@ -27,7 +27,7 @@ import unittest
 
 import numpy as np
 import pandas as pd
-from hamcrest import assert_that, contains
+from hamcrest import assert_that, contains, contains_inanyorder
 
 from pml.data.model import DataSet, as_dataset
 from pml.utils.errors import InconsistentSampleIdError
@@ -181,6 +181,38 @@ class DataSetTest(base_tests.BaseDataSetTest):
         assert_that(first.get_labels(), equals_series({0: "b", 1: "b"}))
         self.assertTrue(second.is_labelled())
         assert_that(second.get_labels(), equals_series({2: "b", 3: "a"}))
+        
+    def test_split_in_half_using_labels(self):
+        labels = ["a", "a", "a", "a", "b", "b", "b", "b"]
+        dataset = self.create_dataset(labels=labels, 
+                                      sample_ids=range(len(labels)))
+        
+        first, second = dataset.split(0.5, using_labels=True)
+
+        assert_that(first.get_labels(), 
+                    contains_inanyorder("a", "a", "b", "b"))
+        assert_that(second.get_labels(), 
+                    contains_inanyorder("a", "a", "b", "b"))
+        
+    def test_split_ratio_using_labels(self):
+        labels = ["a", "a", "b", "a", "b", "a", "b", "b", "a", "a"]
+        dataset = self.create_dataset(labels=labels, 
+                                      sample_ids=range(len(labels)))
+        
+        first, second = dataset.split(0.75, using_labels=True)
+        assert_that(first.get_labels(), 
+                    contains_inanyorder("a", "a", "a", "a", "b", "b", "b"))
+        assert_that(second.get_labels(), 
+                    contains_inanyorder("a", "a", "b"))
+        
+    def test_split_unlabelled_using_labels(self):
+        dataset = self.create_dataset(labels=None)
+        
+        self.assertRaises(
+                UnlabelledDataSetError,
+                dataset.split,
+                0.5, using_labels=True
+        )
         
     def test_get_row(self):
         dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]])
