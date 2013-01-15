@@ -33,15 +33,24 @@ from pml.unsupervised.pca import ReducedDataSet
 from pml.data.model import DataSet
 
 from test.matchers.pml_matchers import equals_dataset
-from test.matchers.pandas_matchers import equals_series
+from test.matchers.pandas_matchers import equals_series, equals_dataframe
 
 class PCATest(unittest.TestCase):
 
     def create_otago_dataset(self):
         # example data from Otago university tutorial
-        return DataSet([[2.5, 2.4], [0.5, 0.7], [2.2, 2.9], [1.9, 2.2], 
-                        [3.1, 3.0], [2.3, 2.7], [2, 1.6], [1, 1.1], 
-                        [1.5, 1.6], [1.1, 0.9]])
+        raw_data = [[2.5, 2.4], [0.5, 0.7], [2.2, 2.9], [1.9, 2.2], 
+                    [3.1, 3.0], [2.3, 2.7], [2, 1.6], [1, 1.1], 
+                    [1.5, 1.6], [1.1, 0.9]]
+        df = pd.DataFrame(raw_data, columns=["x", "y"])
+        return DataSet(df)
+
+    def get_transformed_otago_data(self):
+        # values provided in Otago university tutorial
+        return [[-0.828, -0.175], [1.778, 0.143], [-0.992, 0.384], 
+                [-0.274, 0.130], [-1.676, -0.209], [-0.913, 0.175], 
+                [0.099, -0.350], [1.145, 0.046], [0.4380, 0.018], 
+                [1.224, -0.163]]
 
     def test_remove_means(self):
         dataset = DataSet([[4, 1, 9], [2, 3, 0], [5, 1, 3]])
@@ -54,15 +63,34 @@ class PCATest(unittest.TestCase):
 
     def test_otago_example(self):
         dataset = self.create_otago_dataset()
-        # values provided in Otago university tutorial
-        transformed = [[-0.828, -0.175], [1.778, 0.143], [-0.992, 0.384], 
-                       [-0.274, 0.130], [-1.676, -0.209], [-0.913, 0.175], 
-                       [0.099, -0.350], [1.145, 0.046], [0.4380, 0.018], 
-                       [1.224, -0.163]]
+        transformed = self.get_transformed_otago_data()
         
         principal_components = pca.pca(dataset, 2)
         assert_that(principal_components, equals_dataset(transformed, 
                                                          places=2))
+        
+    def test_get_weights(self):
+        dataset = self.create_otago_dataset()
+        reduced = pca.pca(dataset, 2)
+
+        # Note: this is mostly a regression test, these expected values were 
+        # obtained by running the code.
+        assert_that(
+            pd.DataFrame(reduced.get_weights()), 
+            equals_dataframe(
+                [[-0.6778734, -0.73517866], [-0.73517866, 0.6778734]], 
+                places=3)
+        )
+
+    def test_get_first_component_feature_weights(self):
+        dataset = self.create_otago_dataset()
+        reduced = pca.pca(dataset, 2)
+        
+        # see note in test_get_weights
+        assert_that(
+            reduced.get_first_component_feature_weights(), 
+            equals_series({"x": -0.6778734, "y": -0.73517866}, places=3)
+        )
         
     def test_reduced_dataset_has_row_indices(self):
         dataset = DataSet(pd.DataFrame([[1, 2], [3, 4], [5, 6]], 
@@ -80,7 +108,9 @@ class PCATest(unittest.TestCase):
         sample_ids = [0, 1, 2]
         labels = None
         eigenvalues = [1.50, 2.20, 0.60, 4.90, 3.80, 5.75]
-        reduced_dataset = ReducedDataSet(data, sample_ids, labels, eigenvalues)
+        
+        original_data = DataSet(pd.DataFrame(data, index=sample_ids), labels)
+        reduced_dataset = ReducedDataSet(data, original_data, eigenvalues, [])
         self.assertAlmostEqual(reduced_dataset.percent_variance(), 0.77, 
                                places=2)
 
@@ -107,7 +137,7 @@ class PCATest(unittest.TestCase):
         dataset = self.create_otago_dataset()
         pct_variances = pca.get_pct_variance_per_principal_component(dataset)
         assert_that(pct_variances, equals_series({0: 0.9632, 1: 0.0368}, places=4))
-
+        
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

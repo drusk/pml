@@ -47,27 +47,33 @@ class ReducedDataSet(model.DataSet):
     reduced features.
     """
     
-    def __init__(self, data, sample_ids, labels, eigenvalues):
+    def __init__(self, data, original_data, eigenvalues, weights):
         """
         Creates a new ReducedDataSet.
         
         Args:
           data: numpy.array
             The raw array with the new data.
-          sample_ids: list
-            The ids for the samples (rows, observations) in the data set.
-          labels: pandas.Series
-            The labels, if any, provided for the observations.
+          original_data: model.DataSet
+            The original data before being reduced.
           eigenvalues: numpy.array (1D)
             The list of eigenvalues produced to determine which components in 
             the new feature space were most important.  This includes all of 
             the eigenvalues, not just the ones for the components selected.
+          weights: numpy.array (2D)
+            The weights 'matrix' that the imput data is dot-producted with
+            to produce the reduced data.  Each column corresponds to a 
+            principle component and contains the coefficients for each 
+            feature.
         """
         # build a pandas DataFrame with the original row index
-        dataframe = pd.DataFrame(data, index=sample_ids)
-        super(ReducedDataSet, self).__init__(dataframe, labels=labels)
+        dataframe = pd.DataFrame(data, index=original_data.get_sample_ids())
+        super(ReducedDataSet, self).__init__(dataframe, 
+                                             original_data.get_labels())
         
         self.eigenvalues = eigenvalues
+        self.weights = weights
+        self._original_features = original_data.feature_list()
 
     def percent_variance(self):
         """
@@ -79,6 +85,28 @@ class ReducedDataSet(model.DataSet):
           percentage. 
         """
         return _percent_variance(self.eigenvalues, self.num_features())
+    
+    def get_weights(self):
+        """
+        Returns:
+          weights: numpy.array (2D)
+            The weights 'matrix' that the imput data was dot-producted with
+            to produce the reduced data.  Each column corresponds to a 
+            principle component and contains the coefficients for each 
+            feature.
+        """
+        return self.weights
+    
+    def get_first_component_feature_weights(self):
+        """
+        Retrieves the weights for the features in the first principle 
+        component.  See also get_weights().
+        
+        Returns:
+          weights: pd.Series
+            Weights by feature.
+        """
+        return pd.Series(self.weights[:, 0], index=self._original_features)
     
     
 def _percent_variance(eigenvalues, num_components):
@@ -303,8 +331,7 @@ def pca(dataset, num_components):
     selected_indices = indices[:num_components]
 
     # transform the data into the new space created by the top N eigenvectors
-    transformed_data = np.dot(dataset.get_data_frame(), 
-                              eigenvectors[:, selected_indices])
+    weights = eigenvectors[:, selected_indices]
+    transformed_data = np.dot(dataset.get_data_frame(), weights)
     
-    return ReducedDataSet(transformed_data, dataset.get_sample_ids(), 
-                          dataset.get_labels(), eigenvalues)
+    return ReducedDataSet(transformed_data, dataset, eigenvalues, weights)
