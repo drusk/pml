@@ -63,6 +63,25 @@ class IntegrationTest(base_tests.BaseFileLoadingTest):
         self.assertAlmostEqual(results.compute_accuracy(), 0.93, 2)
     
     
+    @unittest.skip("XXX: separate running unit tests from integration tests")
+    def test_pca_semiconductor_variance(self):
+        """
+        This takes around 10 seconds due to 1500 samples by 590 features.
+        Create a separate run script/config for unit tests only that can be 
+        run frequently, and then these slower integration tests can just be 
+        run before checkins.
+        """
+        data = load(self.relative_to_base("datasets/semiconductor.data"),
+                    has_ids=False, has_labels=False, has_header=False, 
+                    delimiter=" ")
+        print data.num_features()
+        data.fill_missing_with_feature_means()
+        
+        variances = get_pct_variance_per_principal_component(data)
+        expected = [0.593, 0.241, 0.092, 0.023, 0.015, 0.005, 0.003]
+        for i in range(7):
+            self.assertAlmostEqual(variances[i], expected[i], places=3)
+    
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
