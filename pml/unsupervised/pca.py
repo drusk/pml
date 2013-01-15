@@ -97,16 +97,19 @@ class ReducedDataSet(model.DataSet):
         """
         return self.weights
     
-    def get_first_component_feature_weights(self):
+    def get_first_component_impacts(self):
         """
-        Retrieves the weights for the features in the first principle 
-        component.  See also get_weights().
+        Takes the weights for the features in the first principle component 
+        and finds their absolute values ('impacts').  See also get_weights().
         
         Returns:
-          weights: pd.Series
-            Weights by feature.
+          impacts: pd.Series
+            Magnitude (absolute value) of weights by feature, sorted from 
+            largest to smallest.
         """
-        return pd.Series(self.weights[:, 0], index=self._original_features)
+        impact = np.abs(pd.Series(self.weights[:, 0], 
+                                  index=self._original_features))
+        return impact.order(ascending=False)
     
     
 def _percent_variance(eigenvalues, num_components):

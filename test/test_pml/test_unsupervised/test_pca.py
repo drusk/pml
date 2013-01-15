@@ -87,10 +87,14 @@ class PCATest(unittest.TestCase):
         reduced = pca.pca(dataset, 2)
         
         # see note in test_get_weights
+        impacts = reduced.get_first_component_impacts()
         assert_that(
-            reduced.get_first_component_feature_weights(), 
-            equals_series({"x": -0.6778734, "y": -0.73517866}, places=3)
+            impacts, 
+            equals_series({"x": 0.6778734, "y": 0.73517866}, places=3)
         )
+        
+        # verify order
+        assert_that(impacts.index, contains("y", "x"))
         
     def test_reduced_dataset_has_row_indices(self):
         dataset = DataSet(pd.DataFrame([[1, 2], [3, 4], [5, 6]], 
