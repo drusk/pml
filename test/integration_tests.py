@@ -26,9 +26,13 @@ properly.  These tests should be in the form of a user workflow.
 
 import unittest
 
+import pandas as pd
+from hamcrest import assert_that, contains
+
 from pml.api import *
 
 import base_tests
+from matchers.pml_matchers import equals_dataset
 
 class IntegrationTest(base_tests.BaseFileLoadingTest):
     
@@ -74,13 +78,51 @@ class IntegrationTest(base_tests.BaseFileLoadingTest):
         data = load(self.relative_to_base("datasets/semiconductor.data"),
                     has_ids=False, has_labels=False, has_header=False, 
                     delimiter=" ")
-        print data.num_features()
         data.fill_missing_with_feature_means()
         
         variances = get_pct_variance_per_principal_component(data)
         expected = [0.593, 0.241, 0.092, 0.023, 0.015, 0.005, 0.003]
         for i in range(7):
             self.assertAlmostEqual(variances[i], expected[i], places=3)
+
+    def test_pca_ingredients(self):
+        """
+        Verifies against MATLAB example:
+        http://www.mathworks.com/help/stats/princomp.html
+        
+        Note that the MATLAB docs have the sign backwards on the example 
+        output for pc (in all the columns except the leftmost).  This can 
+        be verified trivially by running the example in MATLAB.
+        """
+        data = load(self.relative_to_base("datasets/ingredients.data"),
+                    has_ids=False, has_labels=False, has_header=False)
+        
+        reduced = pca(data, 4)
+        expected = load(self.relative_to_base("datasets/pca_ingredients.data"),
+                        has_ids=False, has_labels=False, has_header=False)
+        
+        # TODO matcher that accepts another DataSet as the expected value
+        expected_as_list = [expected.get_row(index).tolist() 
+                            for index in expected.get_sample_ids()]
+        assert_that(reduced, equals_dataset(expected_as_list, places=1))
+        
+        # TODO numpy array matcher
+        assert_that(
+            DataSet(pd.DataFrame(reduced.get_weights())), 
+            equals_dataset([[0.0678, 0.6460, -0.5673, 0.5062],
+                            [0.6785, 0.0200, 0.5440, 0.4933],
+                            [-0.0290, -0.7553, -0.4036, 0.5156],
+                            [-0.7309, 0.1085, 0.4684, 0.4844]], 
+                           places=4)
+        )
+        
+        # TODO: generic sequence almost equals matcher
+        expected_eigenvalues = [517.7969, 67.4964, 0.2372, 12.4054]
+        eigenvalues = reduced.get_eigenvalues()
+        for i, expected_eigenvalue in enumerate(expected_eigenvalues):
+            self.assertAlmostEqual(eigenvalues[i], expected_eigenvalue, 
+                                   places=4)
+         
     
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

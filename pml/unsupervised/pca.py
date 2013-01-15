@@ -111,6 +111,19 @@ class ReducedDataSet(model.DataSet):
                                   index=self._original_features))
         return impact.order(ascending=False)
     
+    def get_eigenvalues(self):
+        """
+        Returns:
+          eigenvalues: numpy.array (1D)
+            The list of eigenvalues produced to determine which components in 
+            the new feature space were most important.  This includes all of 
+            the eigenvalues, not just the ones for the components selected.
+            
+        NOTE: the eigenvalues are returned in the order they were calculated, 
+        not sorted.
+        """
+        return self.eigenvalues
+    
     
 def _percent_variance(eigenvalues, num_components):
     """
