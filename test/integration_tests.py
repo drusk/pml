@@ -27,7 +27,7 @@ properly.  These tests should be in the form of a user workflow.
 import unittest
 
 import pandas as pd
-from hamcrest import assert_that, contains
+from hamcrest import assert_that
 
 from pml.api import *
 
@@ -113,7 +113,7 @@ class IntegrationTest(base_tests.BaseFileLoadingTest):
                             [0.6785, 0.0200, 0.5440, 0.4933],
                             [-0.0290, -0.7553, -0.4036, 0.5156],
                             [-0.7309, 0.1085, 0.4684, 0.4844]], 
-                           places=4)
+                            places=4)
         )
         
         # TODO: generic sequence almost equals matcher
@@ -122,7 +122,44 @@ class IntegrationTest(base_tests.BaseFileLoadingTest):
         for i, expected_eigenvalue in enumerate(expected_eigenvalues):
             self.assertAlmostEqual(eigenvalues[i], expected_eigenvalue, 
                                    places=4)
-         
+            
+    def create_iris_preset_centroids(self, dataset, k):
+        assert k == 3
+        
+#        index = ["sepal_length", "sepal_width", "petal_length", "petal_width"]
+        index = dataset.feature_list()
+        return [pd.Series([4.5, 3, 1.5, 1], index=index),
+                pd.Series([6.8, 3.5, 5.5, 2], index=index),
+                pd.Series([5.2, 2.8, 1.5, 0.5], index=index)]
+    
+    def test_kmeans_vs_matlab(self):
+        """
+        Checks kmeans clusters against the results achieved by MATLAB's 
+        kmeans function.
+        
+        The only modification made to the MATLAB output is reducing the 
+        cluster numbers by 1 (they started at 1 instead of 0).
+        
+        Note that the initial centroids have a fixed location to eliminate
+        the random factor that would make comparison difficult.
+        """
+        data = load(self.relative_to_base("datasets/iris.data"), 
+                    has_ids=False)
+        ml_clusters = pd.read_csv(self.relative_to_base(
+                                  "datasets/mlab_iris_clusters.data"),
+                                  header=None)
+        # Cluster assignments were loaded into a DataFrame, slice them out as
+        # a Series for convenience.
+        ml_clusters = ml_clusters.ix[:, 0]
+
+        clustered = kmeans(data, 3, 
+                        create_centroids=self.create_iris_preset_centroids)
+        
+        pml_clusters = clustered.get_cluster_assignments()
+        for index in pml_clusters.index:
+            self.assertEqual(pml_clusters[index], ml_clusters[index], 
+                             msg="Cluster discrepancy at index %d" % index)
+
     
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

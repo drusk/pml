@@ -167,7 +167,8 @@ def create_random_centroids(dataset, k):
     
     The random value chosen for each feature will always be limited to the 
     range of values found in the dataset.  For example, if a certain feature 
-    has a minimum value of 0 in the dataset, and maximum value of 9, the
+    has a minimum value of 0 in the dataset, and maximum value of 9, the 
+    value chosen will be between 0 and 9.
     
     Args:
       dataset: DataSet
@@ -189,8 +190,10 @@ def create_random_centroids(dataset, k):
         """
         return random.uniform(range_tuple[0], range_tuple[1])
 
-    return [pd.Series(map(rand_range, min_maxs), index=dataset.feature_list(), 
-                      name = i) for i in range(k)]
+    return [pd.Series(map(rand_range, min_maxs), 
+                      index=dataset.feature_list(), 
+                      name=i) 
+            for i in range(k)]
 
 def kmeans(dataset, k=2, create_centroids=create_random_centroids):
     """
@@ -218,7 +221,7 @@ def kmeans(dataset, k=2, create_centroids=create_random_centroids):
     
     # Initialize k centroids
     centroids = create_centroids(dataset, k)
-    
+
     # Iteratively compute best clusters until they stabilize
     assignments = None
     clusters_changed = True
