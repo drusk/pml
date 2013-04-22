@@ -1,4 +1,4 @@
-# Copyright (C) 2012 David Rusk
+# Copyright (C) 2012, 2013 David Rusk
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy 
 # of this software and associated documentation files (the "Software"), to 
@@ -39,3 +39,30 @@ def euclidean(vector1, vector2):
       The distance (magnitude) between vector1 and vector2.
     """
     return np.sqrt(np.power(np.asarray(vector1) - np.asarray(vector2), 2).sum())
+
+def cosine_similarity(vector1, vector2):
+    """
+    Calculates the cosine similarity between two vectors.  This is the
+    cosine of the angle between them.
+
+    Args:
+      vector1: array-like
+      vector2: array-like
+
+    Returns:
+      The cosine of the angle between the input vectors.
+      -1 means they are complete opposites.  0 means they are independent,
+      and 1 means they are very similar.
+    """
+    # Make sure we are working with numpy arrays
+    vector1 = np.asarray(vector1)
+    vector2 = np.asarray(vector2)
+
+    norm = np.linalg.norm
+    product_of_magnitudes = norm(vector1) * norm(vector2)
+
+    if product_of_magnitudes == 0:
+        # TODO find a reference supporting this decision
+        return 0.0
+
+    return np.dot(vector1, vector2) / product_of_magnitudes
