@@ -35,4 +35,5 @@ from pml.unsupervised.pca import pca, remove_means, recommend_num_components, \
     get_pct_variance_per_principal_component, \
     plot_pct_variance_per_principal_component
 from pml.utils.distance_utils import euclidean
+from pml.utils.distance_utils import cosine_similarity
 from pml.tools.info_theory import info_gain, entropy

@@ -31,6 +31,7 @@ from hamcrest import assert_that
 from pml.unsupervised import clustering
 from pml.data.model import DataSet
 from pml.utils.errors import UnlabelledDataSetError
+from pml.utils.distance_utils import euclidean
 
 from test.matchers.general_matchers import in_range
 from test.matchers.pandas_matchers import equals_series, equals_dataframe
@@ -93,7 +94,8 @@ class ClusteringTest(unittest.TestCase):
         dataset = DataSet([[1, 5], [2, 1], [6, 5]])
         centroids = [pd.Series([4, 5]), pd.Series([6, 2])]
         
-        results = clustering._get_distances_to_centroids(dataset, centroids)
+        results = clustering._get_distances_to_centroids(dataset, centroids,
+                                                         euclidean)
         assert_that(results, 
                     equals_dataframe([[3, 5.83], [4.47, 4.12], [2, 3]], 
                                      places=2))
@@ -102,8 +104,8 @@ class ClusteringTest(unittest.TestCase):
         dataset = DataSet([[1, 5], [2, 1], [6, 5]])
         centroids = [pd.Series([4, 5]), pd.Series([6, 2])]
         
-        new_cent, clusters = clustering._compute_iteration(dataset, centroids)
-        
+        new_cent, clusters = clustering._compute_iteration(dataset, centroids,
+                                                           euclidean)
         expected_cent = [{0: 3.5, 1: 5}, {0: 2, 1: 1}]
         
         self.assertEqual(len(new_cent), len(expected_cent))

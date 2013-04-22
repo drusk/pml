@@ -195,7 +195,8 @@ def create_random_centroids(dataset, k):
                       name=i) 
             for i in range(k)]
 
-def kmeans(dataset, k=2, create_centroids=create_random_centroids):
+def kmeans(dataset, k=2, distance=euclidean,
+           create_centroids=create_random_centroids):
     """
     K-means clustering algorithm.
     
@@ -226,14 +227,15 @@ def kmeans(dataset, k=2, create_centroids=create_random_centroids):
     assignments = None
     clusters_changed = True
     while clusters_changed:
-        centroids, new_assignments = _compute_iteration(dataset, centroids)
+        centroids, new_assignments = _compute_iteration(dataset, centroids,
+                                                        distance)
         if are_dataframes_equal(new_assignments, assignments):
             clusters_changed = False
         assignments = new_assignments
     
     return ClusteredDataSet(dataset, assignments)
 
-def _get_distances_to_centroids(dataset, centroids):
+def _get_distances_to_centroids(dataset, centroids, distance_measure):
     """
     Calculates the calc_distance from each data point to each centroid.
     
@@ -250,15 +252,14 @@ def _get_distances_to_centroids(dataset, centroids):
     distances = {}
     for i, centroid in enumerate(centroids):
         def calc_distance(sample):
-            # TODO: parameter to pass in calc_distance function
-            return euclidean(sample, centroid)
+            return distance_measure(sample, centroid)
     
         distances[i] = dataset.reduce_rows(calc_distance)
 
     # each dictionary entry is interpreted as a column
     return pd.DataFrame(distances)
 
-def _compute_iteration(dataset, centroids):
+def _compute_iteration(dataset, centroids, distance_measure):
     """
     Computes an iteration of the k-means algorithm.
     
@@ -274,16 +275,17 @@ def _compute_iteration(dataset, centroids):
       cluster_assignments: pandas Series
         The current cluster assignments for each sample.
     """
-    # 2. Calculate calc_distance from each data point to each centroid
-    distances = _get_distances_to_centroids(dataset, centroids)
+    # Calculate calc_distance from each data point to each centroid
+    distances = _get_distances_to_centroids(dataset, centroids,
+                                            distance_measure)
 
-    # 3. Find each datapoint's nearest centroid
+    # Find each datapoint's nearest centroid
     cluster_assignments = distances.idxmin(axis=1)
 
     def nearest_centroid(sample_index):
         return cluster_assignments[sample_index]
         
-    # 4. Calculate mean position of datapoints in each centroid's cluster
+    # Calculate mean position of datapoints in each centroid's cluster
     new_centroids = dataset.get_data_frame().groupby(nearest_centroid).mean()
 
     # XXX turning each row in dataframe into a series... refactor!    
