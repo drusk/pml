@@ -66,3 +66,26 @@ def cosine_similarity(vector1, vector2):
         return 0.0
 
     return np.dot(vector1, vector2) / product_of_magnitudes
+
+def cosine_distance(vector1, vector2):
+    """
+    Calculates the cosine distance between two vectors.  It is the complement
+    of cosine similarity.  I.e.:
+
+      cosine_distance = 1 - cosine_similarity
+
+    Use this instead of cosine similarity when you want small values to mean
+    the vectors are similar as in regular distance measurements such as
+    Euclidean distance.
+
+    NOTE: this is not a proper distance metric as it does not have the
+    triangle inequality property.
+
+    Args:
+      vector1: array-like
+      vector2: array-like
+
+    Returns:
+      Close to 0 for similar vectors and larger values for dissimilar vectors.
+    """
+    return 1 - cosine_similarity(vector1, vector2)

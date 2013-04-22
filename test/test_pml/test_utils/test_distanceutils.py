@@ -27,6 +27,7 @@ import unittest
 
 from pml.utils.distance_utils import euclidean
 from pml.utils.distance_utils import cosine_similarity
+from pml.utils.distance_utils import cosine_distance
 
 class DistutilsTest(unittest.TestCase):
 
@@ -86,6 +87,24 @@ class DistutilsTest(unittest.TestCase):
         vector2 = [1, 1, 2]
         distance = cosine_similarity(vector1, vector2)
         self.assertAlmostEqual(distance, -0.645497, delta=self.delta)
+
+    def test_cosine_distance(self):
+        """
+        http://bioinformatics.oxfordjournals.org/content/suppl/2009/10/24/
+        btp613.DC1/bioinf-2008-1835-File004.pdf
+        NOTE: the answer they give is slightly off by about 0.013 (easily
+        verifiable with hand calculator).
+        """
+        vector1 = [1, 1, 0, 1]
+        vector2 = [2, 0, 1, 1]
+        distance = cosine_distance(vector1, vector2)
+        self.assertAlmostEqual(distance, 0.293, delta=self.delta)
+
+    def test_cosine_distance_parallel(self):
+        vector1 = [1, 1, 1, 1]
+        vector2 = [3, 3, 3, 3]
+        distance = cosine_distance(vector1, vector2)
+        self.assertAlmostEqual(distance, 0.0, delta=self.delta)
 
 
 if __name__ == "__main__":
