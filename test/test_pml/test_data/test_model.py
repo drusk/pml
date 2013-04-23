@@ -87,7 +87,45 @@ class DataSetTest(base_tests.BaseDataSetTest):
         dataset.set_column(3, [11, 11, 11])
         assert_that(dataset, equals_dataset([[1, 2, 3, 11], [4, 5, 6, 11], 
                                              [7, 8, 9, 11]]))
-        
+
+    def test_slice_features_list_string(self):
+        df = pd.DataFrame([[1, 2, 3], [4, 5, 6], [7, 8, 9]],
+                          columns=["weight", "height", "age"])
+        labels = ["m", "f", "m"]
+        dataset = DataSet(df, labels=labels)
+        sliced = dataset.slice_features(["weight", "height"])
+        assert_that(sliced, equals_dataset([[1, 2], [4, 5], [7, 8]]))
+        assert_that(sliced.feature_list(), contains("weight", "height"))
+        assert_that(sliced.get_labels(), contains(*labels))
+
+    def test_slice_features_list_indices(self):
+        df = pd.DataFrame([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        labels = ["m", "f", "m"]
+        dataset = DataSet(df, labels=labels)
+        sliced = dataset.slice_features([1, 2])
+        assert_that(sliced, equals_dataset([[2, 3], [5, 6], [8, 9]]))
+        assert_that(sliced.feature_list(), contains(1, 2))
+        assert_that(sliced.get_labels(), contains(*labels))
+
+    def test_slice_features_original_unchanged(self):
+        df = pd.DataFrame([[1, 2, 3], [4, 5, 6], [7, 8, 9]],
+                          columns=["weight", "height", "age"])
+        labels = ["m", "f", "m"]
+        dataset = DataSet(df, labels=labels)
+        sliced = dataset.slice_features(["weight", "height"])
+
+        # Modify sliced data
+        sliced.set_column("weight", [0, 0, 0])
+        sliced.labels[0] = "x"
+
+        # Check that it was indeed changed
+        assert_that(sliced.get_column("weight"), contains(0, 0, 0))
+        assert_that(sliced.get_labels(), contains("x", "f", "m"))
+
+        # Verify it was not changed in the original dataset
+        assert_that(dataset.get_column("weight"), contains(1, 4, 7))
+        assert_that(dataset.get_labels(), contains(*labels))
+
     def test_get_rows(self):
         dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8]])
         selection = dataset.get_rows([1, 3])

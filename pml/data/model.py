@@ -404,6 +404,29 @@ class DataSet(object):
         """
         return self._dataframe[index]
 
+    def slice_features(self, features):
+        """
+        Slices out the specified features into a new DataSet.
+
+        Args:
+          features: list
+            A list of the names of features to keep.
+
+        Returns:
+          slice: DataSet
+            The new DataSet with only the features that were specified.
+            The original DataSet is unchanged.
+
+        Examples:
+          For named features:
+            dataset.slice_features(["weight", "height"])
+            dataset.slice_features(["weight"])
+          Otherwise, features are 0-indexed based:
+            dataset.slice_features([0, 1])
+            dataset.slice_features([0])
+        """
+        return DataSet(self._dataframe[features], labels=self.labels.copy())
+
     def set_column(self, index, new_column):
         """
         Set the new values for a column.  Can be used to create a new column.
