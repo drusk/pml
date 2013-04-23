@@ -118,14 +118,9 @@ class ClusteringTest(unittest.TestCase):
         dataset = DataSet([[3, 13], [5, 13], [2, 11], [4, 11], [6, 11], 
                            [8, 5], [5, 3], [6, 2], [9, 2], [16, 14], [18, 13], 
                            [16, 11], [19, 10]])
-        
-        def create_centroids(dataset, k):
-            # Want pre-set centroids (not random) so that test outcome is known
-            # Therefore ignore input parameters.
-            return [pd.Series([4, 9]), pd.Series([10, 6]), pd.Series([17, 9])]
-        
-        clustered = clustering.kmeans(dataset, k=3, 
-                                      create_centroids=create_centroids)
+        preset_centroids = [pd.Series([4, 9]), pd.Series([10, 6]), pd.Series([17, 9])]
+
+        clustered = clustering.kmeans(dataset, k=3, centroids=preset_centroids)
         assert_that(clustered.get_cluster_assignments(), equals_series({0: 0, 
                                             1: 0, 2: 0, 3: 0, 4: 0, 5: 1, 
                                             6: 1, 7: 1, 8: 1, 9: 2, 10: 2, 

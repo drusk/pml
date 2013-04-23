@@ -123,11 +123,8 @@ class IntegrationTest(base_tests.BaseFileLoadingTest):
             self.assertAlmostEqual(eigenvalues[i], expected_eigenvalue, 
                                    places=4)
             
-    def create_iris_preset_centroids(self, dataset, k):
-        assert k == 3
-        
-#        index = ["sepal_length", "sepal_width", "petal_length", "petal_width"]
-        index = dataset.feature_list()
+    def create_iris_preset_centroids(self):
+        index = ["sepal_length", "sepal_width", "petal_length", "petal_width"]
         return [pd.Series([4.5, 3, 1.5, 1], index=index),
                 pd.Series([6.8, 3.5, 5.5, 2], index=index),
                 pd.Series([5.2, 2.8, 1.5, 0.5], index=index)]
@@ -152,8 +149,7 @@ class IntegrationTest(base_tests.BaseFileLoadingTest):
         # a Series for convenience.
         ml_clusters = ml_clusters.ix[:, 0]
 
-        clustered = kmeans(data, 3, 
-                        create_centroids=self.create_iris_preset_centroids)
+        clustered = kmeans(data, 3, centroids=self.create_iris_preset_centroids())
         
         pml_clusters = clustered.get_cluster_assignments()
         for index in pml_clusters.index:
