@@ -225,7 +225,19 @@ class DataSet(object):
             return self.labels
         else:
             return self.labels.take(indices)
-    
+
+    def get_label_set(self):
+        """
+        Returns the set of all labels in the DataSet.
+
+        Returns:
+          label_set: set
+        """
+        if self.labels is None:
+            return set()
+        else:
+            return set(self.labels)
+
     def get_feature_values(self, feature):
         """
         Retrieves the set of values for a given feature.

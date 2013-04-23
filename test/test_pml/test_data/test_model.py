@@ -27,7 +27,7 @@ import unittest
 
 import numpy as np
 import pandas as pd
-from hamcrest import assert_that, contains, contains_inanyorder
+from hamcrest import assert_that, contains, contains_inanyorder, has_length
 
 from pml.data.model import DataSet, as_dataset
 from pml.utils.errors import InconsistentSampleIdError
@@ -151,6 +151,15 @@ class DataSetTest(base_tests.BaseDataSetTest):
         value_counts = dataset.get_label_value_counts()
         assert_that(value_counts, equals_series(expected))
         assert_that(value_counts.index, contains("b", "a", "c"))
+
+    def test_get_label_set(self):
+        dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12]],
+                          labels=["a", "b", "b", "c", "a", "b"])
+        assert_that(dataset.get_label_set(), contains_inanyorder("a", "b", "c"))
+
+    def test_get_label_empty_set(self):
+        dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12]])
+        assert_that(dataset.get_label_set(), has_length(0))
         
     def test_get_label_value_counts_no_labels(self):
         dataset = DataSet([[1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12]])
