@@ -400,6 +400,26 @@ class DataSet(object):
         return DataSet(self._dataframe.drop(index, axis=1), 
                        labels=self.labels)
 
+    def drop_empty_samples(self):
+        """
+        Creates a copy of the data set with any samples (rows) that had no
+        value for any feature removed.
+
+        Returns:
+          filtered: DataSet
+            A new DataSet with empty samples removed.  The original DataSet
+            is unaltered.
+        """
+        def all_null(row):
+            return pd.isnull(row).all()
+
+        empty_rows = self.reduce_rows(all_null)
+        non_empty_rows = -empty_rows
+
+        labels = self.labels[non_empty_rows] if self.is_labelled() else None
+
+        return DataSet(self._dataframe[non_empty_rows], labels=labels)
+
     def get_column(self, index):
         """
         Selects a column from the data set.

@@ -27,7 +27,8 @@ import unittest
 
 import numpy as np
 import pandas as pd
-from hamcrest import assert_that, contains, contains_inanyorder, has_length
+from hamcrest import (assert_that, contains, contains_inanyorder, has_length,
+                      equal_to)
 
 from pml.data.model import DataSet, as_dataset
 from pml.utils.errors import InconsistentSampleIdError
@@ -65,7 +66,29 @@ class DataSetTest(base_tests.BaseDataSetTest):
                                        num_features=3)
         filtered = original.drop_column(1)
         assert_that(filtered.get_labels(), contains("cat", "dog", "bird"))
-        
+
+    def test_drop_empty_samples(self):
+        df = pd.DataFrame([[1, 2, np.NAN], [np.NAN, np.NAN, np.NAN], [7, 8, 9]])
+        original = DataSet(df, labels=["a", "b", "c"])
+
+        filtered = original.drop_empty_samples()
+        assert_that(filtered.feature_list(), has_length(3))
+        assert_that(filtered.num_samples(), equal_to(2))
+        assert_that(filtered, equals_dataset([[1, 2, np.NAN], [7, 8, 9]]))
+        assert_that(filtered.get_labels(), contains("a", "c"))
+
+    def test_drop_empty_samples_original_unchanged(self):
+        data_list = [[1, 2, np.NAN], [np.NAN, np.NAN, np.NAN], [7, 8, 9]]
+        label_list = ["a", "b", "c"]
+        original = DataSet(pd.DataFrame(data_list), labels=label_list)
+
+        filtered = original.drop_empty_samples()
+        filtered.set_column(0, [-1, -1])
+        filtered.labels[0] = "z"
+
+        assert_that(original, equals_dataset(data_list))
+        assert_that(original.get_labels(), contains(*label_list))
+
     def test_get_column(self):
         dataset = DataSet([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
         column1 = dataset.get_column(1)
