@@ -31,7 +31,6 @@ import pandas as pd
 from pml.utils import plotting, pandas_util
 from pml.utils.errors import InconsistentSampleIdError
 from pml.utils.errors import UnlabelledDataSetError
-from pml.utils.pandas_util import get_indices_with_value
 
 class DataSet(object):
     """
@@ -361,7 +360,7 @@ class DataSet(object):
           filtered: model.DataSet
             The filtered data set.
         """
-        samples = get_indices_with_value(self.get_column(feature), value)
+        samples = pandas_util.find(self.get_column(feature), value)
         return self.sample_filter(samples)
 
     def label_filter(self, label):
@@ -383,7 +382,7 @@ class DataSet(object):
         if not self.is_labelled():
             raise UnlabelledDataSetError()
         
-        return self.sample_filter(get_indices_with_value(self.labels, label))                
+        return self.sample_filter(pandas_util.find(self.labels, label))
 
     def drop_column(self, index):
         """

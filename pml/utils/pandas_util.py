@@ -24,7 +24,7 @@ Series.
 @author: drusk
 """
 
-def get_indices_with_value(series, value):
+def find(series, value):
     """
     Retrieves the indices of a pandas Series which have the specified value.
     

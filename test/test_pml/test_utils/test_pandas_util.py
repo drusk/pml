@@ -47,10 +47,10 @@ class PandasUtilTest(unittest.TestCase):
         df2 = pd.DataFrame([[1, 2], [3, 4], [5, 6]])
         self.assertFalse(pandas_util.are_dataframes_equal(df1, df2))
 
-    def test_get_indices_with_values(self):
+    def test_find_one_value(self):
         series = pd.Series(["friendly", "friendly", "not_friendly"], 
                            index=["cat", "dog", "mouse"])
-        indices = pandas_util.get_indices_with_value(series, "friendly")
+        indices = pandas_util.find(series, "friendly")
         assert_that(indices, contains("cat", "dog"))
 
     def test_is_series_numeric_actual_is_int(self):
