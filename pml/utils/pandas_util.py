@@ -24,21 +24,47 @@ Series.
 @author: drusk
 """
 
-def find(series, value):
+def find(series, search_for):
     """
-    Retrieves the indices of a pandas Series which have the specified value.
+    Retrieves the indices of a pandas Series which have a specified value.
     
     Args:
       series: pandas.Series
         The series to search and retrieve indices from.
-      value:
-        The value to search for.
+      search_for:
+        Either a single value to search for, or a list of several values
+        to search for.  If it is a list, then if an index has any of the
+        specified values it will be included.
         
     Returns:
       indices: pandas.Index
-        The indices which held the specified value.
+        The indices which held one of the specified values.
+
+    Example 1, search for single value:
+      series = pd.Series(["hostile", "friendly", "friendly", "neutral"],
+                           index=["wolf", "cat", "dog", "mouse"])
+      indices = find(series, "friendly")
+      assert_that(indices, contains("cat", "dog")
+
+    Example 2, search for multiple values:
+      series = pd.Series(["hostile", "friendly", "friendly", "neutral"],
+                           index=["wolf", "cat", "dog", "mouse"])
+      indices = find(series, ["friendly", "neutral"])
+      assert_that(indices, contains("cat", "dog", "mouse")
     """
-    return series.index[series == value]
+    # Convert values to search for to a list if they aren't
+    values = [search_for] if type(search_for) is not list else search_for
+
+    overall_matches = None
+    for value in values:
+        matches = (series == value)
+
+        if overall_matches is None:
+            overall_matches = matches
+        else:
+            overall_matches |= matches
+
+    return series.index[overall_matches]
 
 def are_dataframes_equal(dataframe1, dataframe2):
     """

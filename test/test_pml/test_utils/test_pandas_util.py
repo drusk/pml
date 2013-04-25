@@ -53,6 +53,12 @@ class PandasUtilTest(unittest.TestCase):
         indices = pandas_util.find(series, "friendly")
         assert_that(indices, contains("cat", "dog"))
 
+    def test_find_multiple_values(self):
+        series = pd.Series(["hostile", "friendly", "friendly", "not_friendly"],
+                           index=["wolf", "cat", "dog", "mouse"])
+        indices = pandas_util.find(series, ["friendly", "not_friendly"])
+        assert_that(indices, contains("cat", "dog", "mouse"))
+
     def test_is_series_numeric_actual_is_int(self):
         series = pd.Series([0, 1, 2])
         self.assertTrue(pandas_util.is_series_numeric(series))
