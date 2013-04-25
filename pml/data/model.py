@@ -363,13 +363,13 @@ class DataSet(object):
         samples = pandas_util.find(self.get_column(feature), value)
         return self.sample_filter(samples)
 
-    def label_filter(self, label):
+    def label_filter(self, labels):
         """
         Filters the data set based on its labels.
         
         Args:
-          label:
-            Samples with this label value will remain in the filtered data 
+          labels: single value or list of values
+            Samples with one of these labels will remain in the filtered data
             set.  All others will be removed.
         
         Returns:
@@ -382,7 +382,7 @@ class DataSet(object):
         if not self.is_labelled():
             raise UnlabelledDataSetError()
         
-        return self.sample_filter(pandas_util.find(self.labels, label))
+        return self.sample_filter(pandas_util.find(self.labels, labels))
 
     def drop_column(self, index):
         """

@@ -460,6 +460,19 @@ class DataSetTest(base_tests.BaseDataSetTest):
                                               ["Bob", "black"]]))
         assert_that(filtered.get_labels(), 
                     equals_series({0: "SENG", 1: "SENG"}))
+
+    def test_filter_by_multiple_labels(self):
+        features = ["name", "hair colour"]
+        df = pd.DataFrame([["Will", "black"], ["Rob", "blonde"],
+                           ["Bill", "brown"], ["Bob", "black"],
+                           ["Jim", "brown"]], columns=features)
+        dataset = DataSet(df, labels=["ELEC", "SENG", "ELEC", "CENG", "SENG"])
+        filtered = dataset.label_filter(["SENG", "CENG"])
+        assert_that(filtered, equals_dataset([["Rob", "blonde"],
+                                              ["Bob", "black"],
+                                              ["Jim", "brown"]]))
+        assert_that(filtered.get_labels(),
+                    equals_series({1: "SENG", 3: "CENG", 4: "SENG"}))
         
     def test_filter_unlabelled_data_by_label(self):
         features = ["name", "hair colour"]
