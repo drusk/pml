@@ -440,7 +440,20 @@ class DataSetTest(base_tests.BaseDataSetTest):
         assert_that(filtered.get_sample_ids(), contains(0, 2))
         assert_that(filtered, equals_dataset([["Bill", "brown"], 
                                               ["Jim", "brown"]]))
-        
+
+    def test_filter_by_multiple_values_of_feature(self):
+        features = ["name", "hair colour"]
+        df = pd.DataFrame([["Will", "grey"], ["Rob", "blonde"],
+                           ["Bill", "brown"], ["Bob", "black"],
+                           ["Jim", "brown"]], columns=features)
+        dataset = DataSet(df)
+        filtered = dataset.value_filter("hair colour", ["brown", "blonde"])
+        self.assertEqual(filtered.feature_list(), features)
+        assert_that(filtered.get_sample_ids(), contains(1, 2, 4))
+        assert_that(filtered, equals_dataset([["Rob", "blonde"],
+                                              ["Bill", "brown"],
+                                              ["Jim", "brown"]]))
+
     def test_filter_by_feature_value_with_labels(self):
         features = ["name", "hair colour"]
         df = pd.DataFrame([["Bill", "brown"], ["Bob", "black"], 

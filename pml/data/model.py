@@ -344,7 +344,7 @@ class DataSet(object):
         return DataSet(self._dataframe.ix[samples_to_keep], 
                        self._get_filtered_labels_if_exist(samples_to_keep))
 
-    def value_filter(self, feature, value):
+    def value_filter(self, feature, values):
         """
         Filters the data set based on its values for a given feature.
         
@@ -352,15 +352,15 @@ class DataSet(object):
             feature: string
               The name of the feature whose value will be examined for each 
               sample.
-            value:
-              The value which all samples passing through the filter should 
-              have for the specified feature.
+            values: single value or list of values.
+              Samples passing through the filter must have one of these
+              values for the specified feature.
         
         Returns:
           filtered: model.DataSet
             The filtered data set.
         """
-        samples = pandas_util.find(self.get_column(feature), value)
+        samples = pandas_util.find(self.get_column(feature), values)
         return self.sample_filter(samples)
 
     def label_filter(self, labels):
