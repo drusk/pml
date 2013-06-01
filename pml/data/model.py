@@ -752,7 +752,21 @@ class DataSet(object):
         binned_vals[feature_vals >= boundaries[-1]] = bin_names[-1]
 
         self.set_column(feature, binned_vals)
-        
+
+    def normalize_features(self):
+        """
+        TODO docs
+        Computes each feature's mean and subtract it from the data set.
+        Then divide each feature by its standard deviation.
+        """
+        def normalize(feature_vector):
+            return (feature_vector - feature_vector.mean()) / feature_vector.std()
+
+        # TODO: vectorize?
+        for feature in self.feature_list():
+            feature_vals = self.get_column(feature)
+            self.set_column(feature, normalize(feature_vals))
+
     def plot_radviz(self):
         """
         Generates a RadViz plot of the data set.  Radviz is useful for 

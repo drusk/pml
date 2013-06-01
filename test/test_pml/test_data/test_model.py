@@ -31,6 +31,7 @@ from hamcrest import (assert_that, contains, contains_inanyorder, has_length,
                       equal_to)
 
 from pml.data.model import DataSet, as_dataset
+from pml.data import loader
 from pml.utils.errors import InconsistentSampleIdError
 from pml.utils.errors import UnlabelledDataSetError
 
@@ -38,7 +39,7 @@ from test import base_tests
 from test.matchers.pml_matchers import equals_dataset
 from test.matchers.pandas_matchers import equals_series, equals_dataframe
 
-class DataSetTest(base_tests.BaseDataSetTest):
+class DataSetTest(base_tests.BaseDataSetTest, base_tests.BaseFileLoadingTest):
 
     def test_reduce_rows(self):
         dataset = DataSet([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
@@ -609,6 +610,17 @@ class DataSetTest(base_tests.BaseDataSetTest):
         
         assert_that(dataset, equals_dataset([["low", "mid"], ["high", "low"], 
                                              ["mid", "mid"]]))
+
+    def test_normalize_features(self):
+        # Note that last column is the training target, so we omitt it by
+        # loading it as labels.
+        dataset = loader.load(self.relative_to_base("datasets/ex1data2.txt"),
+                              has_ids=False, has_header=False, has_labels=True)
+        dataset.normalize_features()
+
+        expected = np.loadtxt(self.relative_to_base("datasets/ex1data2norm.txt"),
+                              delimiter=",")
+        assert_that(dataset, equals_dataset(expected.tolist(), places=15))
 
 
 if __name__ == "__main__":
