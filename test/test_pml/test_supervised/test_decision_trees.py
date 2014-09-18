@@ -60,11 +60,11 @@ class DecisionTreesTest(base_tests.BaseFileLoadingTest):
         assert_that(tree,
             equals_tree(
                 {"no_surfacing": {
-                    False: False,
-                    True: {
+                    "no": "no",
+                    "yes": {
                         "has_flippers": {
-                            False: False, 
-                            True: True           
+                            "no": "no",
+                            "yes": "yes"
                         }
                     }
                  }
@@ -81,14 +81,14 @@ class DecisionTreesTest(base_tests.BaseFileLoadingTest):
                 {"weather": {
                     "sunny": {
                         "parents": {
-                            True: "cinema",
-                            False: "tennis"
+                            "yes": "cinema",
+                            "no": "tennis"
                         }
                     },
                     "windy": {
                         "parents": {
-                            True: "cinema",
-                            False: {
+                            "yes": "cinema",
+                            "no": {
                                 "money": {
                                     "rich": "shopping",
                                     "poor": "cinema"
@@ -116,15 +116,15 @@ class DecisionTreesTest(base_tests.BaseFileLoadingTest):
                 {"Outlook": {
                     "Sunny": {
                         "Humidity": {
-                            "High": False,
-                            "Normal": True
+                            "High": "No",
+                            "Normal": "Yes"
                         }
                     },
-                    "Overcast": True,
+                    "Overcast": "Yes",
                     "Rain": {
                         "Wind": {
-                            "Strong": False,
-                            "Weak": True
+                            "Strong": "No",
+                            "Weak": "Yes"
                         }
                     }
                 }}
@@ -138,12 +138,12 @@ class DecisionTreesTest(base_tests.BaseFileLoadingTest):
         sample = pd.Series(["Rain", "Cool", "High", "Strong"], 
                            index=['Outlook', 'Temperature', 'Humidity', 
                                   'Wind'])
-        self.assertEqual(classifier.classify(sample), False)
+        self.assertEqual(classifier.classify(sample), "No")
         
     def test_classify_weekends(self):
         training = load(self.relative_to_base("/datasets/weekends.data"))
         classifier = DecisionTree(training)
-        sample = pd.Series(["windy", False, "rich"], 
+        sample = pd.Series(["windy", "no", "rich"],
                            index=['weather', 'parents', 'money'])
         self.assertEqual(classifier.classify(sample), "shopping")
 
@@ -151,8 +151,8 @@ class DecisionTreesTest(base_tests.BaseFileLoadingTest):
         training = load(self.relative_to_base("/datasets/weekends.data"))
         classifier = DecisionTree(training)
         index = ['weather', 'parents', 'money']
-        sample_0 = pd.Series(["windy", False, "rich"], index=index)
-        sample_1 = pd.Series(["sunny", True, "rich"], index=index)
+        sample_0 = pd.Series(["windy", "no", "rich"], index=index)
+        sample_1 = pd.Series(["sunny", "yes", "rich"], index=index)
         results = classifier.classify_all(
                         DataSet(pd.DataFrame([sample_0, sample_1])))
         assert_that(results.get_classifications(), 
@@ -167,7 +167,7 @@ class DecisionTreesTest(base_tests.BaseFileLoadingTest):
         sample = pd.Series({"Outlook": "Snowing", "Temperature": "Cool", 
                             "Humidity": "Normal", "Wind": "Strong"})
         
-        assert_that(classifier.classify(sample), equal_to(True))
+        assert_that(classifier.classify(sample), equal_to("Yes"))
 
 
 if __name__ == "__main__":

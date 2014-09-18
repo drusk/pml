@@ -49,7 +49,7 @@ setup(
       
       install_requires=[
                         "ipython >= 0.11",
-                        "pandas >= 0.8.1",
+                        "pandas >= 0.14.1",
                         "matplotlib",
                         "numpy >= 1.6.1",
                         ]

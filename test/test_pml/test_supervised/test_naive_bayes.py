@@ -41,9 +41,6 @@ class NaiveBayesTest(base_tests.BaseFileLoadingTest):
     def load_car_data(self):
         """
         Loads an example training set and related sample.
-         
-        NOTE: pandas automatically converts columns with just 'yes' and 'no' 
-        values into booleans.
         """
         training_set = loader.load(self.relative_to_base("datasets/"
                                                          "car_thefts.data"))
@@ -57,13 +54,13 @@ class NaiveBayesTest(base_tests.BaseFileLoadingTest):
     def test_count_examples(self):
         training_set, sample = self.load_car_data()
         classifier = NaiveBayes(training_set)
-        count = classifier._count_examples(True, "color", sample["color"])
+        count = classifier._count_examples("yes", "color", sample["color"])
         self.assertEquals(count, 3)
 
     def test_calc_prob_feature_given_class(self):
         training_set, sample = self.load_car_data()
         classifier = NaiveBayes(training_set)
-        prob = classifier._calc_prob_feature_given_class(True, "color", 
+        prob = classifier._calc_prob_feature_given_class("yes", "color",
                                                          sample["color"])
         self.assertAlmostEqual(prob, 0.57, places=2)
         
@@ -77,23 +74,23 @@ class NaiveBayesTest(base_tests.BaseFileLoadingTest):
     def test_classify_single_sample(self):
         training_set, sample = self.load_car_data()
         classifier = NaiveBayes(training_set)
-        self.assertFalse(classifier.classify(sample))
+        self.assertEqual(classifier.classify(sample), "no")
 
     def test_get_classification_probabilities(self):
         training_set, sample = self.load_car_data()
         classifier = NaiveBayes(training_set)
         probabilities = classifier.get_classification_probabilities(sample)
-        self.assertAlmostEqual(probabilities[True], 0.035, places=3)
-        self.assertAlmostEqual(probabilities[False], 0.070, places=3)
+        self.assertAlmostEqual(probabilities["yes"], 0.035, places=3)
+        self.assertAlmostEqual(probabilities["no"], 0.070, places=3)
     
     def test_classify_all(self):
         training_set, sample_0 = self.load_car_data()
         sample_1 = {"color": "yellow", "type": "sports", "origin": "domestic"}
         dataset = DataSet(pd.DataFrame([sample_0, sample_1]), 
-                          labels=[False, True])
+                          labels=["no", "yes"])
         classifier = NaiveBayes(training_set)
         results = classifier.classify_all(dataset)
-        assert_that(results.get_classifications(), equals_series({0: False, 1: False}))
+        assert_that(results.get_classifications(), equals_series({0: "no", 1: "no"}))
         self.assertEqual(results.compute_accuracy(), 0.5)
     
     def test_classify_inconsistent_features(self):

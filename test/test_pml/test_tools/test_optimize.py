@@ -51,13 +51,13 @@ class GradientDescentTest(BaseFileLoadingTest):
         learning_rate = 0.01
         iter = 100
 
-        initial_theta = pd.Series({"bias": 0, "X.1": 0})
+        initial_theta = pd.Series({0: 0, "bias": 0})
         theta = optimize.gradient_descent(dataset, initial_theta,
                                           learning_rate, iterations=iter)
 
         # assert_that(theta.tolist(), contains(-0.576556, 0.859582))
-        assert_that(theta, equals_series({"bias": -0.576556,
-                                          "X.1": 0.859582},
+        assert_that(theta, equals_series({0: 0.859582,
+                                         "bias": -0.576556},
                                          places=6))
 
     def test_gradient_descent_3_parameters(self):
@@ -74,13 +74,13 @@ class GradientDescentTest(BaseFileLoadingTest):
         learning_rate = 1.0
         iter = 50
 
-        initial_theta = pd.Series({"bias": 0, "X.1": 0, "X.2": 0})
+        initial_theta = pd.Series({0: 0, 1: 0, "bias": 0})
         theta = optimize.gradient_descent(dataset, initial_theta,
                                           learning_rate, iterations=iter)
 
-        assert_that(theta, equals_series({"bias": 340412.659574,
-                                          "X.1": 110631.050279,
-                                          "X.2": -6649.474271},
+        assert_that(theta, equals_series({0: 110631.050279,
+                                          1: -6649.474271,
+                                         "bias": 340412.659574},
                                          places=6))
 
 
