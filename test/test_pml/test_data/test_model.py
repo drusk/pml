@@ -40,6 +40,12 @@ from test.matchers.pml_matchers import equals_dataset
 from test.matchers.pandas_matchers import equals_series, equals_dataframe
 
 class DataSetTest(base_tests.BaseDataSetTest, base_tests.BaseFileLoadingTest):
+    def test_create_dataset_from_numpy_array(self):
+        as_list = [[0, 1], [2, 3]]
+        np_array = np.array(as_list)
+        dataset = DataSet(np_array)
+
+        assert_that(dataset, equals_dataset(as_list))
 
     def test_reduce_rows(self):
         dataset = DataSet([[1, 2, 3], [4, 5, 6], [7, 8, 9]])

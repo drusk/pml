@@ -50,8 +50,9 @@ class DataSet(object):
           data: 
             Data of unknown type.  The supported types are:
                 1) pandas DataFrame
-                2) Python lists or pandas DataFrame
-                3) an existing DataSet object 
+                2) Python lists
+                3) numpy array
+                4) an existing DataSet object
           labels: pandas Series, Python list or Python dictionary
             The classification labels for the samples in data.  If they are 
             not known (i.e. it is an unlabelled data set) the value None 
@@ -66,6 +67,8 @@ class DataSet(object):
         if isinstance(data, pd.DataFrame):
             self._dataframe = data
         elif isinstance(data, list):
+            self._dataframe = pd.DataFrame(data)
+        elif isinstance(data, np.ndarray):
             self._dataframe = pd.DataFrame(data)
         elif isinstance(data, DataSet):
             self._dataframe = data._dataframe.copy()
