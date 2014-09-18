@@ -123,7 +123,7 @@ class IsTree(BaseMatcher):
         
     def describe_to(self, description):
         description.append_text("Tree with form:")
-        description.append_text(self.expected_dict)
+        description.append_text(str(self.expected_dict))
     
 
 def lists_match(list1, list2, places=None):

@@ -79,6 +79,9 @@ class Tree(object):
           depth: int
         """
         return self._root_node.get_height() + 1
+
+    def __repr__(self):
+        return "{ '%s': %s }" % (self._root_node._value, self._root_node._children)
     
 
 class Node(object):
@@ -199,4 +202,8 @@ class Node(object):
         
         return descendants
     
-    
+    def __repr__(self):
+        if self.is_leaf():
+            return "'%s'" % self._value
+        else:
+            return "{ '%s': %s }" % (self._value, self._children)
